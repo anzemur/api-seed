@@ -7,8 +7,7 @@
     "dev": "concurrently --kill-others \"tsc -w\" \"nodemon dist/src/scripts/start.js\"",
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
-    "start": "npm run serve",
-    "serve": "node dist/src/scripts/start.js",
+    "start": "tsc && node dist/src/scripts/start.js",
     "watch-node": "nodemon dist/src/scripts/start.js",
     "watch-ts": "tsc -w",
     "test": "mocha -r ts-node/register ./test/*.test.ts"

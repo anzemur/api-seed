@@ -20,27 +20,18 @@ export class App {
     this.app = express();
     this.port = Number(process.env.PORT || 3000);
 
-    /**
-     * Register parsers middleware.
-     */
+    /* Register parsers middleware. */
     registerCors(this.app);
     registerBodyParsers(this.app);
 
-    /**
-     * Register context middleware.
-     */
+    /* Register context middleware. */
     this.app.use(registerContext);
 
-    /**
-     * Register api routes.
-     */
-
+    /* Register api routes. */
     registerRootRoutes(this.app);
     registerUsersRoutes(this.app);
 
-    /**
-     * Register api middleware.
-     */
+    /* Register api middleware. */
     this.app.use(handleNotFoundError);
     this.app.use(handleErrors);
   }
@@ -51,6 +42,7 @@ export class App {
   public async listen() {
     return new Promise((resolve) => {
       this.server = this.app.listen(this.port, resolve);
+      console.log(`│ Server listening on port: ${this.port}.`);
     });
   }
 
@@ -72,7 +64,7 @@ export class App {
    * Connects to database.
    */
   public async connectDb() {
-    let connectionUri;
+    let connectionUri: string;
     if (process.env.ENV === 'dev') {
       connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'straight-as-dev'}`;
     }
@@ -84,28 +76,25 @@ export class App {
     }
     this.mongooseConnection = mongoose.connection;
 
-    /** 
-     * Mongoose connection.
-    **/
+    /* Mongoose connection. */
     this.mongooseConnection.on('connected', () => {
-      console.log('MongoDb is connected on: ', connectionUri);
+      console.log('│ MongoDb is connected on: ', connectionUri);
     });
     
-    /**
-     *  Mongoose error.
-    **/
+    /* Mongoose error. */
     this.mongooseConnection.on('error', (error) => {
-      console.log('MongoDb encountered an error: ' + error);  
+      console.log('│ MongoDb encountered an error: ' + error);  
     });
       
-    /**
-     * Mongoose disconnected.
-    **/
+    /* Mongoose disconnected.*/
     this.mongooseConnection.on('disconnected', () => {
-      console.log('MongoDb is disconnected.');
+      console.log('│ MongoDb is disconnected.');
     });
 
-    await mongoose.connect(connectionUri, { useNewUrlParser: true });
+    await mongoose.connect(connectionUri, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    });
   }
 
   /**

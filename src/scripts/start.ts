@@ -8,10 +8,10 @@ config();
 const app = new App();
 
 (async () => {
+  console.log('╒══════════════════════════════════════════════════');
   await app.listen();
   await app.connectDb();
-  console.log(`Server listening on port: ${app.port}.`);
-
+  console.log('╘══════════════════════════════════════════════════');
 })().catch(async (error) => {
   console.log(error);
   await app.close();

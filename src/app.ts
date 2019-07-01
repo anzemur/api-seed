@@ -23,7 +23,6 @@ export class App {
     /**
      * Register parsers middleware.
      */
-
     registerCors(this.app);
     registerBodyParsers(this.app);
 
@@ -42,7 +41,6 @@ export class App {
     /**
      * Register api middleware.
      */
-    
     this.app.use(handleNotFoundError);
     this.app.use(handleErrors);
   }

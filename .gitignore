@@ -1,0 +1,14 @@
+# Logs
+/logs
+
+# OS metadata
+.DS_Store
+
+# API keys and secrets
+.env
+
+# Compiled
+/dist
+
+# Dependencies
+/node_modules

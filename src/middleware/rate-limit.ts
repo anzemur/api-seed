@@ -3,6 +3,8 @@ import { Response, NextFunction, RequestHandler } from 'express';
 import { RateLimiterMongo, RateLimiterRes, IRateLimiterMongoOptions } from 'rate-limiter-flexible';
 import { RateLimitExceededError } from '../lib/errors';
 import { RateLimitByType } from '../config/types';
+import { parseDurationFromMs } from '../lib/parsers';
+
 
 export interface RateLimitConfig {
   limitBy?: RateLimitByType;
@@ -15,8 +17,6 @@ export interface RateLimitConfig {
 export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     const defaultRateLimit = req.context.adminConfig.rateLimit;
-
-    console.log(config);
 
     const options: IRateLimiterMongoOptions = {
       storeClient: req.context.mongooseConnection,
@@ -38,9 +38,12 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
         next();
       })
       .catch((rateLimiterRes) => {
-        console.log(rateLimiterRes);
         res.set(getHeaders(rateLimiterRes, options));
-        next(new RateLimitExceededError('Too many requests.'));
+        if (rateLimiterRes.consumedPoints > options.points && options.blockDuration) {
+          next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Requesting this endpoint is now blocked for: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
+        } else {
+          next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Please try again in: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
+        }
       });
   };
 }

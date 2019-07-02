@@ -17,7 +17,7 @@ const app = new App();
   const adminSvc = new AdminService();
   const data = {
     rateLimit: {
-      limitBy: 0,
+      limitBy: 1,
       maxPoints: 3,
       consumePoints: 1,
       duration: 10,

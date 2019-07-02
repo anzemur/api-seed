@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /**
  * Formats application uptime to format 'hh:mm:ss'.
  * @param uptime Application uptime.
@@ -11,4 +13,13 @@ export function formatApplicationUptime(uptime: number) {
   const s = Math.floor(uptime % 60);
 
   return pad(h) + ':' + pad(m) + ':' + pad(s);
+}
+
+/**
+ * Parses duration in ms to given format.
+ * @param durationMs Duration in ms.
+ * @param format Chosen format.
+ */
+export function parseDurationFromMs(durationMs: number, format?: string) {
+  return moment.utc(durationMs).format(format || 'HH:mm:ss');
 }

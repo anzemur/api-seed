@@ -48,8 +48,6 @@ export class ConflictError extends Error {
   }
 }
 
-
-
 /**
  * Internal system error.
  */
@@ -98,6 +96,22 @@ export class ValidationError extends Error {
     this.name = this.constructor.name;
     this.message = message;
     this.errors = error.details && Array.isArray(error.details) ? error.details.map((d: any) => d.message) : [];
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * NotFound error.
+ */
+export class RateLimitExceededError extends Error {
+  public readonly status: number;
+
+  public constructor(message?: string) {
+    super();
+    this.status = 429;
+    this.name = this.constructor.name;
+    this.message = message;
 
     Error.captureStackTrace(this, this.constructor);
   }

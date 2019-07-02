@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UnauthorizedError, UnauthenticatedError, InternalServerError, BadRequestError, ConflictError, ValidationError } from '../lib/errors';
+import { UnauthorizedError, UnauthenticatedError, InternalServerError, BadRequestError, ConflictError, ValidationError, RateLimitExceededError } from '../lib/errors';
 
 /**
  * Not found error handling middleware.
@@ -27,7 +27,7 @@ export function handleErrors(error: any, req: Request, res: Response, next: Next
     console.log(error);
   }
 
-  if (error instanceof UnauthorizedError || error instanceof UnauthenticatedError || error instanceof BadRequestError) {
+  if (error instanceof UnauthorizedError || error instanceof UnauthenticatedError || error instanceof BadRequestError || error instanceof RateLimitExceededError) {
     res.status(error.status).json({
       status: error.status,
       name: error.name,

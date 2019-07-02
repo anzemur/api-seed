@@ -19,13 +19,18 @@ export class App {
   constructor() {
     this.app = express();
     this.port = Number(process.env.PORT || 3000);
+  }
 
+  /**
+   * Registers applications routes and middleware.
+   */
+  public registerRoutesAndMiddleware() {
     /* Register parsers middleware. */
     registerCors(this.app);
     registerBodyParsers(this.app);
 
     /* Register context middleware. */
-    this.app.use(registerContext);
+    this.app.use(registerContext(this.mongooseConnection));
 
     /* Register api routes. */
     registerRootRoutes(this.app);
@@ -55,6 +60,7 @@ export class App {
         if (err) {
           return reject(err);
         }
+        this.server = null;
         resolve();
       });
     });
@@ -103,4 +109,25 @@ export class App {
   public async closeDbConnection() {
     await this.mongooseConnection.close();
   }
+
+  public collectRoutes() {
+    const routes = [];
+
+    this.app._router.stack.forEach((middleware) => {
+        if (middleware.route) { // routes registered directly on the app
+            routes.push(middleware.route);
+        } else if (middleware.name === 'router') { // router middleware 
+            middleware.handle.stack.forEach((handler) => {
+              // console.log(JSON.stringify(handler));
+              const route = handler.route;
+              if (route) {
+                routes.push(route);
+              }
+            });
+        }
+    });
+
+    routes.forEach((route) => console.log(JSON.stringify(route)));
+  }
+
 }

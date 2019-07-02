@@ -1,6 +1,6 @@
 import { Model } from './model';
 import { UserStatus, UserRoles } from '../config/user';
-import { prop, arrayProp } from 'typegoose';
+import { prop } from 'typegoose';
 
 export class UserModel extends Model {
   @prop({ required: true, unique: true })

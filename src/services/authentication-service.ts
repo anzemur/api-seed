@@ -1,6 +1,6 @@
 import { Service } from './service';
 import * as jwt from 'jsonwebtoken';
-import { User, UserModel } from '../models/user-model';
+import { User } from '../models/user-model';
 import { UserStatus } from '../config/user';
 import * as bcrypt from 'bcryptjs';
 
@@ -26,7 +26,7 @@ export class AuthenticationService extends Service {
    * @param usernameOrEmail Users username or email.
    * @param password Users password.
    */
-  async  checkAuthUser(usernameOrEmail: string, password: string) {
+  async checkAuthUser(usernameOrEmail: string, password: string) {
     if (!usernameOrEmail || !password) {
       return null;
     }

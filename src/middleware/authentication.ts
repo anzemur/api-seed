@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { UserRoles } from '../config/user';
 import { ExtractJwt } from 'passport-jwt';
 import { UnauthenticatedError, UnauthorizedError } from '../lib/errors';
@@ -20,7 +20,7 @@ export interface AuthRequest extends Request {
  * Middleware that authenticates user's request based on JWT token.
  * @param roles Allowed user's roles.
  */
-export function authenticateRequest(roles: UserRoles[]) {
+export function authenticateRequest(roles?: UserRoles[]): RequestHandler {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     const authToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     if (!authToken) {
@@ -44,7 +44,7 @@ export function authenticateRequest(roles: UserRoles[]) {
     }
 
     /* Check if user has required roles. */
-    if (roles.length > 0 && !user.roles.some((role) => roles.indexOf(role) >= 0)) {
+    if (roles && roles.length > 0 && !user.roles.some((role) => roles.indexOf(role) >= 0)) {
       return next(new UnauthorizedError('User doesn\'t have required role.'));
     }
 

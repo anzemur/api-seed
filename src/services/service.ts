@@ -5,14 +5,10 @@ import * as winston from 'winston';
  */
 export abstract class Service {
 
-  /**
-   * Service name property definition.
-   */
+  /* Service name property definition. */
   name: string;
 
-  /**
-   * Logger instance property definition.
-   */
+  /* Logger instance property definition. */
   logger: winston.Logger;
 
   constructor(name: string) {

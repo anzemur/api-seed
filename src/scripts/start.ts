@@ -12,6 +12,7 @@ const app = new App();
   console.log('╒══════════════════════════════════════════════════');
   await app.listen();
   await app.connectDb();
+  await app.createRedisClient();
   app.registerRoutesAndMiddleware();
 
   const adminSvc = new AdminService();
@@ -22,7 +23,9 @@ const app = new App();
       consumePoints: 1,
       duration: 10,
       blockDuration: 0,
-    }
+    },
+    cacheExpiration: 3,
+    cachePerUser: true,
   };
   await adminSvc.createAdminConfig(data);
 
@@ -31,4 +34,7 @@ const app = new App();
   console.log(error);
   await app.close();
   await app.closeDbConnection();
+  await app.closeRedisClient();
+  console.log('╘══════════════════════════════════════════════════');
+  process.exit(0);
 });

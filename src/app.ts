@@ -6,6 +6,10 @@ import { registerRootRoutes } from './routes/root';
 import { handleErrors, handleNotFoundError } from './middleware/errors';
 import { registerCors, registerBodyParsers } from './middleware/parsers';
 import { registerContext } from './middleware/context';
+import { RedisClient, createClient } from 'redis';
+import { exitOnError } from 'winston';
+import { responseInterceptor } from './middleware/response-interceptor';
+
 
 /**
  * Base application instance.
@@ -14,6 +18,7 @@ export class App {
   public app: Application;
   public server: Server;
   public mongooseConnection: Connection;
+  public redisClient: RedisClient;
   public port: number;
 
   constructor() {
@@ -28,9 +33,10 @@ export class App {
     /* Register parsers middleware. */
     registerCors(this.app);
     registerBodyParsers(this.app);
+    this.app.use(responseInterceptor);
 
     /* Register context middleware. */
-    this.app.use(registerContext(this.mongooseConnection));
+    this.app.use(registerContext(this.mongooseConnection, this.redisClient));
 
     /* Register api routes. */
     registerRootRoutes(this.app);
@@ -89,7 +95,7 @@ export class App {
     
     /* Mongoose error. */
     this.mongooseConnection.on('error', (error) => {
-      console.log('│ MongoDb encountered an error: ' + error);  
+      console.log('│ MongoDb encountered an error: ' + error);
     });
       
     /* Mongoose disconnected.*/
@@ -110,24 +116,57 @@ export class App {
     await this.mongooseConnection.close();
   }
 
-  public collectRoutes() {
-    const routes = [];
-
-    this.app._router.stack.forEach((middleware) => {
-        if (middleware.route) { // routes registered directly on the app
-            routes.push(middleware.route);
-        } else if (middleware.name === 'router') { // router middleware 
-            middleware.handle.stack.forEach((handler) => {
-              // console.log(JSON.stringify(handler));
-              const route = handler.route;
-              if (route) {
-                routes.push(route);
-              }
-            });
-        }
+  /**
+   * Creates new Redis client connection.
+   */
+  public async createRedisClient() {
+    this.redisClient = await createClient({
+      enable_offline_queue: false,
+      host: process.env.REDIS_HOST,
+      port: Number(process.env.REDIS_PORT)
     });
 
-    routes.forEach((route) => console.log(JSON.stringify(route)));
+    this.redisClient.on('connect', () => {
+      console.log(`│ Redis DB is connected on: ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`);
+    });
+ 
+    this.redisClient.on('error', (error) => {
+      console.log('│ Redis DB encountered an error: ' + error);
+    });
+
+    this.redisClient.on('end', (error) => {
+      console.log('│ Redis DB is disconnected.');
+    });
   }
+
+  /**
+   * Closes Redis client connection.
+   */
+  public async closeRedisClient() {
+    await this.redisClient.quit();
+  }
+
+  
+
+
+  // public collectRoutes() {
+  //   const routes = [];
+
+  //   this.app._router.stack.forEach((middleware) => {
+  //       if (middleware.route) { // routes registered directly on the app
+  //           routes.push(middleware.route);
+  //       } else if (middleware.name === 'router') { // router middleware 
+  //           middleware.handle.stack.forEach((handler) => {
+  //             // console.log(JSON.stringify(handler));
+  //             const route = handler.route;
+  //             if (route) {
+  //               routes.push(route);
+  //             }
+  //           });
+  //       }
+  //   });
+
+  //   routes.forEach((route) => console.log(JSON.stringify(route)));
+  // }
 
 }

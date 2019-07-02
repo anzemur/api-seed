@@ -17,6 +17,14 @@ export interface AuthRequest extends Request {
 }
 
 /**
+ * Authenticated response instance. 
+ */
+export interface AuthResponse extends Response {
+  cacheData: any;
+  send: any;
+}
+
+/**
  * Middleware that authenticates user's request based on JWT token.
  * @param roles Allowed user's roles.
  */

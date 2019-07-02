@@ -5,6 +5,7 @@ import { NextFunction, Response, RequestHandler } from 'express';
 import { AdminConfigModel } from '../models/admin-config-model';
 import { AdminService } from '../services/admin-service';
 import { Connection } from 'mongoose';
+import { RedisClient } from 'redis';
 
 const adminService = new AdminService();
 
@@ -16,12 +17,14 @@ export class Context {
   public user: UserModel;
   public adminConfig: AdminConfigModel;
   public mongooseConnection: Connection;
+  public redisClient: RedisClient;
 
   constructor() {
     this.id = new ObjectId();
     this.user = null;
     this.adminConfig = null;
     this.mongooseConnection = null;
+    this.redisClient = null;
   }
 }
 
@@ -31,11 +34,12 @@ export class Context {
  * @param res Express response instance.
  * @param next Express next function instance.
  */
-export function registerContext(mongooseConnection: Connection): RequestHandler {
+export function registerContext(mongooseConnection: Connection, redisClient: RedisClient): RequestHandler {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     req.context = new Context();
     req.context.adminConfig = await adminService.getAdminConfig();
     req.context.mongooseConnection = mongooseConnection;
+    req.context.redisClient = redisClient;
     next();
   };
 }

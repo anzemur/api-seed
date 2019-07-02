@@ -21,6 +21,7 @@ const app = new App();
       maxPoints: 3,
       consumePoints: 1,
       duration: 10,
+      blockDuration: 0,
     }
   };
   await adminSvc.createAdminConfig(data);

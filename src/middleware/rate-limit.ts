@@ -9,6 +9,7 @@ export interface RateLimitConfig {
   maxPoints?: number;
   consumePoints?: number;
   duration?: number;
+  blockDuration?: number;
 }
 
 export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler {
@@ -19,8 +20,9 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
 
     const options: IRateLimiterMongoOptions = {
       storeClient: req.context.mongooseConnection,
-      points: config.maxPoints || defaultRateLimit.maxPoints, // Number of points
-      duration: config.duration || defaultRateLimit.duration, // Per second(s)
+      points: config.maxPoints || defaultRateLimit.maxPoints,
+      duration: config.duration || defaultRateLimit.duration,
+      blockDuration: config.blockDuration || defaultRateLimit.blockDuration,
     };
     
     const limitBy = config.limitBy || defaultRateLimit.limitBy;
@@ -30,12 +32,13 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
     }
 
     const rateLimiterMongo = new RateLimiterMongo(options);
-    rateLimiterMongo.consume(consumeKey, config.consumePoints || defaultRateLimit.consumePoints) // consume 2 points
+    rateLimiterMongo.consume(consumeKey, config.consumePoints || defaultRateLimit.consumePoints)
       .then((rateLimiterRes) => {
         res.set(getHeaders(rateLimiterRes, options));
         next();
       })
       .catch((rateLimiterRes) => {
+        console.log(rateLimiterRes);
         res.set(getHeaders(rateLimiterRes, options));
         next(new RateLimitExceededError('Too many requests.'));
       });

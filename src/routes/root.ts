@@ -20,7 +20,7 @@ export function rootRoutes() {
   /**
    * Returns api base information.
    */
-  router.get('/', authenticateRequest(), registerRateLimit(), async (req: AuthRequest, res: Response) => {
+  router.get('/', authenticateRequest(), registerRateLimit({blockDuration: 60000}), async (req: AuthRequest, res: Response) => {
     res.status(200).json({
       name: 'API-seed',
       description: 'API-seed is a tool that helps developers develop their APIs better and faster.',

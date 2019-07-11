@@ -21,7 +21,7 @@ export function rootRoutes() {
   /**
    * Returns api base information.
    */
-  router.get('/', authenticateRequest(), registerCache(), async (req: AuthRequest, res: Response) => {
+  router.get('/', registerCache(), async (req: AuthRequest, res: Response) => {
     res.status(200).json({
       name: 'API-seed',
       description: 'API-seed is a tool that helps developers develop their APIs better and faster.',

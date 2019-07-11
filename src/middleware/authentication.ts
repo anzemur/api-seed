@@ -20,7 +20,7 @@ export interface AuthRequest extends Request {
  * Authenticated response instance. 
  */
 export interface AuthResponse extends Response {
-  cacheData: any;
+  responseData: any;
   send: any;
 }
 

@@ -7,8 +7,8 @@ import { handleErrors, handleNotFoundError } from './middleware/errors';
 import { registerCors, registerBodyParsers } from './middleware/parsers';
 import { registerContext } from './middleware/context';
 import { RedisClient, createClient } from 'redis';
-import { exitOnError } from 'winston';
 import { responseInterceptor } from './middleware/response-interceptor';
+import { registerLogs } from './middleware/logs';
 
 
 /**
@@ -34,6 +34,7 @@ export class App {
     registerCors(this.app);
     registerBodyParsers(this.app);
     this.app.use(responseInterceptor);
+    this.app.use(registerLogs);
 
     /* Register context middleware. */
     this.app.use(registerContext(this.mongooseConnection, this.redisClient));

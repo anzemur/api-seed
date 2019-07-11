@@ -22,11 +22,11 @@ export function registerCache(perUser: boolean = false, expiration?: number): Re
       if (!err && result) {
         res.send(JSON.parse(result));
       } else {
-        res.cacheData = res.send;
+        res.responseData = res.send;
         res.send = (data: any) => {
           redisClient.set(key, data, 'EX', cacheDataExp, (error, reply) => {
             if (reply === 'OK') {
-              res.cacheData(data);
+              res.responseData(data);
             }
           });
         };

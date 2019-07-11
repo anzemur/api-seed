@@ -3,6 +3,7 @@ import { UserStatus, UserRoles } from '../config/user';
 import { prop } from 'typegoose';
 
 export class UserModel extends Model {
+
   @prop({ required: true, unique: true })
   username: string;
 

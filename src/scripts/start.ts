@@ -13,7 +13,9 @@ const app = new App();
   await app.listen();
   await app.connectDb();
   await app.createRedisClient();
-  app.registerRoutesAndMiddleware();
+  await app.registerRoutesAndMiddleware();
+
+  // await app.createAdminConsoleNuxtApp();
 
   const adminSvc = new AdminService();
   const data = {

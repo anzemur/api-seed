@@ -8,3 +8,7 @@ export enum EnvType {
   PRODUCTION = 'production',
   TEST = 'test',
 }
+
+export enum PassportAuthType {
+  FACEBOOK = 'facebook-token',
+}

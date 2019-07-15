@@ -10,7 +10,7 @@ export class UserModel extends Model {
   @prop({ required: true, unique: true })
   email: string;
 
-  @prop({ required: true })
+  @prop()
   password: string;
 
   @prop({ required: true })
@@ -24,6 +24,9 @@ export class UserModel extends Model {
 
   @prop({required: true })
   roles: UserRoles[];
+
+  @prop()
+  fbId: string;
 }
 
 export const User = new UserModel().getModelForClass(UserModel, { schemaOptions: Model.schemaOptions });

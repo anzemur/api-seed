@@ -14,3 +14,16 @@ export function isEmail(email: string): boolean {
 export function isRequestBodyEmpty(body: any): boolean {
   return (body.constructor === Object && Object.keys(body).length === 0);
 }
+
+/**
+ * Checks if given JSON string can be parsed into JS object.
+ * @param jsonString JSON string to check.
+ */
+export function isJsonString(jsonString: string): boolean {
+  try {
+    JSON.parse(jsonString);
+  } catch (error) {
+    return false;
+  }
+  return true;
+}

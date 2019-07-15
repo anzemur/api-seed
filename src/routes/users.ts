@@ -2,6 +2,7 @@ import { Application, Router } from 'express';
 import { UsersController } from '../controllers/users-controller';
 import { authenticateRequest } from '../middleware/authentication';
 import { UserRoles } from '../config/user';
+import passport from 'passport';
 
 /* Register controllers. */
 const usersController = new UsersController();
@@ -19,6 +20,9 @@ export function registerUsersRoutes(app: Application) {
  */
 export function usersRoutes() {
   const router = Router();
+
+  router.post('/users/auth/facebook',
+    usersController.facebookAuth);
 
   router.post('/users/registration',
     usersController.registrationRequest);

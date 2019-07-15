@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { UnauthorizedError, UnauthenticatedError, InternalServerError, BadRequestError, ConflictError, ValidationError, RateLimitExceededError } from '../lib/errors';
+import { UnauthorizedError, UnauthenticatedError, InternalServerError, BadRequestError, ConflictError, ValidationError, RateLimitExceededError, InternalOAuthError } from '../lib/errors';
+import { isJsonString } from '../lib/validators';
 
 /**
  * Not found error handling middleware.
@@ -31,29 +32,36 @@ export function handleErrors(error: any, req: Request, res: Response, next: Next
     res.status(error.status).json({
       status: error.status,
       name: error.name,
-      ... error.message ? { message: error.message } : {},
+      ...error.message ? { message: error.message } : {},
     });
   } else if (error instanceof InternalServerError) {
     res.status(error.status).json({
       status: error.status,
       name: error.name,
-      ... error.message ? { message: error.message } : {},
-      ... error.error && process.env.ENV === 'dev' ? { error: error.error } : {},
+      ...error.message ? { message: error.message } : {},
+      ...error.error && process.env.ENV === 'dev' ? { error: error.error } : {},
     });
   } else if (error instanceof ConflictError) {
     res.status(error.status).json({
       status: error.status,
       name: error.name,
-      ... error.message ? { message: error.message } : {},
+      ...error.message ? { message: error.message } : {},
       conflicts: error.conflicts
     });
   } else if (error instanceof ValidationError) {
       res.status(error.status).json({
         status: error.status,
         name: error.name,
-        ... error.message ? { message: error.message } : {},
-        ... error.errors.length ? { errors: error.errors } : {}
+        ...error.message ? { message: error.message } : {},
+        ...error.errors.length ? { errors: error.errors } : {}
       });
+  } else if (error instanceof InternalOAuthError) {
+    res.status(error.status).json({
+      status: error.status,
+      name: error.name,
+      ...error.message ? { message: error.message } : {},
+      ...error.data ? (isJsonString(error.data) ? { data: JSON.parse(error.data) } : { data: error.data }) : {}
+    });
   } else {
     res.status(error.status || 500).json({
       status: error.status || 500,

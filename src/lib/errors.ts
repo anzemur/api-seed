@@ -102,7 +102,7 @@ export class ValidationError extends Error {
 }
 
 /**
- * NotFound error.
+ * Rate limit exceeded error.
  */
 export class RateLimitExceededError extends Error {
   public readonly status: number;
@@ -118,7 +118,7 @@ export class RateLimitExceededError extends Error {
 }
 
 /**
- * NotFound error.
+ * Not found error.
  */
 export class NotFoundError extends Error {
   public readonly status: number;
@@ -128,6 +128,24 @@ export class NotFoundError extends Error {
     this.status = 404;
     this.name = this.constructor.name;
     this.message = message;
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * Internal OAuth error.
+ */
+export class InternalOAuthError extends Error {
+  public readonly status: number;
+  public data: string;
+
+  public constructor(status: number = 500, message?: string, data?: any) {
+    super();
+    this.status = status;
+    this.name = this.constructor.name;
+    this.message = message;
+    this.data = data;
 
     Error.captureStackTrace(this, this.constructor);
   }

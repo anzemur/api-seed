@@ -11,6 +11,8 @@
     "no-unused-expression": true
   },
   "rules": {
+    "no-identical-functions": false,
+    "cognitive-complexity": [true, 25],
     "no-unsafe-any": false,
     "no-any": false,
     "no-return-await": true,

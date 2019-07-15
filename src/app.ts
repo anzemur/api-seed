@@ -10,6 +10,8 @@ import { RedisClient, createClient } from 'redis';
 import { responseInterceptor } from './middleware/response-interceptor';
 import { registerLogs } from './middleware/logs';
 import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
+import passport from 'passport';
+import { registerFacebookAuth } from './config/passport';
 
 /**
  * Base application instance.
@@ -30,6 +32,10 @@ export class App {
    * Registers applications routes and middleware.
    */
   public async registerRoutesAndMiddleware() {
+    await registerFacebookAuth();
+    this.app.use(passport.initialize());
+
+
     /* Register parsers middleware. */
     registerCors(this.app);
     registerBodyParsers(this.app);
@@ -44,7 +50,7 @@ export class App {
     registerUsersRoutes(this.app);
 
     /* Register admin console app middleware. */
-    await buildAdminConsoleNuxtApp(this.app);
+    // await buildAdminConsoleNuxtApp(this.app);
 
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);

@@ -12,7 +12,7 @@
   },
   "rules": {
     "no-identical-functions": false,
-    "cognitive-complexity": [true, 25],
+    "cognitive-complexity": [true, 35],
     "no-unsafe-any": false,
     "no-any": false,
     "no-return-await": true,
@@ -35,7 +35,7 @@
     "no-null-keyword": false,
     "arrow-parens": false,
     "ordered-imports": false,
-    "curly": true,
+    "curly": false,
     "eofline": true,
     "forin": false,
     "import-blacklist": [true, "underscore"],
@@ -87,7 +87,7 @@
       true,
       "single"
     ],
-    "radix": true,
+    "radix": false,
     "semicolon": [
       true,
       "always",

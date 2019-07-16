@@ -12,6 +12,7 @@ import { registerLogs } from './middleware/logs';
 import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import passport from 'passport';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
+import env from './config/env';
 
 /**
  * Base application instance.
@@ -34,8 +35,12 @@ export class App {
   public async registerRoutesAndMiddleware() {
 
     /** Register passport authentication strategies */
-    await registerFacebookAuth();
-    await registerGoogleAuth();
+    if (env.FB_CLIENT_ID && env.FB_CLIENT_SECRET)
+      await registerFacebookAuth();
+
+    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)
+      await registerGoogleAuth();
+
     this.app.use(passport.initialize());
 
     /* Register parsers middleware. */
@@ -52,7 +57,9 @@ export class App {
     registerUsersRoutes(this.app);
 
     /* Register admin console app middleware. */
-    // await buildAdminConsoleNuxtApp(this.app);
+    if (env.USE_ADMIN_CONSOLE) {
+      await buildAdminConsoleNuxtApp(this.app);
+    }
 
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);

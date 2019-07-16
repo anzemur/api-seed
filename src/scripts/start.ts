@@ -19,6 +19,7 @@ const app = new App();
 
   const adminSvc = new AdminService();
   const data = {
+    allowGoogleAuth: false,
     rateLimit: {
       limitBy: 1,
       maxPoints: 3,

@@ -11,6 +11,12 @@ export class AdminConfigModel extends Model {
 
   @prop({ required: true })
   cachePerUser: boolean;
+
+  @prop({ required: true, default: true })
+  allowFacebookAuth: boolean;
+
+  @prop({ required: true, default: true })
+  allowGoogleAuth: boolean;
 }
 
 export const AdminConfig = new AdminConfigModel().getModelForClass(

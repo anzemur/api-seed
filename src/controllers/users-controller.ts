@@ -5,7 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
 import { registrationRequestSchema, changePasswordSchema } from './requests/users';
-import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError } from '../lib/errors';
+import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError } from '../lib/errors';
 import { UserStatus, UserRoles } from '../config/user';
 import { MailingService } from '../services/mailing-service';
 import { registrationEmailTemplate } from '../res/templates/registration-email';
@@ -28,9 +28,12 @@ export class UsersController extends Controller {
    * @param res Express response instance.
    * @param next Express next function instance.
    */
-  public async facebookAuth(req: Request, res: Response, next: NextFunction) {
-    const body = req.body;
+  public async facebookAuth(req: AuthRequest, res: Response, next: NextFunction) {
+    if (req.context.adminConfig && !req.context.adminConfig.allowFacebookAuth) {
+      return next(new UnauthorizedError('Facebook authentication is not allowed.'));
+    }
 
+    const body = req.body;
     if (!body || !body.access_token) {
       return next(new BadRequestError('Request body is missing `access_token`.'));
     }
@@ -64,9 +67,12 @@ export class UsersController extends Controller {
    * @param res Express response instance.
    * @param next Express next function instance.
    */
-  public async googleAuth(req: Request, res: Response, next: NextFunction) {
-    const body = req.body;
+  public async googleAuth(req: AuthRequest, res: Response, next: NextFunction) {
+    if (req.context.adminConfig && !req.context.adminConfig.allowGoogleAuth) {
+      return next(new UnauthorizedError('Google authentication is not allowed.'));
+    }
 
+    const body = req.body;
     if (!body || !body.access_token) {
       return next(new BadRequestError('Request body is missing `access_token`.'));
     }

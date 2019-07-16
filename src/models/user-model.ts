@@ -26,7 +26,10 @@ export class UserModel extends Model {
   roles: UserRoles[];
 
   @prop()
-  fbId: string;
+  facebookId: string;
+
+  @prop()
+  googleId: string;
 }
 
 export const User = new UserModel().getModelForClass(UserModel, { schemaOptions: Model.schemaOptions });

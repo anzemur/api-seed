@@ -12,6 +12,7 @@ import { registrationEmailTemplate } from '../res/templates/registration-email';
 import { isRequestBodyEmpty } from '../lib/validators';
 import { AuthRequest } from '../middleware/authentication';
 import passport from 'passport';
+import { PassportAuthStrategyType } from '../config/types';
 
 /* Register services.*/
 const authService = new AuthenticationService();
@@ -21,8 +22,8 @@ const authService = new AuthenticationService();
  */
 export class UsersController extends Controller {
 
-   /**
-   * Checks if user can be authenticated using Facebook auth and generates authentication token. 
+  /**
+   * Checks if user can be authenticated using Facebook auth and generates authentication token.
    * @param req Express request instance.
    * @param res Express response instance.
    * @param next Express next function instance.
@@ -34,7 +35,7 @@ export class UsersController extends Controller {
       return next(new BadRequestError('Request body is missing `access_token`.'));
     }
 
-    await passport.authenticate('facebook-token', (error, user, data) => {
+    await passport.authenticate(PassportAuthStrategyType.FACEBOOK, (error, user, data) => {
       if (error) {
         if (error.name === 'InternalOAuthError') {
           return next(new InternalOAuthError(
@@ -46,7 +47,7 @@ export class UsersController extends Controller {
           return next(new InternalServerError('There was a problem while performing Facebook authorization.', error));
         }
       }
-      
+
       /* Authenticate user and generate JWT. */
       if (user) {
         return res.status(200).json({
@@ -54,9 +55,49 @@ export class UsersController extends Controller {
           authToken: authService.generateAuthToken(user.id)
         });
       }
+    }) (req, res);
+  }
 
-      console.log(error);
-      console.log(user);
+  /**
+   * Checks if user can be authenticated using Google auth and generates authentication token.
+   * @param req Express request instance.
+   * @param res Express response instance.
+   * @param next Express next function instance.
+   */
+  public async googleAuth(req: Request, res: Response, next: NextFunction) {
+    const body = req.body;
+
+    if (!body || !body.access_token) {
+      return next(new BadRequestError('Request body is missing `access_token`.'));
+    }
+
+    await passport.authenticate(PassportAuthStrategyType.GOOGLE, (error, user, data) => {
+      /** If invalid `access_token` is provided `error` is passed as `data` parameter. */
+      if (data && data.name === 'InternalOAuthError') {
+        error = data;
+      }
+
+      if (error) {
+        if (error.name === 'InternalOAuthError') {
+          return next(new InternalOAuthError(
+            error.oauthError && error.oauthError.statusCode ? error.oauthError.statusCode : 500,
+            error.message || 'Failed to fetch user profile.',
+            error.oauthError && error.oauthError.data ? error.oauthError.data : ''
+          ));
+        } else if (error instanceof BadRequestError) {
+          next(error);
+        } else {
+          return next(new InternalServerError('There was a problem while performing Google authorization.', error));
+        }
+      }
+
+      /* Authenticate user and generate JWT. */
+      if (user) {
+        return res.status(200).json({
+          user: user,
+          authToken: authService.generateAuthToken(user.id)
+        });
+      }
     }) (req, res);
   }
 
@@ -140,7 +181,7 @@ export class UsersController extends Controller {
       body.firstName,
       body.lastName,
     );
-    
+
     if (!registrationToken) {
       return next(new BadRequestError('Invalid registration token.'));
     }

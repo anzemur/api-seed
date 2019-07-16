@@ -23,6 +23,9 @@ export function usersRoutes() {
 
   router.post('/users/auth/facebook',
     usersController.facebookAuth);
+    
+  router.post('/users/auth/google',
+    usersController.googleAuth);
 
   router.post('/users/registration',
     usersController.registrationRequest);

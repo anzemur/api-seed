@@ -15,8 +15,6 @@ const app = new App();
   await app.createRedisClient();
   await app.registerRoutesAndMiddleware();
 
-  // await app.createAdminConsoleNuxtApp();
-
   const adminSvc = new AdminService();
   const data = {
     allowGoogleAuth: false,
@@ -26,6 +24,7 @@ const app = new App();
       consumePoints: 1,
       duration: 10,
       blockDuration: 0,
+      allowRateLimit: true,
     },
     cacheExpiration: 3,
     cachePerUser: true,

@@ -18,6 +18,11 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     const defaultRateLimit = req.context.adminConfig.rateLimit;
 
+    /* Check if rate limiting is disabled. */
+    if (!defaultRateLimit.allowRateLimit) {
+      return next();
+    }
+
     const options: IRateLimiterMongoOptions = {
       storeClient: req.context.mongooseConnection,
       points: config.maxPoints || defaultRateLimit.maxPoints,
@@ -40,9 +45,9 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
       .catch((rateLimiterRes) => {
         res.set(getHeaders(rateLimiterRes, options));
         if (rateLimiterRes.consumedPoints > options.points && options.blockDuration) {
-          next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Requesting this endpoint is now blocked for: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
+          return next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Requesting this endpoint is now blocked for: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
         } else {
-          next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Please try again in: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
+          return next(new RateLimitExceededError(`Too many sent requests from this ${limitBy === RateLimitByType.USER ? 'user' : 'IP'}. Please try again in: ${parseDurationFromMs(rateLimiterRes.msBeforeNext)}`));
         }
       });
   };

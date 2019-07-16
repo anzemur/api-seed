@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from 'express';
+import { RequestHandler } from 'express';
 import { AuthRequest, AuthResponse } from './authentication';
 import { NextFunction } from 'connect';
 

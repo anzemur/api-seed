@@ -22,6 +22,7 @@ export interface AuthRequest extends Request {
 export interface AuthResponse extends Response {
   responseData: any;
   send: any;
+  return(status: number, data: Object, meta?: Object): void;
 }
 
 /**

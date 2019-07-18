@@ -6,6 +6,7 @@ import { MailingService } from '../services/mailing-service';
 import { InternalServerError } from '../lib/errors';
 import { AdminConfig } from '../models/admin-config-model';
 import { AuthRequest } from '../middleware/authentication';
+import { HttpStatusCodes } from '../config/http-status-codes';
 
 /**
  * Admin controller.
@@ -29,7 +30,7 @@ export class AdminController extends Controller {
   public async getAdminConfig(req: Request, res: Response, next: NextFunction) {
     const { config, error } = await this.adminService.getAdminConfig();
     if (config) {
-      res.status(200).json(config);
+      res.status(HttpStatusCodes.OK).json(config);
     } else {
       return next(error ? error : new InternalServerError('There was a problem while getting admin config.'));
     }
@@ -49,7 +50,7 @@ export class AdminController extends Controller {
         { new: true, runValidators: true }
       );
       if (config) {
-        res.status(200).json(config);
+        res.status(HttpStatusCodes.OK).json(config);
       } else {
         return next(new InternalServerError('There was a problem while updating admin config.'));
       }

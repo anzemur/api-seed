@@ -14,6 +14,7 @@ import passport from 'passport';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import env from './config/env';
 import { registerAdminRoutes } from './routes/admin';
+import { MongooseEvents, RedisEvents } from './config/types';
 
 /**
  * Base application instance.
@@ -110,17 +111,17 @@ export class App {
     this.mongooseConnection = mongoose.connection;
 
     /* Mongoose connection. */
-    this.mongooseConnection.on('connected', () => {
+    this.mongooseConnection.on(MongooseEvents.CONNECTED, () => {
       console.log('│ MongoDb is connected on: ', connectionUri);
     });
 
     /* Mongoose error. */
-    this.mongooseConnection.on('error', (error) => {
+    this.mongooseConnection.on(MongooseEvents.ERROR, (error) => {
       console.log('│ MongoDb encountered an error: ' + error);
     });
 
     /* Mongoose disconnected.*/
-    this.mongooseConnection.on('disconnected', () => {
+    this.mongooseConnection.on(MongooseEvents.DISCONNECTED, () => {
       console.log('│ MongoDb is disconnected.');
     });
 
@@ -148,15 +149,15 @@ export class App {
       port: Number(process.env.REDIS_PORT)
     });
 
-    this.redisClient.on('connect', () => {
+    this.redisClient.on(RedisEvents.CONNECT, () => {
       console.log(`│ Redis DB is connected on: ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`);
     });
 
-    this.redisClient.on('error', (error) => {
+    this.redisClient.on(RedisEvents.ERROR, (error) => {
       console.log('│ Redis DB encountered an error: ' + error);
     });
 
-    this.redisClient.on('end', (error) => {
+    this.redisClient.on(RedisEvents.END, (error) => {
       console.log('│ Redis DB is disconnected.');
     });
   }

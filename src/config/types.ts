@@ -33,3 +33,21 @@ export enum LoggerLevels {
   warn = 'warn',
   error = 'error',
 }
+
+/**
+ * Mongoose event types.
+ */
+export enum MongooseEvents {
+  CONNECTED = 'connected',
+  DISCONNECTED = 'disconnected',
+  ERROR = 'error',
+}
+
+/**
+ * Redis event types.
+ */
+export enum RedisEvents {
+  CONNECT = 'connect',
+  END = 'end',
+  ERROR = 'error',
+}

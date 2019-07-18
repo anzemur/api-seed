@@ -1,3 +1,5 @@
+import { HttpStatusCodes } from '../config/http-status-codes';
+
 /**
  * Unauthorized error.
  */
@@ -6,7 +8,7 @@ export class UnauthorizedError extends Error {
 
   public constructor(message?: string) {
     super();
-    this.status = 403;
+    this.status = HttpStatusCodes.Forbidden;
     this.name = this.constructor.name;
     this.message = message;
 
@@ -22,7 +24,7 @@ export class UnauthenticatedError extends Error {
 
   public constructor(message?: string) {
     super();
-    this.status = 401;
+    this.status = HttpStatusCodes.Unauthorized;
     this.name = this.constructor.name;
     this.message = message;
 
@@ -39,7 +41,7 @@ export class ConflictError extends Error {
 
   public constructor(conflicts: string[], message?: string) {
     super();
-    this.status = 409;
+    this.status = HttpStatusCodes.Conflict;
     this.name = this.constructor.name;
     this.message = message;
     this.conflicts = conflicts;
@@ -57,7 +59,7 @@ export class InternalServerError extends Error {
   
   public constructor(message?: string, error?: any) {
     super();
-    this.status = 500;
+    this.status = HttpStatusCodes.InternalServerError;
     this.name = this.constructor.name;
     this.message = message;
     this.error = error;
@@ -74,7 +76,7 @@ export class BadRequestError extends Error {
 
   public constructor(message?: string) {
     super();
-    this.status = 400;
+    this.status = HttpStatusCodes.BadRequest;
     this.name = this.constructor.name;
     this.message = message;
 
@@ -92,7 +94,7 @@ export class ValidationError extends Error {
   public constructor(message?: string, error?: any) {
     super();
 
-    this.status = 422;
+    this.status = HttpStatusCodes.UnprocessableEntity;
     this.name = this.constructor.name;
     this.message = message;
     this.errors = error.details && Array.isArray(error.details) ? error.details.map((d: any) => d.message) : [];
@@ -109,7 +111,7 @@ export class RateLimitExceededError extends Error {
 
   public constructor(message?: string) {
     super();
-    this.status = 429;
+    this.status = HttpStatusCodes.TooManyRequests;
     this.name = this.constructor.name;
     this.message = message;
 
@@ -125,7 +127,7 @@ export class NotFoundError extends Error {
 
   public constructor(message?: string) {
     super();
-    this.status = 404;
+    this.status = HttpStatusCodes.NotFound;
     this.name = this.constructor.name;
     this.message = message;
 

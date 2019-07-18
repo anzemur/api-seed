@@ -13,6 +13,7 @@ interface AdminRateLimitConfig extends RateLimitConfig {
  * Admin config model.
  */
 export class AdminConfigModel extends Model {
+
   @prop({ required: true })
   rateLimit: AdminRateLimitConfig;
 

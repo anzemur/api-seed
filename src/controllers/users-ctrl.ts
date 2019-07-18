@@ -1,4 +1,4 @@
-import { Controller } from './controller';
+import { Controller } from './ctrl';
 import { User } from '../models/user-model';
 import { AuthenticationService } from '../services/authentication-service';
 import { Request, Response, NextFunction } from 'express';
@@ -200,7 +200,7 @@ export class UsersController extends Controller {
       html: registrationEmailTemplate(registrationToken)
     };
 
-    const mailingService = new MailingService();
+    const mailingService = MailingService.getInstance();
     const response = await mailingService.sendMail(emailData);
     if (response) {
       res.status(200).json({

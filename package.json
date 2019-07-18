@@ -10,7 +10,8 @@
     "start": "tsc && node dist/src/scripts/start.js",
     "watch-node": "nodemon dist/src/scripts/start.js",
     "watch-ts": "tsc -w",
-    "test": "mocha -r ts-node/register ./test/*.test.ts"
+    "test": "mocha -r ts-node/register ./test/*.test.ts",
+    "lint": "tslint --project tsconfig.json \"src/**/*.ts?(x)\""
   },
   "author": "Anze Mur <am3159@student.uni-lj.si>",
   "license": "ISC",
@@ -41,6 +42,7 @@
     "@types/passport-jwt": "^3.0.1",
     "@types/redis": "^2.8.13",
     "@types/supertest": "^2.0.7",
+    "autobind-decorator": "^2.4.0",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.1.3",
@@ -68,7 +70,9 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "supertest": "^4.0.2",
+    "swagger-ui-express": "^4.0.7",
     "ts-node": "^8.3.0",
+    "tslint-no-circular-imports": "^0.7.0",
     "typegoose": "^5.6.0",
     "winston": "^3.2.1"
   }

@@ -6,6 +6,7 @@ import { AdminConfigModel } from '../models/admin-config-model';
 import { AdminService } from '../services/admin-service';
 import { Connection } from 'mongoose';
 import { RedisClient } from 'redis';
+import { InternalServerError } from '../lib/errors';
 
 const adminService = new AdminService();
 
@@ -37,7 +38,16 @@ export class Context {
 export function registerContext(mongooseConnection: Connection, redisClient: RedisClient): RequestHandler {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     req.context = new Context();
-    req.context.adminConfig = await adminService.getAdminConfig();
+
+    /* Load admin config from db. */
+    const { config, error } = await adminService.getAdminConfig();
+    if (config) {
+      req.context.adminConfig = config;
+    }
+
+    if (!req.context.adminConfig)
+      next(error ? error : new InternalServerError('There was a problem while loading admin config. Please try again.'));
+    
     req.context.mongooseConnection = mongooseConnection;
     req.context.redisClient = redisClient;
     next();

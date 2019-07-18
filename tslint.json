@@ -1,7 +1,8 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint-sonarts"
+    "tslint-sonarts",
+    "tslint-no-circular-imports"
   ],
   "exclude": [
     "tools/**",

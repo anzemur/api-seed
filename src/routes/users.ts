@@ -1,14 +1,13 @@
 import { Application, Router } from 'express';
-import { UsersController } from '../controllers/users-controller';
+import { UsersController } from '../controllers/users-ctrl';
 import { authenticateRequest } from '../middleware/authentication';
 import { UserRoles } from '../config/user';
-import passport from 'passport';
 
-/* Register controllers. */
+/* Register controller. */
 const usersController = new UsersController();
 
 /**
- * Registers users api routes.
+ * Registers users api routes at `/api/{API_VERSION}/admin`.
  * @param app Express application instance.
  */
 export function registerUsersRoutes(app: Application) {

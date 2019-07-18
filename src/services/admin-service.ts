@@ -1,5 +1,6 @@
 import { Service } from './service';
 import { AdminConfig, AdminConfigModel } from '../models/admin-config-model';
+import { InternalServerError } from '../lib/errors';
 
 export class AdminService extends Service {
 
@@ -8,10 +9,25 @@ export class AdminService extends Service {
   }
 
   /**
-   * Returns admin config from DB.
+   * Returns admin config from db.
    */
-  async getAdminConfig(): Promise<AdminConfigModel> {
-    return AdminConfig.findOne();
+  async getAdminConfig(): Promise<{ config: AdminConfigModel, error?: any}> {
+    try {
+      const config = await AdminConfig.findOne();
+      if (config) {
+        return { config };
+      } else {
+        return {
+          config: null,
+          error: new InternalServerError('There was a problem while getting admin config.')
+        };
+      }
+    } catch (error) {
+      return {
+        config: null,
+        error: new InternalServerError('There was a problem while getting admin config.', error)
+      };
+    }
   }
 
   async createAdminConfig(data: any): Promise<AdminConfigModel> {    

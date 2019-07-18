@@ -1,4 +1,6 @@
 import * as winston from 'winston';
+import moment from 'moment';
+import { LoggerLevels } from '../config/types';
 
 /**
  * Base service class.
@@ -6,21 +8,21 @@ import * as winston from 'winston';
 export abstract class Service {
 
   /* Service name property definition. */
-  name: string;
+  readonly name: string;
 
   /* Logger instance property definition. */
-  logger: winston.Logger;
+  readonly logger: winston.Logger;
 
   constructor(name: string) {
     this.name = name;
 
     this.logger = winston.createLogger({
-      level: 'info',
+      level: LoggerLevels.info,
       format: winston.format.json(),
       defaultMeta: { service: this.name },
       transports: [
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/all.log' })
+        new winston.transports.File({ filename: `logs/${moment().format('MM-DD-YYYY')}-error.log`, level: LoggerLevels.error }),
+        new winston.transports.File({ filename: `logs/${moment().format('MM-DD-YYYY')}-all.log` })
       ]
     });
   }

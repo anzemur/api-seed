@@ -13,6 +13,7 @@ import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import passport from 'passport';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import env from './config/env';
+import { registerAdminRoutes } from './routes/admin';
 
 /**
  * Base application instance.
@@ -55,11 +56,11 @@ export class App {
     /* Register api routes. */
     registerRootRoutes(this.app);
     registerUsersRoutes(this.app);
+    registerAdminRoutes(this.app);
 
     /* Register admin console app middleware. */
-    if (env.USE_ADMIN_CONSOLE) {
+    if (env.USE_ADMIN_CONSOLE) 
       await buildAdminConsoleNuxtApp(this.app);
-    }
 
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);
@@ -126,6 +127,7 @@ export class App {
     await mongoose.connect(connectionUri, {
       useNewUrlParser: true,
       useCreateIndex: true,
+      useFindAndModify: false
     });
   }
 

@@ -1,6 +1,8 @@
 import { AuthRequest, AuthResponse } from './authentication';
 import { NextFunction } from 'express';
 import { Log } from '../models/log-model';
+import moment from 'moment';
+import logger from '../config/logger';
 
 /**
  * Request logs middleware.
@@ -29,6 +31,8 @@ export function registerLogs(req: AuthRequest, res: AuthResponse, next: NextFunc
       responseTime: `${Date.now() - startTime}ms`
     });
 
+    logger.http(`Request on ${moment()}`, { request: log });
+    
     try {
       await log.save();
     } catch (error) {

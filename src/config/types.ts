@@ -22,3 +22,14 @@ export enum PassportAuthStrategyType {
   FACEBOOK = 'facebook-token',
   GOOGLE = 'google-token',
 }
+
+/**
+ * Logger level types.
+ */
+export enum LoggerLevels {
+  debug = 'debug',
+  info = 'info',
+  http = 'http',
+  warn = 'warn',
+  error = 'error',
+}

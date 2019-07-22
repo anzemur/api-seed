@@ -1,6 +1,5 @@
 import { NextFunction } from 'express';
 import { AuthRequest, AuthResponse } from './authentication';
-import { RequestHandler } from 'express-serve-static-core';
 
 /**
  * Response interceptor.
@@ -12,15 +11,11 @@ export function responseInterceptor(req: AuthRequest, res: AuthResponse, next: N
   next();
 }
 
-export function createReturn(): RequestHandler {
-  return (req: AuthRequest, res: AuthResponse, next: NextFunction) => {
-    res.return = (status: number, data: Object, meta?: Object) => {
-      res.status(status).json({
-        ...data,
-        meta
-      });
-    };
-    next();
+export function createReturn(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+  res.return = (status: number, data: any, meta?: Object) => {
+    const returnData = meta ? { data, meta } : data;
+    res.status(status).json(returnData);
   };
+  next();
 }
 

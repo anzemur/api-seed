@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { ObjectId } from 'bson';
 
 /**
  * Formats application uptime to format 'hh:mm:ss'.
@@ -22,4 +23,12 @@ export function formatApplicationUptime(uptime: number) {
  */
 export function parseDurationFromMs(durationMs: number, format?: string) {
   return moment.utc(durationMs).format(format || 'HH:mm:ss');
+}
+
+/**
+ * Parses given value to MongoDB ObjectId or returns null.
+ * @param value string | number | ObjectId.
+ */
+export function toObjectId(value: any) {
+  return ObjectId.isValid(value) ? new ObjectId(value) : null;
 }

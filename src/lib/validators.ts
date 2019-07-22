@@ -1,3 +1,5 @@
+import { ObjectId } from 'bson';
+
 /**
  * Checks if given email string is valid email.
  * @param email Email string.
@@ -26,4 +28,12 @@ export function isJsonString(jsonString: string): boolean {
     return false;
   }
   return true;
+}
+
+/**
+ * Checks if given valid is valid MongoDB ObjectId.
+ * @param value string | number | ObjectId.
+ */
+export function isObjectId(value: any): boolean {
+  return ObjectId.isValid(value);
 }

@@ -1,6 +1,14 @@
 import * as Joi from 'joi';
 
 /**
+ * User update body schema.
+ */
+export const updateUserSchema = Joi.object().keys({
+  firstName: Joi.string(),
+  lastName: Joi.string(),
+}).required();
+
+/**
  * Admin config update body schemas.
  */
 export const updateAdminConfigSchema = Joi.object().keys({

@@ -6,14 +6,14 @@ import { InternalServerError, UnauthorizedError, NotFoundError } from '../lib/er
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { HttpStatusCodes } from '../config/http-status-codes';
 import { AuthenticationService } from '../services/authentication-service';
-import { ObjectId } from 'bson';
 import { User } from '../models/user-model';
+import { toObjectId } from '../lib/parsers';
 
-export class UserController extends Controller {
+export class UsersController1 extends Controller {
 
   /* Register services. */
-  authenticationService: AuthenticationService;
-  mailingService: MailingService;
+  private authenticationService: AuthenticationService;
+  private mailingService: MailingService;
 
   constructor() {
     super();
@@ -27,6 +27,17 @@ export class UserController extends Controller {
   @BoundMethod
   public async getUser(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const userId = req.params.userId;
+
+    if (userId !== req.context.user.id) {
+      return next(new UnauthorizedError('You are not authorized to read this user data.'));
+    }
+  }
+
+  /**
+   * Get paginated list of users.
+   */
+  @BoundMethod
+  public async getUsers(req: AuthRequest, res: AuthResponse, next: NextFunction) {
   }
 
   /**
@@ -43,7 +54,7 @@ export class UserController extends Controller {
 
     try {
       const user = await User.findOneAndUpdate(
-        { _id: new ObjectId(userId) },
+        { _id: toObjectId(userId) },
         { $set: body },
         { new: true, runValidators: true }
       );
@@ -55,7 +66,14 @@ export class UserController extends Controller {
       }
       
     } catch (error) {
-      return next(new InternalServerError('There was a problem while updating admin config.', error));
+      return next(new InternalServerError('There was a problem while updating user.', error));
     }
+  }
+
+  /**
+   * Deletes user.
+   */
+  @BoundMethod
+  public async deleteUser(req: AuthRequest, res: AuthResponse, next: NextFunction) {
   }
 }

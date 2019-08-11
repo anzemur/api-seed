@@ -14,6 +14,7 @@ const authService = new AuthenticationService();
 export interface AuthRequest extends Request {
   context: Context;
   authToken: string;
+  device: any;
 }
 
 /**

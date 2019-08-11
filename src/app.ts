@@ -4,7 +4,7 @@ import mongoose, { Connection } from 'mongoose';
 import { registerUsersRoutes } from './routes/users';
 import { registerRootRoutes } from './routes/root';
 import { handleErrors, handleNotFoundError } from './middleware/errors';
-import { registerCors, registerBodyParsers } from './middleware/parsers';
+import { registerCors, registerBodyParsers, registerDeviceParsers } from './middleware/parsers';
 import { registerContext } from './middleware/context';
 import { RedisClient, createClient } from 'redis';
 import { responseInterceptor, createReturn } from './middleware/response-interceptor';
@@ -48,6 +48,7 @@ export class App {
     /* Register parsers middleware. */
     registerCors(this.app);
     registerBodyParsers(this.app);
+    registerDeviceParsers(this.app);
 
     /* Register api middleware. */
     this.app.use(createReturn);

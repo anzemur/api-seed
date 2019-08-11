@@ -1,5 +1,6 @@
 import { Service } from './service';
 import { SentMessageInfo, createTransport, Transporter } from 'nodemailer';
+import env from '../config/env';
 
 export interface EmailData {
   from: string;
@@ -25,18 +26,21 @@ export interface SmtpOptions {
 export class MailingService extends Service {
   private static instance: MailingService;
   private transport: Transporter;
-  private smtpOptions: SmtpOptions = {
-    host  : process.env.SMTP_HOST,
-    port  : +process.env.SMTP_PORT,
-    secure: process.env.SMTP_USE_SSL !== 'false',
-    auth  : {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD,
-    }
-  };
+  private smtpOptions: SmtpOptions;
 
   private constructor() {
     super(MailingService.name);
+
+    this.smtpOptions = {
+      host  : env.SMTP_HOST,
+      port  : env.SMTP_PORT,
+      secure: env.SMTP_USE_SSL,
+      auth  : {
+        user: env.SMTP_USERNAME,
+        pass: env.SMTP_PASSWORD,
+      }
+    };
+
     this.transport = createTransport(this.smtpOptions);
     this.transport.verify((error: any, success: any) => {
       if (error) {

@@ -16,13 +16,11 @@
         >
           Documentation
         </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
+        <button
+          @click="test()"
         >
           GitHub
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -34,6 +32,11 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
+  },
+  methods: {
+    test () {
+      console.log('hej')
+    }
   }
 }
 </script>

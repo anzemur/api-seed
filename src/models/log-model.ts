@@ -10,6 +10,9 @@ export class LogModel extends Model {
   requestUrl: string;
 
   @prop({ required: true })
+  fullRequestUrl: string;
+
+  @prop({ required: true })
   statusCode: number;
 
   @prop({ required: true })
@@ -34,7 +37,13 @@ export class LogModel extends Model {
   userId: string;
 
   @prop()
-  responseTime: string;
+  responseTime: number;
+
+  @prop({ required: true })
+  clientDevice: string;
+
+  @prop({ required: true })
+  userAgent: string;
 }
 
 export const Log = new LogModel().getModelForClass(LogModel, { schemaOptions: Model.schemaOptions });

@@ -9,7 +9,45 @@ export const config: NuxtConfiguration =  {
    */
   rootDir: 'src/admin-console',
   modulesDir: ['../../node_modules'],
+  /**
+   * Application mode.
+   */
   mode: 'universal',
+  /**
+   * Base application routing.
+   */
+  router: {
+    base: '/admin',
+    // middleware: ['auth'] 
+  },
+  /**
+   * Authentication middleware.
+   */
+  // auth: {
+  //   redirect: {
+  //     login: '/login',
+  //     logout: '/login',
+  //     home: '/',
+  //   },
+  //   resetOnError: true,
+  //   strategies: {
+  //     local: {
+  //       endpoints: {
+  //         login: {
+  //           url: '/profile/auth',
+  //           method: 'post',
+  //           propertyName: 'data.authToken',
+  //         },
+  //         user: {
+  //           url: '/profile',
+  //           method: 'get',
+  //           propertyName: 'data',
+  //         },
+  //         logout: false,
+  //       },
+  //     },
+  //   },
+  // },
   /*
   ** Headers of the page.
   */
@@ -46,6 +84,7 @@ export const config: NuxtConfiguration =  {
     'bootstrap-vue/nuxt',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
   /*
   ** Axios module configuration.
@@ -53,16 +92,6 @@ export const config: NuxtConfiguration =  {
   */
   axios: {
   },
-  /*
-  ** Build configuration
-  */
-  // build: {
-    /*
-    ** You can extend webpack config here
-    */
-    // extend(config, ctx) {
-    // }
-  // }
 };
 
 export default config;

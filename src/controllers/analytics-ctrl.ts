@@ -15,18 +15,182 @@ export class AnalyticsController extends Controller {
   }
 
   @boundMethod
-  public async getRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+  public async getRequestDevicesCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
 
     try {
       const logs = await Log.aggregate([
-        // {
-        //   $match:  {
-        //     'createdAt': {
-        //       $lte: '2019-07-20T00:45:16.345+02:00',
-        //       $gte: '2019-07-12T00:45:16.345+02:00',
-        //     }
-        //   }
-        // },
+        {
+          $match:  {
+            ...(query.startTime && query.endTime) ? 
+            {
+              'createdAt': {
+                $lte: query.endTime,
+                $gte: query.startTime,
+              }
+            } : {},
+          }
+        },
+        {
+          $group: {
+              _id: { clientDevice: '$clientDevice' },
+              count: {
+                $sum: 1
+              }
+          }
+        },
+        {
+          $project: {
+            clientDevice: '$_id.clientDevice',
+            count: '$count',
+            _id: 0,
+          }
+        },
+        { $sort : { count: 1 } },
+      ]);
+
+    res.return(200, logs);
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting logs.', error));
+    }
+
+  }
+
+  @boundMethod
+  public async getRequestsCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
+
+    try {
+      const logs = await Log.aggregate([
+        {
+          $match:  {
+            ...(query.startTime && query.endTime) ? 
+            {
+              'createdAt': {
+                $lte: query.endTime,
+                $gte: query.startTime,
+              }
+            } : {},
+          }
+        },
+        {
+          $group: {
+              _id: { requestUrl: '$requestUrl' },
+              count: {
+                $sum: 1
+              }
+          }
+        },
+        {
+          $project: {
+            requestUrl: '$_id.requestUrl',
+            count: '$count',
+            _id: 0,
+          }
+        },
+        { $sort : { count: 1 } },
+      ]);
+
+    res.return(200, logs);
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting logs.', error));
+    }
+  }
+
+  @boundMethod
+  public async getRequestsResponseTimes(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
+
+    try {
+      const logs = await Log.aggregate([
+        {
+          $match:  {
+            ...(query.startTime && query.endTime) ? 
+            {
+              'createdAt': {
+                $lte: query.endTime,
+                $gte: query.startTime,
+              }
+            } : {},
+          }
+        },
+        {
+          $group: {
+            _id: { requestUrl: '$requestUrl' },
+            responseTime: { $avg: '$responseTime' }
+          }
+        },
+        {
+          $project: {
+            requestUrl: '$_id.requestUrl',
+            responseTime: '$responseTime',
+            _id: 0,
+          }
+        },
+        { $sort : { responseTime: 1 } },
+      ]);
+
+    res.return(200, logs);
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting logs.', error));
+    }
+  }
+
+  @boundMethod
+  public async getRequests(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
+
+    query.limit = query.limit || 25;
+    query.page = query.page || 0;
+
+    const $match = {
+      $and: [
+        { ...(query.statusCode && !isNaN(query.statusCode) ? { statusCode: Number(query.statusCode) } : {}) },
+        { ...(query.method ? { method: query.method } : {}) },
+        { ...(query.requestUrl ? { requestUrl: query.requestUrl } : {}) },
+        { ...(query.userId ? { userId: query.userId } : {}) },
+      ],
+    };
+    
+    try {
+      const logs = await Log.aggregate([
+        { $match },
+        { $sort : { createdAt : -1 } },
+        { $limit: query.limit * query.page  + query.limit },
+        { $skip: query.limit * query.page },
+      ]);
+      const count = await Log.countDocuments($match);
+
+      res.return(200, logs, {
+        totalRecords: count,
+        page        : query.page,
+        totalPages  : Math.ceil(count / query.limit),
+        perPage     : query.limit
+      });
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting logs.', error));
+    }
+
+
+  }
+
+  @boundMethod
+  public async getRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
+    
+    try {
+      const logs = await Log.aggregate([
+        {
+          $match:  {
+            ...(query.startTime && query.endTime) ? 
+            {
+              'createdAt': {
+                $lte: query.endTime,
+                $gte: query.startTime,
+              }
+            } : {},
+          }
+        },
         {
           $group: {
             _id: {
@@ -44,6 +208,9 @@ export class AnalyticsController extends Controller {
             count: 1,
             _id: 0
           }
+        },
+        {
+          $sort : { date : -1 }
         }
       ]);
 

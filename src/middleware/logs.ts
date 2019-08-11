@@ -19,7 +19,8 @@ export function registerLogs(req: AuthRequest, res: AuthResponse, next: NextFunc
 
     const log = new Log({
       requestId: req.context.id || '',
-      requestUrl: req.originalUrl || '',
+      requestUrl: req.originalUrl.split('?')[0] || '',
+      fullRequestUrl: req.originalUrl || '',
       statusCode: res.statusCode || 0,
       statusMessage: res.statusMessage || '',
       method: req.method || '',
@@ -28,7 +29,9 @@ export function registerLogs(req: AuthRequest, res: AuthResponse, next: NextFunc
       httpVersion: req.httpVersion || '',
       protocol: req.protocol || '',
       userId: req.context.user && req.context.user.id ? req.context.user.id : null,
-      responseTime: `${Date.now() - startTime}ms`
+      responseTime: Number(`${Date.now() - startTime}`),
+      clientDevice: req.device && req.device.type ? req.device.type : '',
+      userAgent: (req.headers && req.headers['user-agent']) ? req.headers['user-agent'] : '',
     });
 
     logger.http(`Request on ${moment()}`, { request: log });

@@ -57,5 +57,17 @@ export function usersRoutes() {
   router.get('/ana',
     ana.getRequestCount);
 
+  router.get('/ana1',
+    ana.getRequests);
+
+  router.get('/ana2',
+    ana.getRequestsResponseTimes);
+
+  router.get('/ana3',
+    ana.getRequestsCount);
+
+  router.get('/ana4',
+    ana.getRequestDevicesCount);
+
   return router;
 }

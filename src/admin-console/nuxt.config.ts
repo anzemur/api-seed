@@ -18,36 +18,37 @@ export const config: NuxtConfiguration =  {
    */
   router: {
     base: '/admin',
-    // middleware: ['auth'] 
+    middleware: ['auth']
   },
   /**
    * Authentication middleware.
    */
-  // auth: {
-  //   redirect: {
-  //     login: '/login',
-  //     logout: '/login',
-  //     home: '/',
-  //   },
-  //   resetOnError: true,
-  //   strategies: {
-  //     local: {
-  //       endpoints: {
-  //         login: {
-  //           url: '/profile/auth',
-  //           method: 'post',
-  //           propertyName: 'data.authToken',
-  //         },
-  //         user: {
-  //           url: '/profile',
-  //           method: 'get',
-  //           propertyName: 'data',
-  //         },
-  //         logout: false,
-  //       },
-  //     },
-  //   },
-  // },
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      home: '/',
+    },
+    resetOnError: true,
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/users/login',
+            method: 'post',
+            propertyName: 'authToken',
+          },
+          // user: {
+          //   url: '/profile',
+          //   method: 'get',
+          //   propertyName: 'data',
+          // },
+          logout: false,
+          user: false,
+        },
+      },
+    },
+  },
   /*
   ** Headers of the page.
   */
@@ -75,6 +76,7 @@ export const config: NuxtConfiguration =  {
   ** Plugins to load before mounting the App.
   */
   plugins: [
+    { src: '~plugins/vee-validate' },
   ],
   /*
   ** Nuxt.js modules.
@@ -91,6 +93,7 @@ export const config: NuxtConfiguration =  {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
+    baseURL: '/api/v1/',
   },
 };
 

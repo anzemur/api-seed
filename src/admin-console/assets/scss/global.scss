@@ -1,0 +1,101 @@
+/* ========= Bootstrap primary button override. ========= */
+
+button.btn-primary {
+  color: $white;
+  background-color: $primary;
+  border: 0.07rem solid $primary;
+  outline: 0;
+}
+
+
+button.btn-primary:hover {
+  background: $white;
+  color: $primary;
+  border-color: $primary;
+  outline: 0;
+}
+
+button.btn-primary:active {
+  background: $primary !important;
+  color: $white !important;
+  border-color: $primary !important;
+}
+
+
+a { 
+  text-decoration: none !important; 
+}
+
+/* ================= FAB ================= */
+
+.fab-hint-container {
+	position: fixed;
+	bottom: 2.95rem;
+	right: 6.5625rem;
+	display: table;
+	visibility: hidden;
+}
+
+.fab-hint-text {
+	color:#FFF;
+	background:rgba(51,51,51,0.4);
+	display:table-cell;
+	vertical-align:middle;
+	padding:10px;
+	border-radius:3px;
+}
+
+.fab {
+  z-index: 900;
+	position: fixed;
+	width: 4rem;
+	height: 4rem;
+	bottom: 2.3rem;
+	right: 2.3rem;
+	background-color: $primary;
+	color: $white;
+	border-radius: 50px;
+	text-align: center;
+  box-shadow: 2px 2px 3px #999;
+}
+
+@media only screen and (max-width : 700px) {
+  .fab {
+    bottom: 1rem;
+	  right: 1rem;
+  }
+
+  .fab-hint-container{
+    bottom: 1.7rem;
+    right: 5.8625rem;
+  }
+}
+
+.fab:hover {
+  color: $white;
+}
+
+.fab:focus {
+  color: $white;
+}
+
+a.fab + div.fab-hint-container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.fab:hover + div.fab-hint-container{
+  visibility: visible;
+  opacity: 1;
+}
+
+.fab-ic {
+  color: $white;
+}
+
+.fab-icon {
+  height: 35px;
+  width: 35px;
+  margin-top: 15px;
+}

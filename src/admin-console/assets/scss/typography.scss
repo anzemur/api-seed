@@ -1,0 +1,37 @@
+// Google fonts
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,500&subset=latin-ext');
+
+// Text color of the body.
+$body-font-color: $base;
+
+// Font stack of the body.
+$body-font-family: 'Rubik', Arial, sans-serif;
+$body-antialiased: true;
+$global-weight-normal: normal;
+$global-weight-bold: 500;
+
+// Headings
+
+$header-font-family: 'Rubik', Arial, sans-serif;
+$header-font-style: normal;
+$header-lineheight: 1.3;
+$header-margin-bottom: rem-calc(24);
+
+$header-styles: (
+  small: (
+    'h1': ('font-size': 28, 'line-height' : 1),
+    'h2': ('font-size': 25),
+    'h3': ('font-size': 24),
+    'h4': ('font-size': 22),
+    'h5': ('font-size': 17),
+    'h6': ('font-size': 16),
+  ),
+  medium: (
+    'h1': ('font-size': 48),
+    'h2': ('font-size': 40),
+    'h3': ('font-size': 26),
+    'h4': ('font-size': 22),
+    'h5': ('font-size': 20),
+    'h6': ('font-size': 16),
+  ),
+);

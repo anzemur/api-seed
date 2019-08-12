@@ -6,7 +6,7 @@ $shadow-gray: #f0f0f0;
 $border: #E4E4E7;
 $white: #FFFFFF;
 $base: #2B2525;
-$primary: #3BF3CB;
+$primary: darken(#3BF3CB, 15%);
 $primary-light: lighten($primary, 30%);
 $primary-dark: darken($primary, 10%);
 $secondary: #34495E;

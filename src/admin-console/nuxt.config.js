@@ -1,14 +1,7 @@
-import NuxtConfiguration from '@nuxt/config';
-
 /**
  * Nuxt.js admin console app config.
  */
-export const config: NuxtConfiguration =  {
-  /**
-   * Directory paths options. Remove `rootDir` and `modulesDir` properties if you want to run/build on admin console Nuxt app.
-   */
-  // rootDir: 'src/admin-console',
-  // modulesDir: ['../../node_modules'],
+export default {
   server: {
     port: 3030
   },
@@ -64,7 +57,12 @@ export const config: NuxtConfiguration =  {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', integrity: 'sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz', crossorigin: 'anonymous'}
+      { 
+        rel: 'stylesheet',
+        href: 'https://use.fontawesome.com/releases/v5.4.1/css/all.css',
+        integrity: 'sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz',
+        crossorigin: 'anonymous'
+      }
     ]
   },
   /*
@@ -102,5 +100,3 @@ export const config: NuxtConfiguration =  {
     baseURL: 'http://localhost:3000/api/v1/',
   },
 };
-
-export default config;

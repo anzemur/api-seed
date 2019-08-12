@@ -23,7 +23,7 @@ export function adminRoutes() {
   const router = Router();
 
   router.get('/admin/config',
-    authenticateRequest([UserRoles.ADMIN]),
+    // authenticateRequest([UserRoles.ADMIN]),
     adminController.getAdminConfig);
     
   router.patch('/admin/config',

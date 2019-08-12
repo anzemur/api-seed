@@ -1,42 +1,11 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        admin-console
-      </h1>
-      <h2 class="subtitle">
-        Admin console app for API-seed tool.
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <button
-          @click="test()"
-        >
-          GitHub
-        </button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
 
 export default {
-  components: {
-    Logo
-  },
+  auth: false,
   methods: {
-    test () {
-      console.log('hej')
-    }
   }
 }
 </script>

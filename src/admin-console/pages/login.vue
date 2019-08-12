@@ -54,8 +54,8 @@
 <script>
 
 export default {
-  fontawesome: {
-    component: 'fa'
+  $_veeValidate: {
+    validator: 'new'
   },
   data () {
     return {

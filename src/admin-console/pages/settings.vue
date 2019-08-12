@@ -79,12 +79,20 @@
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
-          <b-form-group label="Allow rate limiting" description="We'll never share your email with anyone else.">
+          <b-form-group label="Rate limit by" description="We'll never share your email with anyone else.">
             <b-form-select v-model="adminConfig.rateLimit.limitBy" :options="rateLimitByOptions"></b-form-select>
           </b-form-group>
         </div>
       </div>
-     
+
+      <b-alert :show="updateState === 1" dismissible variant="success" >
+        <p> Settings were successfully updated. </p>
+      </b-alert>
+
+      <b-alert :show="updateState === 2" dismissible variant="danger" >
+        <p> There was a problem while updating settings. Please try again. </p>
+      </b-alert>
+
       <b-button type="submit" variant="primary">Save changes</b-button>
     </b-form>
   </div>
@@ -97,10 +105,24 @@ export default {
   auth: false,
   data () {
     return {
-      adminConfig: {},
+      updateState: 0,
+      adminConfig: {
+        cachePerUser: null,
+        cacheExpiration: null,
+        allowFacebookAuth : null,
+        allowGoogleAuth : null,
+        rateLimit: {
+          limitBy: null,
+          maxPoints: null,
+          consumePoints: null,
+          duration: null,
+          blockDuration: null,
+          allowRateLimit: null,
+        },
+      },
       rateLimitByOptions: [
-        { value: 0, text: 'USER' },
-        { value: 1, text: 'IP' },
+        { value: 0, text: 'User ID' },
+        { value: 1, text: 'IP address' },
       ],
     }
   },
@@ -113,11 +135,32 @@ export default {
   methods: {
     async saveChanges(event) {
       event.preventDefault()
+      this.updateState = 0
+      try {
+        await this.$axios.patch('/admin/config', this.adminConfig);
+        this.updateState = 1
+      } catch (error) {
+        this.updateState = 2
+        console.log(error);
+      }
     },
     async getAdminConfig () {
       try {
         const res = await this.$axios.get('/admin/config');
-        this.adminConfig = res.data;
+        this.adminConfig = {
+          cachePerUser: res.data.cachePerUser,
+          cacheExpiration: res.data.cacheExpiration,
+          allowFacebookAuth : res.data.allowFacebookAuth,
+          allowGoogleAuth : res.data.allowGoogleAuth,
+          rateLimit: {
+            limitBy: res.data.rateLimit.limitBy,
+            maxPoints: res.data.rateLimit.maxPoints,
+            consumePoints: res.data.rateLimit.consumePoints,
+            duration: res.data.rateLimit.duration,
+            blockDuration: res.data.rateLimit.blockDuration,
+            allowRateLimit: res.data.rateLimit.allowRateLimit,
+          },
+        },
         console.log(res);
       } catch (error) {
         console.log(error);

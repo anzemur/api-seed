@@ -66,6 +66,7 @@
     "nodemailer": "^6.2.1",
     "nodemon": "^1.19.0",
     "nuxt": "^2.8.1",
+    "nuxt-fontawesome": "^0.4.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "passport-google-token": "^0.1.2",

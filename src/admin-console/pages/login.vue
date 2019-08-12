@@ -1,32 +1,43 @@
 <template>
    <div class="row">
     <div class="login-form">
-      <!-- <a href='/'>
+      <a href='/admin'>
         <img src="~/assets/img/logo.png" class="d-block mx-auto logo mt-5 mb-4">
-      </a> -->
+      </a>
+      <h2 class="text-center mb-5 pl-5 pr-5">
+        Welcome to API-seed admin console!
+      </h2>
       <b-form @submit="performLogIn" class="content pl-5 pr-5 pb-5">
-        <b-form-group label="Username or email">
-          <b-form-input
-            v-model="logInData.usernameOrEmail"
-            name="usernameOrEmail"
-            v-validate="'required'"
-            data-vv-as="username or email"
-            placeholder="Username or email"
-            class="mb-1">
-          </b-form-input>
+        <b-form-group>
+          <b-input-group>
+            <b-input-group-prepend>
+              <span class="input-group-text icon"><i class="fa fa-user fa-sm"></i></span>
+            </b-input-group-prepend>
+            <b-form-input
+              v-model="logInData.usernameOrEmail"
+              name="usernameOrEmail"
+              v-validate="'required'"
+              data-vv-as="username or email"
+              placeholder="Username or email">
+            </b-form-input>
+          </b-input-group>
           <span class="error-span">{{ errors.first('usernameOrEmail') }}</span>
         </b-form-group>
   
-        <b-form-group label="Password">
-          <b-form-input
-            v-model="logInData.password"
-            type="password"
-            name="password"
-            v-validate="'required'"
-            placeholder="Password"
-            :ref="'password'"
-            class="mb-1">
-          </b-form-input>
+        <b-form-group>
+          <b-input-group>
+            <b-input-group-prepend>
+              <span class="input-group-text icon"><i class="fa fa-lock fa-sm"></i></span>
+            </b-input-group-prepend>
+            <b-form-input
+              v-model="logInData.password"
+              type="password"
+              name="password"
+              v-validate="'required'"
+              placeholder="Password"
+              :ref="'password'">
+            </b-form-input>
+          </b-input-group>          
           <span class="error-span">{{ errors.first('password') }}</span>
         </b-form-group>
 
@@ -43,6 +54,9 @@
 <script>
 
 export default {
+  fontawesome: {
+    component: 'fa'
+  },
   data () {
     return {
       logInData: {
@@ -143,5 +157,9 @@ export default {
 
   .col-form-label {
     font-weight: bold !important;
+  }
+
+  .icon {
+    color: $gray;
   }
 </style>

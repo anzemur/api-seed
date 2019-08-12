@@ -1,17 +1,34 @@
-/* ========= Bootstrap primary button override. ========= */
+/* ================= Global styles. ================= */
+
+h1 {
+  font-size: 2.0rem;
+  color: $gray;
+}
+
+
+h2 {
+  font-size: 1.5rem;
+  color: $gray;
+}
+
+h3 {
+  font-size: 1rem;
+  color: $gray;
+}
+
+/* ================= Bootstrap primary button override. ================= */
 
 button.btn-primary {
   color: $white;
   background-color: $primary;
   border: 0.07rem solid $primary;
   outline: 0;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-
 button.btn-primary:hover {
-  background: $white;
-  color: $primary;
-  border-color: $primary;
+  background: $primary-dark;
   outline: 0;
 }
 
@@ -21,12 +38,11 @@ button.btn-primary:active {
   border-color: $primary !important;
 }
 
-
 a { 
   text-decoration: none !important; 
 }
 
-/* ================= FAB ================= */
+/* ================= FAB. ================= */
 
 .fab-hint-container {
 	position: fixed;

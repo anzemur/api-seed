@@ -1,6 +1,6 @@
 <template>
-  <div id="side-nav" class="side-nav mt-3">
-    <ul class="mt-2">
+  <div id="side-nav" class="side-nav">
+    <ul class="mt-4">
       <li @click="changeView(types.MenuItems.SETTINGS)" v-bind:class="{ active: menuItem === types.MenuItems.SETTINGS }">
         <nuxt-link to="/settings" class="pl-3 pb-2 pt-2">
           <i class="mr-2 side-nav-ic fa fa-cogs fa-xs"></i>
@@ -23,6 +23,12 @@
         <nuxt-link to="/" class="pl-3 pb-2 pt-2">
           <i class="mr-2 side-nav-ic fa fa-user fa-xs"></i>
           <span>Users</span>
+        </nuxt-link>
+      </li>
+      <li @click="logOut()" class="side-nav-profile">
+        <nuxt-link to="#" class="pl-3 pb-2 pt-2">
+          <i class="mr-2 side-nav-ic fa fa-sign-out-alt fa-xs"></i>
+          <span>Log Out</span>
         </nuxt-link>
       </li>
     </ul>
@@ -106,7 +112,11 @@ export default {
       //   this.$store.dispatch('ui/toggleSidebar')
       // }
     },
-  }
+    async logOut() {
+      await this.$auth.logout();
+      this.$router.push('/login');
+    },
+  },
 }
 </script>
 

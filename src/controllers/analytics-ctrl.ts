@@ -64,13 +64,17 @@ export class AnalyticsController extends Controller {
       const logs = await Log.aggregate([
         {
           $match:  {
-            ...(query.startTime && query.endTime) ? 
-            {
-              'createdAt': {
-                $lte: query.endTime,
-                $gte: query.startTime,
-              }
-            } : {},
+            $and: [
+              { ...(query.startTime && query.endTime) ? 
+                {
+                  createdAt: {
+                    $lte: query.endTime,
+                    $gte: query.startTime,
+                  }
+                } : {},
+              },
+              { statusCode: { $ne: 404} }
+            ]
           }
         },
         {
@@ -89,8 +93,13 @@ export class AnalyticsController extends Controller {
           }
         },
         { $sort : { count: 1 } },
-      ]);
-
+      ]).then((unfilteredLogs) => unfilteredLogs.filter((log) => !(
+        log.requestUrl.startsWith('/admin') ||
+        log.requestUrl.startsWith('/_nuxt') ||
+        log.requestUrl.startsWith('/dist') ||
+        log.requestUrl.startsWith('/favicon') ||
+        log.requestUrl.startsWith('/api/v1/analytics/')
+      )));
     res.return(200, logs);
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
@@ -105,13 +114,17 @@ export class AnalyticsController extends Controller {
       const logs = await Log.aggregate([
         {
           $match:  {
-            ...(query.startTime && query.endTime) ? 
-            {
-              'createdAt': {
-                $lte: query.endTime,
-                $gte: query.startTime,
-              }
-            } : {},
+            $and: [
+              { ...(query.startTime && query.endTime) ? 
+                {
+                  createdAt: {
+                    $lte: query.endTime,
+                    $gte: query.startTime,
+                  }
+                } : {},
+              },
+              { statusCode: { $ne: 404} }
+            ]
           }
         },
         {
@@ -128,7 +141,13 @@ export class AnalyticsController extends Controller {
           }
         },
         { $sort : { responseTime: 1 } },
-      ]);
+      ]).then((unfilteredLogs) => unfilteredLogs.filter((log) => !(
+        log.requestUrl.startsWith('/admin') ||
+        log.requestUrl.startsWith('/_nuxt') ||
+        log.requestUrl.startsWith('/dist') ||
+        log.requestUrl.startsWith('/favicon') ||
+        log.requestUrl.startsWith('/api/v1/analytics/')
+      )));
 
     res.return(200, logs);
     } catch (error) {
@@ -170,12 +189,10 @@ export class AnalyticsController extends Controller {
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
-
-
   }
 
   @boundMethod
-  public async getRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+  public async getDailyRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
     
     try {
@@ -210,7 +227,7 @@ export class AnalyticsController extends Controller {
           }
         },
         {
-          $sort : { date : -1 }
+          $sort : { date : 1 }
         }
       ]);
 

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <b-alert class="m-5" :show="!adminConfig" variant="danger" >
+      <h4 class="alert-heading">System error!</h4>
+      <p> There was a problem while loading admin settings. Please try again.</p>
+    </b-alert>
     <b-form @submit="saveChanges" class="content m-5 p-4">
       <div class="row mb-3 pb-3 group">
         <h2 class="col-12 mb-4"> Authenitcation settings</h2>
@@ -99,7 +103,6 @@
 </template>
 
 <script>
-import { constants } from 'crypto';
 
 export default {
   auth: false,
@@ -141,7 +144,6 @@ export default {
         this.updateState = 1
       } catch (error) {
         this.updateState = 2
-        console.log(error);
       }
     },
     async getAdminConfig () {
@@ -160,10 +162,9 @@ export default {
             blockDuration: res.data.rateLimit.blockDuration,
             allowRateLimit: res.data.rateLimit.allowRateLimit,
           },
-        },
-        console.log(res);
+        };
       } catch (error) {
-        console.log(error);
+        this.adminConfig = false;
       }
     },
     setNavMargin () {
@@ -198,7 +199,6 @@ export default {
     font-size: 1.5rem;
     color: $gray;
   }
-   
 
   .group {
     border-bottom: 0.5px solid #e8e8e8;

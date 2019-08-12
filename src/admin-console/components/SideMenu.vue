@@ -8,7 +8,7 @@
         </nuxt-link>
       </li>
       <li @click="changeView(types.MenuItems.ANALYTICS)" v-bind:class="{ active: menuItem === types.MenuItems.ANALYTICS }">
-        <nuxt-link to="/" class="pl-3 pb-2 pt-2">
+        <nuxt-link to="/analytics" class="pl-3 pb-2 pt-2">
           <i class="mr-2 side-nav-ic fa fa-chart-bar fa-xs"></i>
           <span>Analytics</span>
         </nuxt-link>
@@ -100,11 +100,11 @@ export default {
       document.getElementById('main-content').style.marginLeft = this.mainContentMarginLeft
     },
     async changeView (view) {
-      this.openNav()
-      await this.$store.dispatch('ui/changeView', view)
-      if (this.mobile) {
-        this.$store.dispatch('ui/toggleSidebar')
-      }
+      this.menuItem = view;
+      // await this.$store.dispatch('ui/changeView', view)
+      // if (this.mobile) {
+      //   this.$store.dispatch('ui/toggleSidebar')
+      // }
     },
   }
 }

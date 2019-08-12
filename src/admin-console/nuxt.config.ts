@@ -7,11 +7,8 @@ export const config: NuxtConfiguration =  {
   /**
    * Directory paths options. Remove `rootDir` and `modulesDir` properties if you want to run/build on admin console Nuxt app.
    */
-  // rootDir: 'src/admin-console',
-  // modulesDir: ['../../node_modules'],
-  server: {
-    port: 3030
-  },
+  rootDir: 'src/admin-console',
+  modulesDir: ['../../node_modules'],
   /**
    * Application mode.
    */
@@ -20,7 +17,7 @@ export const config: NuxtConfiguration =  {
    * Base application routing.
    */
   router: {
-    // base: '/admin',
+    base: '/admin',
     middleware: ['auth']
   },
   /**
@@ -98,8 +95,8 @@ export const config: NuxtConfiguration =  {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    // baseURL: '/api/v1/',
-    baseURL: 'http://localhost:3000/api/v1/',
+    baseURL: '/api/v1/',
+    // baseURL: 'http://localhost:3000/api/v1/',
   },
 };
 

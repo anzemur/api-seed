@@ -5,14 +5,10 @@ import { UserRoles } from '../config/user';
 import { UsersController1 } from '../controllers/users-controller';
 import { validateBody } from '../middleware/validate-body';
 import { updateUserSchema } from '../config/body-schemas';
-import { AnalyticsController } from '../controllers/analytics-ctrl';
 
 /* Register controller. */
 const usersController = new UsersController();
-
 const usersController1 = new UsersController1();
-
-const ana = new AnalyticsController();
 
 /**
  * Registers users api routes at `/api/{API_VERSION}/users`.
@@ -51,23 +47,6 @@ export function usersRoutes() {
     authenticateRequest(),
     validateBody(updateUserSchema),
     usersController1.updateUser);
-
-
-
-  router.get('/ana',
-    ana.getRequestCount);
-
-  router.get('/ana1',
-    ana.getRequests);
-
-  router.get('/ana2',
-    ana.getRequestsResponseTimes);
-
-  router.get('/ana3',
-    ana.getRequestsCount);
-
-  router.get('/ana4',
-    ana.getRequestDevicesCount);
 
   return router;
 }

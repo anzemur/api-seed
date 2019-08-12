@@ -16,6 +16,37 @@ h3 {
   color: $gray;
 }
 
+#main-content {
+  transition: margin-left .5s;
+}
+
+@media only screen and (min-width : 320px) and (max-width : 768px)   {
+  #main-content {
+    transition: margin-left .2s;
+  }
+}
+
+/* ================= Scroll Bar. ================= */
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.45rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px $gray; 
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: $primary; 
+  border-radius: 10px;
+}
+
+
+
 /* ================= Bootstrap primary button override. ================= */
 
 button.btn-primary {

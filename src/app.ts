@@ -15,6 +15,7 @@ import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import env from './config/env';
 import { registerAdminRoutes } from './routes/admin';
 import { MongooseEvents, RedisEvents } from './config/types';
+import { registerAnalyticsRoutes } from './routes/analytics';
 
 /**
  * Base application instance.
@@ -60,6 +61,7 @@ export class App {
     registerRootRoutes(this.app);
     registerUsersRoutes(this.app);
     registerAdminRoutes(this.app);
+    registerAnalyticsRoutes(this.app);
 
     /* Register admin console app middleware. */
     if (env.USE_ADMIN_CONSOLE) 

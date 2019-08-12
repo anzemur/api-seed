@@ -98,6 +98,7 @@ export class AnalyticsController extends Controller {
         log.requestUrl.startsWith('/_nuxt') ||
         log.requestUrl.startsWith('/dist') ||
         log.requestUrl.startsWith('/favicon') ||
+        log.requestUrl.startsWith('/api/v1/admin/') ||
         log.requestUrl.startsWith('/api/v1/analytics/')
       )));
     res.return(200, logs);
@@ -146,6 +147,7 @@ export class AnalyticsController extends Controller {
         log.requestUrl.startsWith('/_nuxt') ||
         log.requestUrl.startsWith('/dist') ||
         log.requestUrl.startsWith('/favicon') ||
+        log.requestUrl.startsWith('/api/v1/admin/') ||
         log.requestUrl.startsWith('/api/v1/analytics/')
       )));
 

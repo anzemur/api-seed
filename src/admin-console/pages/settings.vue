@@ -103,8 +103,10 @@
 </template>
 
 <script>
+import { setMenuMargin } from '~/mixins/set-menu-margin';
 
 export default {
+  mixins: [ setMenuMargin ],
   auth: false,
   data () {
     return {
@@ -133,7 +135,7 @@ export default {
     this.getAdminConfig();
   },
   mounted () {
-    this.setNavMargin();
+    this.setMenuMargin();
   },
   methods: {
     async saveChanges(event) {
@@ -167,18 +169,6 @@ export default {
         this.adminConfig = false;
       }
     },
-    setNavMargin () {
-      /* Small devices */
-      if (window.screen.width < 768 || window.innerWidth < 768) {
-      /* Special check for bulma mobile view switch */
-      } else if ((window.screen.width >= 1024 || window.innerWidth >= 1024) && (window.screen.width < 1087 || window.innerWidth < 1087)) {
-        document.getElementById('main-content').style.marginLeft = '17%'
-
-      /* Large devices */
-      } else {
-        document.getElementById('main-content').style.marginLeft = '15%'
-      }
-    },
   },
 }
 </script>
@@ -193,6 +183,12 @@ export default {
   .content {
     background-color: white;
     border: 0.5px solid #e8e8e8;
+  }
+
+  @include media('<560px') {
+    .content {
+      margin: 0 !important;
+    }
   }
 
   .form-title {

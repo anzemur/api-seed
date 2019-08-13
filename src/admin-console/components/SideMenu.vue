@@ -37,6 +37,7 @@
 
 <script>
 import { MenuItems } from '../types';
+import { mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -46,11 +47,14 @@ export default {
       isActive: true,
       menuItem: MenuItems.SETTINGS,
       user: {},
-      showMenu: true,
     }
   },
-  mixins: [],
-  components: {},
+  computed: {
+    ...mapGetters({
+      showMenu: 'ui/getSideMenuOpen',
+      currentView: 'ui/getCurrentView'
+    })
+  },
   watch: {
     showMenu: function (show) {
       show ? this.openNav() : this.closeNav()
@@ -72,7 +76,7 @@ export default {
   methods: {
     windowResized (event) {
       if (this.showMenu && (window.screen.width < 1070 || window.innerWidth < 1070)) {
-        this.$store.dispatch('ui/toggleSidebar')
+        this.$store.dispatch('ui/toggleSideMenu')
       }
     },
     openNav () {
@@ -107,10 +111,10 @@ export default {
     },
     async changeView (view) {
       this.menuItem = view;
-      // await this.$store.dispatch('ui/changeView', view)
-      // if (this.mobile) {
-      //   this.$store.dispatch('ui/toggleSidebar')
-      // }
+      await this.$store.dispatch('ui/changeView', view)
+      if (this.mobile) {
+        this.$store.dispatch('ui/toggleSideMenu')
+      }
     },
     async logOut() {
       await this.$auth.logout();

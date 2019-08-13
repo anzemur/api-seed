@@ -19,9 +19,17 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss">
+  @import '~/assets/scss/styles';
+
   body {
     background-color: #f5f5f5;
     margin-top: 100px;
+  }
+
+  @include media('<560px') {
+    body {
+      margin-top: 65px;
+    }
   }
 </style>

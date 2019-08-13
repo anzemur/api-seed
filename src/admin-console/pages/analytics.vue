@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="m-5">
+    <div class="m-5 analyitcs-container">
       <div class="row">
         <div class="col-12 col-md-6 p-2">
           <div class="content p-3">
@@ -34,12 +34,14 @@
 </template>
 
 <script>
+import { setMenuMargin } from '~/mixins/set-menu-margin';
 import LineChart from '../components/charts/LineChart';
 import BarChart from '../components/charts/BarChart';
 import PieChart from '../components/charts/PieChart';
 
 
 export default {
+  mixins: [ setMenuMargin ],
   auth: false,
   components: {
     LineChart,
@@ -61,7 +63,7 @@ export default {
     this.getAverageResponseTimes();
   },
   mounted () {
-    this.setNavMargin();
+    this.setMenuMargin();
   },
   methods: {
     async getAverageResponseTimes() {
@@ -159,18 +161,6 @@ export default {
     generateRandomRgbaColor() {
       return 'rgba(' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.round(Math.random()*255) + ',' + Math.random().toFixed(1) + ')';
     },
-    setNavMargin () {
-      /* Small devices */
-      if (window.screen.width < 768 || window.innerWidth < 768) {
-      /* Special check for bulma mobile view switch */
-      } else if ((window.screen.width >= 1024 || window.innerWidth >= 1024) && (window.screen.width < 1087 || window.innerWidth < 1087)) {
-        document.getElementById('main-content').style.marginLeft = '17%'
-
-      /* Large devices */
-      } else {
-        document.getElementById('main-content').style.marginLeft = '15%'
-      }
-    },
   },
 }
 </script>
@@ -185,6 +175,12 @@ export default {
   .content {
     background-color: white;
     border: 0.5px solid #e8e8e8;
+  }
+
+  @include media('<560px') {
+    .analyitcs-container {
+      margin: 0 !important;
+    }
   }
 
   .form-title {

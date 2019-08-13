@@ -176,6 +176,14 @@ export class AnalyticsController extends Controller {
     try {
       const logs = await Log.aggregate([
         { $match },
+        { ...query.projection ? { $project: {
+          httpVersion: 0,
+          protocol: 0,
+          updatedAt: 0,
+          userAgent: 0,
+          __v: 0,
+
+        } } : {} },
         { $sort : { createdAt : -1 } },
         { $limit: query.limit * query.page  + query.limit },
         { $skip: query.limit * query.page },

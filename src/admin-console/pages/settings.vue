@@ -106,6 +106,7 @@
 import { setMenuMargin } from '~/mixins/set-menu-margin';
 
 export default {
+  layout: 'default',
   mixins: [ setMenuMargin ],
   auth: false,
   data () {
@@ -132,6 +133,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('ui/changeView', this.types.MenuItems.SETTINGS);
     this.getAdminConfig();
   },
   mounted () {

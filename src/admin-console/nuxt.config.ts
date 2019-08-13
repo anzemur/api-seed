@@ -18,7 +18,10 @@ export const config: NuxtConfiguration =  {
    */
   router: {
     base: '/admin',
-    middleware: ['auth']
+    middleware: [
+      'auth',
+      'redirect'
+    ]
   },
   /**
    * Authentication middleware.

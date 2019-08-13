@@ -13,13 +13,12 @@ export const setMenuMargin = Vue.extend({
   methods: {
     setMenuMargin() {
       if (this.shouldMarginBeSet) {
-        /* Small devices */
+        /* Small devices. */
         if (window.screen.width < 768 || window.innerWidth < 768) {
-        /* Special check for bulma mobile view switch */
+        /* Special check for mobile view switch. */
         } else if ((window.screen.width >= 1024 || window.innerWidth >= 1024) && (window.screen.width < 1087 || window.innerWidth < 1087)) {
           document.getElementById('main-content').style.marginLeft = '17%';
-    
-        /* Large devices */
+        /* Large devices. */
         } else {
           document.getElementById('main-content').style.marginLeft = '15%';
         }

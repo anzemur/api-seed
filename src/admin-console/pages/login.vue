@@ -1,7 +1,7 @@
 <template>
    <div class="row">
     <div class="login-form">
-      <a href='/admin'>
+      <a href='/'>
         <img src="~/assets/img/logo.png" class="d-block mx-auto logo mt-5 mb-4">
       </a>
       <h2 class="text-center mb-5 pl-5 pr-5">
@@ -54,9 +54,7 @@
 <script>
 
 export default {
-  $_veeValidate: {
-    validator: 'new'
-  },
+  layout: 'no-navigation',
   data () {
     return {
       logInData: {
@@ -100,7 +98,7 @@ export default {
     a > img {
       width: 75%;
     }
-    width: 24%;
+    width: 22%;
     background: #fff;
     top: 40%;
     left: 50%;

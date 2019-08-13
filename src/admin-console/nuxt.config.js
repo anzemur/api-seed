@@ -14,7 +14,10 @@ export default {
    */
   router: {
     // base: '/admin',
-    middleware: ['auth']
+    middleware: [
+      'auth',
+      'redirect'
+    ]
   },
   /**
    * Authentication middleware.

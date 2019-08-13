@@ -38,6 +38,7 @@ import { setMenuMargin } from '~/mixins/set-menu-margin';
 import LineChart from '../components/charts/LineChart';
 import BarChart from '../components/charts/BarChart';
 import PieChart from '../components/charts/PieChart';
+import { mapGetters } from 'vuex';
 
 
 export default {
@@ -57,12 +58,13 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('ui/changeView', this.types.MenuItems.ANALYTICS);
     this.getDevicesCount();
     this.getDailyRequestCount();
     this.getRequestCount();
     this.getAverageResponseTimes();
   },
-  mounted () {
+  async mounted () {
     this.setMenuMargin();
   },
   methods: {

@@ -1,5 +1,5 @@
-import VeeValidate from 'vee-validate';
 import Vue from 'vue';
+import VeeValidate from 'vee-validate';
 
 Vue.use(VeeValidate, {
   fieldsBagName: 'veeFields'

@@ -161,8 +161,8 @@ export class AnalyticsController extends Controller {
   public async getRequests(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
-    query.limit = query.limit || 25;
-    query.page = query.page || 0;
+    query.limit = query.limit ? Number(query.limit) : 25;
+    query.page = query.page ? Number(query.page) : 0;
 
     const $match = {
       $and: [
@@ -176,14 +176,6 @@ export class AnalyticsController extends Controller {
     try {
       const logs = await Log.aggregate([
         { $match },
-        { ...query.projection ? { $project: {
-          httpVersion: 0,
-          protocol: 0,
-          updatedAt: 0,
-          userAgent: 0,
-          __v: 0,
-
-        } } : {} },
         { $sort : { createdAt : -1 } },
         { $limit: query.limit * query.page  + query.limit },
         { $skip: query.limit * query.page },

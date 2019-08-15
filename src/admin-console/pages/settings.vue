@@ -28,7 +28,6 @@
         <div class="col-12 col-md-6">
           <b-form-group label="Use cache per user" description="We'll never share your email with anyone else.">
             <b-form-checkbox v-model="adminConfig.cachePerUser" switch>
-             
             </b-form-checkbox>
           </b-form-group>
         </div>

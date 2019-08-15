@@ -145,10 +145,6 @@ export default {
     }
   }
 
-  .error-span {
-    color: $errorColor;
-  }
-
   legend.col-form-label {
     font-weight: bold !important;
   }

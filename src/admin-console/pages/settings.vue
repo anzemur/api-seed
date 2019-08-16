@@ -72,6 +72,7 @@
               v-model="adminConfig.rateLimit.consumePoints"
               v-validate="'required|integer'"
               name="consumePoints"
+              data-vv-as="consume points">
             </b-form-input>
             <span class="error-span">{{ errors.first('consumePoints') }}</span>
           </b-form-group>

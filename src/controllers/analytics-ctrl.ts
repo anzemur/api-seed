@@ -1,5 +1,5 @@
 import { Controller } from './ctrl';
-import { boundMethod } from 'autobind-decorator';
+import { boundMethod as BoundMethod } from 'autobind-decorator';
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { NextFunction } from 'connect';
 import { Log } from '../models/log-model';
@@ -14,7 +14,7 @@ export class AnalyticsController extends Controller {
     super();
   }
 
-  @boundMethod
+  @BoundMethod
   public async getRequestDevicesCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
@@ -56,7 +56,7 @@ export class AnalyticsController extends Controller {
 
   }
 
-  @boundMethod
+  @BoundMethod
   public async getRequestsCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
@@ -107,7 +107,7 @@ export class AnalyticsController extends Controller {
     }
   }
 
-  @boundMethod
+  @BoundMethod
   public async getRequestsResponseTimes(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
@@ -157,7 +157,7 @@ export class AnalyticsController extends Controller {
     }
   }
 
-  @boundMethod
+  @BoundMethod
   public async getRequests(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
@@ -193,7 +193,7 @@ export class AnalyticsController extends Controller {
     }
   }
 
-  @boundMethod
+  @BoundMethod
   public async getDailyRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
     

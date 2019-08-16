@@ -33,6 +33,9 @@ export function usersRoutes() {
   router.post('/registration',
     usersController.registrationRequest);
 
+  router.get('/',
+    usersController1.getUsers);
+
   router.post('/',
     usersController.createNewUser);
 

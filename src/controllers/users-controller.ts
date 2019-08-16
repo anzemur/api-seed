@@ -38,6 +38,37 @@ export class UsersController1 extends Controller {
    */
   @BoundMethod
   public async getUsers(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const query = req.query;
+
+    query.limit = query.limit ? Number(query.limit) : 25;
+    query.page = query.page ? Number(query.page) : 0;
+
+    const $match = {
+      $and: [
+        { ...(query.userId ? { _id: toObjectId(query.userId) } : {}) },
+        { ...(query.email ? { email: query.email } : {}) },
+        { ...(query.role ? { roles: query.role } : {}) },
+      ],
+    };
+
+    try {
+      const logs = await User.aggregate([
+        { $match },
+        { $sort : { createdAt : -1 } },
+        { $limit: query.limit * query.page  + query.limit },
+        { $skip: query.limit * query.page },
+      ]);
+      const count = await User.countDocuments($match);
+
+      res.return(200, logs, {
+        totalRecords: count,
+        page        : query.page,
+        totalPages  : Math.ceil(count / query.limit),
+        perPage     : query.limit
+      });
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting users.', error));
+    }
   }
 
   /**

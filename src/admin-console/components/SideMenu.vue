@@ -20,7 +20,7 @@
         </nuxt-link>
       </li>
       <li @click="changeView(types.MenuItems.USERS)" v-bind:class="{ active: menuItem === types.MenuItems.USERS }">
-        <nuxt-link to="/" class="pl-3 pb-2 pt-2">
+        <nuxt-link to="/users" class="pl-3 pb-2 pt-2">
           <i class="mr-2 side-nav-ic fa fa-user fa-xs"></i>
           <span>Users</span>
         </nuxt-link>

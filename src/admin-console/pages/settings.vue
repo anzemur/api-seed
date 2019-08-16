@@ -8,14 +8,14 @@
       <div class="row mb-3 pb-3 group">
         <h2 class="col-12 mb-4"> Authenitcation settings</h2>
         <div class="col-12 col-md-6">
-          <b-form-group description="We'll never share your email with anyone else.">
+          <b-form-group description="Allow users to authenticate with their Google account.">
             <b-form-checkbox v-model="adminConfig.allowGoogleAuth" switch>
               Allow Google auth
             </b-form-checkbox>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
-          <b-form-group description="We'll never share your email with anyone else.">
+          <b-form-group description="Allow users to authenticate with their Facebook account.">
             <b-form-checkbox v-model="adminConfig.allowFacebookAuth" switch>
               Allow Facebook auth
             </b-form-checkbox>
@@ -26,7 +26,7 @@
       <div class="row mb-3 group">
         <h2 class="col-12 mb-4"> Default cache settings </h2>
         <div class="col-12 col-md-6">
-          <b-form-group label="Use cache per user" description="We'll never share your email with anyone else.">
+          <b-form-group label="Use cache per user" description="Cache requests globaly or per user.">
             <b-form-checkbox v-model="adminConfig.cachePerUser" switch>
             </b-form-checkbox>
           </b-form-group>
@@ -34,9 +34,15 @@
         <div class="col-12 col-md-6">
           <b-form-group
             label-cols="12"
-            label="Cache expiration"
-            description="We'll never share your email with anyone else.">
-            <b-form-input v-model="adminConfig.cacheExpiration"></b-form-input>
+            label="Cache expiration (s)"
+            description="Cache data default expiration value in seconds.">
+            <b-form-input
+              v-model="adminConfig.cacheExpiration"
+              v-validate="'required|integer'"
+              name="cacheExpiration"
+              data-vv-as="cache expiration">
+            </b-form-input>
+            <span class="error-span">{{ errors.first('cacheExpiration') }}</span>
           </b-form-group>
         </div>
       </div>
@@ -47,42 +53,64 @@
           <b-form-group
             label-cols="12"
             label="Max points per endpoint"
-            description="We'll never share your email with anyone else.">
-            <b-form-input v-model="adminConfig.rateLimit.maxPoints"></b-form-input>
+            description="Maximum number of points that can be consumed over duration.">
+            <b-form-input
+              v-model="adminConfig.rateLimit.maxPoints"
+              v-validate="'required|integer'"
+              name="maxPoints"
+              data-vv-as="max points">
+            </b-form-input>
+            <span class="error-span">{{ errors.first('maxPoints') }}</span>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
           <b-form-group
             label-cols="12"
             label="Points consumed per endpoint"
-            description="We'll never share your email with anyone else.">
-            <b-form-input v-model="adminConfig.rateLimit.consumePoints"></b-form-input>
+            description="Default number of points consumed per endpoint.">
+            <b-form-input
+              v-model="adminConfig.rateLimit.consumePoints"
+              v-validate="'required|integer'"
+              name="consumePoints"
+            </b-form-input>
+            <span class="error-span">{{ errors.first('consumePoints') }}</span>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
           <b-form-group
             label-cols="12"
             label="Duration"
-            description="We'll never share your email with anyone else.">
-            <b-form-input v-model="adminConfig.rateLimit.duration"></b-form-input>
+            description="Number of seconds before consumed points are reset.">
+            <b-form-input
+              v-model="adminConfig.rateLimit.duration"
+              v-validate="'required|integer'"
+              name="duration">
+            </b-form-input>
+            <span class="error-span">{{ errors.first('duration') }}</span>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
           <b-form-group
             label-cols="12"
             label="Block duration"
-            description="We'll never share your email with anyone else.">
-            <b-form-input v-model="adminConfig.rateLimit.blockDuration"></b-form-input>
+            description="Number of seconds the user is blocked after consuming all of available points on endpoint.">
+            <b-form-input
+              v-model="adminConfig.rateLimit.blockDuration"
+              v-validate="'required|integer'"
+              name="blockDuration"
+              data-vv-as="block duration">
+            </b-form-input>
+            <span class="error-span">{{ errors.first('blockDuration') }}</span>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
-          <b-form-group label="Allow rate limiting" description="We'll never share your email with anyone else.">
+          <b-form-group label="Allow rate limiting" description="Disable rate limiting on all routes.">
             <b-form-checkbox v-model="adminConfig.rateLimit.allowRateLimit" switch>
             </b-form-checkbox>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
-          <b-form-group label="Rate limit by" description="We'll never share your email with anyone else.">
+          <b-form-group label="Rate limit by" description="Rate limit by IP address of user ID.">
             <b-form-select v-model="adminConfig.rateLimit.limitBy" :options="rateLimitByOptions"></b-form-select>
           </b-form-group>
         </div>
@@ -141,6 +169,7 @@ export default {
   methods: {
     async saveChanges(event) {
       event.preventDefault()
+      if (!await this.$validator.validateAll()) return;
       this.updateState = 0
       try {
         await this.$axios.patch('/admin/config', this.adminConfig);

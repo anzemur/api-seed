@@ -30,11 +30,12 @@
         </b-form-group>
       </div>
     </div>
-    <b-table class="requests-table"
+    <b-table class="requests-table pl-3 pr-3"
       :busy="loadingPage"
       :items="items"
       :fields="fields" 
       flex
+      bordered
       responsive
       caption-top
       striped 
@@ -50,33 +51,33 @@
       <b-card>
         <b-row class="mb-3">
           <b-col sm="2" class="text-sm-left"><b>ID:</b></b-col>
-          <b-col sm="2">{{ row.item._id }}</b-col>
+          <b-col sm="2">{{ row.item._id || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Email:</b></b-col>
-          <b-col sm="2">{{ row.item.email }}</b-col>
+          <b-col sm="2">{{ row.item.email || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Username:</b></b-col>
-          <b-col sm="2">{{ row.item.username }}</b-col>
+          <b-col sm="2">{{ row.item.username || '/' }}</b-col>
         </b-row>
 
         <b-row class="mb-3">
           <b-col sm="2" class="text-sm-left"><b>First name:</b></b-col>
-          <b-col sm="2">{{ row.item.firstName }}</b-col>
+          <b-col sm="2">{{ row.item.firstName || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Last name:</b></b-col>
-          <b-col sm="2">{{ row.item.lastName }}</b-col>
+          <b-col sm="2">{{ row.item.lastName || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Google ID:</b></b-col>
-          <b-col sm="2">{{ row.item.googleId }}</b-col>
+          <b-col sm="2">{{ row.item.googleId || '/' }}</b-col>
         </b-row>
 
         <b-row class="mb-3">
           <b-col sm="2" class="text-sm-left"><b>Facebook ID:</b></b-col>
-          <b-col sm="2">{{ row.item.facebookId }}</b-col>
+          <b-col sm="2">{{ row.item.facebookId || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b> Created at:</b></b-col>
-          <b-col sm="2">{{ row.item.createdAt }}</b-col>
+          <b-col sm="2">{{ row.item.createdAt || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Updated at:</b></b-col>
-          <b-col sm="2">{{ row.item.updatedAt }}</b-col>
+          <b-col sm="2">{{ row.item.updatedAt || '/' }}</b-col>
         </b-row>
 
         <b-row class="mt-5">
-          <b-col sm="2" class="text-sm-left"><b-button variant="danger">Delete user</b-button></b-col>
+          <b-col sm="2" class="text-sm-left"><b-button variant="danger" @click="deleteUserConfirmation(row.item._id)">Delete user</b-button></b-col>
         </b-row>
 
       </b-card>
@@ -171,6 +172,35 @@ export default {
         console.log(error);
       } finally {
         this.loadingPage = false;
+      }
+    },
+    deleteUserConfirmation (userId) {
+      this.$bvModal.msgBoxConfirm('Are you sure you want to delete this user? This action cannot be undone.', {
+        title: 'Delete confirmation',
+        size: 'md',
+        buttonSize: 'md',
+        okVariant: 'danger',
+        okTitle: 'Yes',
+        cancelTitle: 'No',
+        footerClass: 'p-2 no-',
+        hideHeaderClose: false,
+        centered: true
+      })
+      .then((value) => {
+        if (value) {
+          this.deleteUser(userId);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    },
+    async deleteUser (userId) {
+      try {
+        await this.$axios.delete(`/users/${userId}`);
+        this.getUsers();
+      } catch (error) {
+        console.log(error);
       }
     },
   },

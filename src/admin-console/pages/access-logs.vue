@@ -38,12 +38,13 @@
         </b-form-group>
       </div>
     </div>
-    <b-table class="requests-table"
+    <b-table class="requests-table pl-3 pr-3"
       :busy="loadingPage"
       :items="items"
       :fields="fields" 
       flex
       responsive
+      bordered
       caption-top
       striped 
       hover

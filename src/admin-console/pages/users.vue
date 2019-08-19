@@ -75,6 +75,10 @@
           <b-col sm="2">{{ row.item.updatedAt }}</b-col>
         </b-row>
 
+        <b-row class="mt-5">
+          <b-col sm="2" class="text-sm-left"><b-button variant="danger">Delete user</b-button></b-col>
+        </b-row>
+
       </b-card>
     </template>
     </b-table>
@@ -109,8 +113,8 @@ export default {
       items: [],
       roles: [
         '',
-        'admin',
-        'user',
+        { text: 'Admin', value: 'admin' },
+        { text: 'User', value: 'user' },
       ],
       neki: 0,
       params: {

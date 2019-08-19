@@ -35,6 +35,9 @@ export function usersRoutes() {
 
   router.get('/',
     usersController1.getUsers);
+  
+  router.delete('/:userId',
+    usersController1.deleteUser);
 
   router.post('/',
     usersController.createNewUser);

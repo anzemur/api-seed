@@ -106,5 +106,21 @@ export class UsersController1 extends Controller {
    */
   @BoundMethod
   public async deleteUser(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const userId = req.params.userId;
+
+    try {
+      const user = await User.findByIdAndDelete(
+        { _id: toObjectId(userId) },
+      );
+
+      if (user) {
+        res.return(HttpStatusCodes.NoContent, user);
+      } else {
+        return next(new NotFoundError('User doesn\'t exists.'));
+      }
+      
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while deleting user.', error));
+    }
   }
 }

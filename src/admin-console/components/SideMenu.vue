@@ -25,6 +25,12 @@
           <span>Users</span>
         </nuxt-link>
       </li>
+      <li @click="changeView(types.MenuItems.SERVER_INFO)" v-bind:class="{ active: menuItem === types.MenuItems.SERVER_INFO }">
+        <nuxt-link to="/server-info" class="pl-3 pb-2 pt-2">
+          <i class="mr-2 side-nav-ic fa fa-server fa-xs"></i>
+          <span>Server info</span>
+        </nuxt-link>
+      </li>
       <li @click="logOut()" class="side-nav-profile">
         <nuxt-link to="#" class="pl-3 pb-2 pt-2">
           <i class="mr-2 side-nav-ic fa fa-sign-out-alt fa-xs"></i>

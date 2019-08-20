@@ -41,11 +41,6 @@ export const config: NuxtConfiguration =  {
             method: 'post',
             propertyName: 'authToken',
           },
-          // user: {
-          //   url: '/profile',
-          //   method: 'get',
-          //   propertyName: 'data',
-          // },
           logout: false,
           user: false,
         },
@@ -59,12 +54,17 @@ export const config: NuxtConfiguration =  {
     title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width,  initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', integrity: 'sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz', crossorigin: 'anonymous'}
+      { 
+        rel: 'stylesheet',
+        href: 'https://use.fontawesome.com/releases/v5.4.1/css/all.css',
+        integrity: 'sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz',
+        crossorigin: 'anonymous'
+      }
     ]
   },
   /*

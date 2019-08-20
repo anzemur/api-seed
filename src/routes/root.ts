@@ -7,6 +7,8 @@ import { AuthRequest, authenticateRequest } from '../middleware/authentication';
 import { RateLimitByType } from '../config/types';
 import { registerCache } from '../middleware/cache';
 
+
+
 /**
  * Root api routes.
  * @param app Express application instance.

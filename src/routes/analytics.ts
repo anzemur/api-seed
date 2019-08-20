@@ -33,5 +33,8 @@ export function analyticsRoutes() {
   router.get('/devices-count',
     analyticsController.getRequestDevicesCount);
 
+  router.get('/server-info',
+    analyticsController.getServerInfo);
+
   return router;
 }

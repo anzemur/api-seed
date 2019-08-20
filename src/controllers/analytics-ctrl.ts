@@ -4,6 +4,8 @@ import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { NextFunction } from 'connect';
 import { Log } from '../models/log-model';
 import { InternalServerError } from '../lib/errors';
+import * as os from 'os';
+import { formatApplicationUptime } from '../lib/parsers';
 
 /**
  * Analytics controller.
@@ -237,6 +239,31 @@ export class AnalyticsController extends Controller {
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
+  }
 
+  @BoundMethod
+  public async getServerInfo(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+
+    req.context.mongooseConnection.db.stats((err, mongoStats) => {
+      res.return(200, {
+        ...process.memoryUsage(),
+        mongoStats,
+        formattedRss: Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100,
+        formattedHeapTotal: Math.round(process.memoryUsage().heapTotal / 1024 / 1024 * 100) / 100,
+        formattedExternal: Math.round(process.memoryUsage().external / 1024 / 1024 * 100) / 100,
+        formattedHeapUsed: Math.round(process.memoryUsage().heapUsed / 1024 / 1024 * 100) / 100,
+        freeMemory: os.freemem(),
+        totalMemory: os.totalmem(),
+        formattedFreeMemory: Math.round(os.freemem() / 1024 / 1024 * 100) / 100,
+        formattedTotalMemory: Math.round(os.totalmem() / 1024 / 1024 * 100) / 100,
+        cpus: os.cpus(),
+        osType: os.type(),
+        osRelease: os.release(),
+        formattedUptime: formatApplicationUptime(process.uptime()),
+        uptime: process.uptime()
+      });
+    });
+
+    
   }
 }

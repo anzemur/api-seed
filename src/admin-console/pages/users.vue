@@ -154,6 +154,7 @@ export default {
       this.getUsers();
     },
     async getUsers () {
+      console.log(process)
       if (!await this.$validator.validateAll()) return;
       this.loadingPage = true;
       try {
@@ -244,8 +245,5 @@ export default {
       margin-top: 90px !important;
     }
   }
-
-  
-/* =============== pagination: ============= */
 
 </style>

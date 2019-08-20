@@ -37,11 +37,6 @@ export default {
             method: 'post',
             propertyName: 'authToken',
           },
-          // user: {
-          //   url: '/profile',
-          //   method: 'get',
-          //   propertyName: 'data',
-          // },
           logout: false,
           user: false,
         },

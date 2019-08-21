@@ -1,8 +1,8 @@
 import { App } from '../src/app';
 import { config } from 'dotenv';
-import { User, UserModel } from '../src/models/user-model';
+import { User, UserModel } from '../src/models/user-mod';
 import * as bcrypt from 'bcryptjs';
-import { UserStatus, UserRoles } from '../src/config/user';
+import { UserStatus, UserRoles } from '../src/config/types';
 import { AuthenticationService } from '../src/services/authentication-service';
 import { Application } from 'express';
 

@@ -6,7 +6,7 @@ import { InternalServerError, UnauthorizedError, NotFoundError } from '../lib/er
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { HttpStatusCodes } from '../config/http-status-codes';
 import { AuthenticationService } from '../services/authentication-service';
-import { User } from '../models/user-model';
+import { User } from '../models/user-mod';
 import { toObjectId } from '../lib/parsers';
 
 export class UsersController1 extends Controller {

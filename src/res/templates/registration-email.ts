@@ -1,3 +1,4 @@
+// tslint:disable-next-line:no-big-function
 export function registrationEmailTemplate(registrationToken: string) {
   return `
   <!doctype html>

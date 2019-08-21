@@ -1,6 +1,9 @@
-import { Model } from './model';
+import { Model } from './mod';
 import { prop } from 'typegoose';
 
+/**
+ * Access log model class.
+ */
 export class LogModel extends Model {
 
   @prop({ required: true })

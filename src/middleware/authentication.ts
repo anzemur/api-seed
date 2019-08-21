@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { UserRoles } from '../config/user';
+import { UserRoles } from '../config/types';
 import { ExtractJwt } from 'passport-jwt';
 import { UnauthenticatedError, UnauthorizedError } from '../lib/errors';
 import { AuthenticationService } from '../services/authentication-service';
-import { User, UserModel } from '../models/user-model';
+import { User, UserModel } from '../models/user-mod';
 import { Context } from './context';
 
 const authService = new AuthenticationService();

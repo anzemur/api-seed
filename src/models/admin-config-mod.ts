@@ -1,4 +1,4 @@
-import { Model } from './model';
+import { Model } from './mod';
 import { prop } from 'typegoose';
 import { RateLimitConfig } from '../middleware/rate-limit';
 
@@ -10,7 +10,7 @@ interface AdminRateLimitConfig extends RateLimitConfig {
 }
 
 /**
- * Admin config model.
+ * Admin config model class.
  */
 export class AdminConfigModel extends Model {
 

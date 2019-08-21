@@ -1,5 +1,5 @@
 import { Service } from './service';
-import { AdminConfig, AdminConfigModel } from '../models/admin-config-model';
+import { AdminConfig, AdminConfigModel } from '../models/admin-config-mod';
 import { InternalServerError } from '../lib/errors';
 
 export class AdminService extends Service {
@@ -30,6 +30,10 @@ export class AdminService extends Service {
     }
   }
 
+  /**
+   * Creates new admin config in database.
+   * @param data Admin config data.
+   */
   async createAdminConfig(data: any): Promise<AdminConfigModel> {    
     const config = new AdminConfig(data);
     try {

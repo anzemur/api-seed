@@ -1,7 +1,7 @@
 import { Service } from './service';
 import * as jwt from 'jsonwebtoken';
-import { User } from '../models/user-model';
-import { UserStatus } from '../config/user';
+import { User } from '../models/user-mod';
+import { UserStatus } from '../config/types';
 import * as bcrypt from 'bcryptjs';
 
 /**

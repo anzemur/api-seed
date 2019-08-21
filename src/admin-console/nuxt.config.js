@@ -1,5 +1,5 @@
 /**
- * Nuxt.js admin console app config.
+ * Nuxt.js admin console app config. This config will be used if you want to run/build on admin console Nuxt app independently as SPA.
  */
 export default {
   server: {
@@ -13,7 +13,6 @@ export default {
    * Base application routing.
    */
   router: {
-    // base: '/admin',
     middleware: [
       'auth',
       'redirect'
@@ -83,18 +82,17 @@ export default {
   ** Nuxt.js modules.
   */
   modules: [
-    // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt',
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration.
-  ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    // baseURL: '/api/v1/',
     baseURL: 'http://localhost:3000/api/v1/',
   },
+  build: {
+    stats: process.env.NODE_ENV === 'test' ? 'errors-only' : {}
+  }
 };

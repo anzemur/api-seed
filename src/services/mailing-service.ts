@@ -2,6 +2,9 @@ import { Service } from './service';
 import { SentMessageInfo, createTransport, Transporter } from 'nodemailer';
 import env from '../config/env';
 
+/**
+ * Email data options.
+ */
 export interface EmailData {
   from: string;
   to: string;
@@ -10,6 +13,9 @@ export interface EmailData {
   html?: string;
 }
 
+/**
+ * SMTP options.
+ */
 export interface SmtpOptions {
   host: string;
   port: number;
@@ -56,7 +62,6 @@ export class MailingService extends Service {
    * @param emailData Email data.
    */
   async sendMail(emailData: EmailData): Promise<boolean> {
-    // replace(/\n/g, '<br>');
     try {
       const status: SentMessageInfo = await this.transport.sendMail(emailData);
       this.logger.info('Email successfully sent: ', status);

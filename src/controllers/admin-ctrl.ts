@@ -4,7 +4,7 @@ import { AdminService } from '../services/admin-service';
 import { Request, Response, NextFunction} from 'express';
 import { MailingService } from '../services/mailing-service';
 import { InternalServerError } from '../lib/errors';
-import { AdminConfig } from '../models/admin-config-model';
+import { AdminConfig } from '../models/admin-config-mod';
 import { AuthRequest } from '../middleware/authentication';
 import { HttpStatusCodes } from '../config/http-status-codes';
 

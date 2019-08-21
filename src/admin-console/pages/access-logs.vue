@@ -204,7 +204,7 @@ export default {
         this.totalPages = res.data.meta.totalPages;
         this.totalRecords = res.data.meta.totalRecords;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         this.loadingPage = false;
       }

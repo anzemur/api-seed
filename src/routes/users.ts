@@ -1,7 +1,7 @@
 import { Application, Router } from 'express';
 import { UsersController } from '../controllers/users-ctrl';
 import { authenticateRequest } from '../middleware/authentication';
-import { UserRoles } from '../config/user';
+import { UserRoles } from '../config/types';
 import { UsersController1 } from '../controllers/users-controller';
 import { validateBody } from '../middleware/validate-body';
 import { updateUserSchema } from '../config/body-schemas';

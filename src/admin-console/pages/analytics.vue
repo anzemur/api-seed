@@ -88,7 +88,7 @@ export default {
           }]
         };
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getDailyRequestCount() {
@@ -111,7 +111,7 @@ export default {
           }]
         };
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getRequestCount() {
@@ -132,7 +132,7 @@ export default {
           }]
         };
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async getDevicesCount() {
@@ -154,7 +154,7 @@ export default {
           }]
         };
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     generateRandomHexColor(){

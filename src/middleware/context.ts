@@ -1,8 +1,8 @@
 import { ObjectId } from 'mongodb';
-import { UserModel } from '../models/user-model';
+import { UserModel } from '../models/user-mod';
 import { AuthRequest } from './authentication';
 import { NextFunction, Response, RequestHandler } from 'express';
-import { AdminConfigModel } from '../models/admin-config-model';
+import { AdminConfigModel } from '../models/admin-config-mod';
 import { AdminService } from '../services/admin-service';
 import { Connection } from 'mongoose';
 import { RedisClient } from 'redis';

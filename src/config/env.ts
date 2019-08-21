@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 config();
 
 /**
- * Type checked environment variables.
+ * Type checked list of environment variables.
  */
 export default {
   ENV                  : process.env.ENV as string,

@@ -2,7 +2,7 @@ import { Controller } from './ctrl';
 import { boundMethod as BoundMethod } from 'autobind-decorator';
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { NextFunction } from 'connect';
-import { Log } from '../models/log-model';
+import { Log } from '../models/log-mod';
 import { InternalServerError } from '../lib/errors';
 import * as os from 'os';
 import { formatApplicationUptime } from '../lib/parsers';

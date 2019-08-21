@@ -1,10 +1,10 @@
 import passport from 'passport';
 import PassportFacebookToken from 'passport-facebook-token';
 import { Strategy as PassportGoogleToken } from 'passport-google-token';
-import { User } from '../models/user-model';
-import { UserStatus, UserRoles } from './user';
+import { User } from '../models/user-mod';
 import { ObjectId } from 'bson';
 import { BadRequestError } from '../lib/errors';
+import { UserStatus, UserRoles } from './types';
 
 /**
  * Registers Facebook passport.js auth strategy.

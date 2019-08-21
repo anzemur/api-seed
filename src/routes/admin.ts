@@ -1,6 +1,6 @@
 import { Application, Router } from 'express';
 import { authenticateRequest } from '../middleware/authentication';
-import { UserRoles } from '../config/user';
+import { UserRoles } from '../config/types';
 import { AdminController } from '../controllers/admin-ctrl';
 import { validateBody } from '../middleware/validate-body';
 import { updateAdminConfigSchema } from '../config/body-schemas';

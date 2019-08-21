@@ -154,7 +154,6 @@ export default {
       this.getUsers();
     },
     async getUsers () {
-      console.log(process)
       if (!await this.$validator.validateAll()) return;
       this.loadingPage = true;
       try {
@@ -170,7 +169,7 @@ export default {
         this.totalPages = res.data.meta.totalPages;
         this.totalRecords = res.data.meta.totalRecords;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         this.loadingPage = false;
       }
@@ -193,7 +192,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       })
     },
     async deleteUser (userId) {
@@ -201,7 +200,7 @@ export default {
         await this.$axios.delete(`/users/${userId}`);
         this.getUsers();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
   },

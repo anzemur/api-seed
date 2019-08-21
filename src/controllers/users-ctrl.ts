@@ -1,18 +1,18 @@
 import { Controller } from './ctrl';
-import { User } from '../models/user-model';
+import { User } from '../models/user-mod';
 import { AuthenticationService } from '../services/authentication-service';
 import { Request, Response, NextFunction } from 'express';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
-import { registrationRequestSchema, changePasswordSchema } from './requests/users';
 import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError } from '../lib/errors';
-import { UserStatus, UserRoles } from '../config/user';
+import { UserStatus, UserRoles } from '../config/types';
 import { MailingService } from '../services/mailing-service';
 import { registrationEmailTemplate } from '../res/templates/registration-email';
 import { isRequestBodyEmpty } from '../lib/validators';
 import { AuthRequest } from '../middleware/authentication';
 import passport from 'passport';
 import { PassportAuthStrategyType } from '../config/types';
+import { registrationRequestSchema, changePasswordSchema } from '../config/body-schemas';
 
 /* Register services.*/
 const authService = new AuthenticationService();

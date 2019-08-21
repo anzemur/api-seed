@@ -1,17 +1,18 @@
 import { AuthRequest, AuthResponse } from './authentication';
 import { NextFunction } from 'express';
-import { Log } from '../models/log-model';
+import { Log } from '../models/log-mod';
 import moment from 'moment';
 import logger from '../config/logger';
 
 /**
- * Request logs middleware.
+ * Request logs middleware that writes access log document into db for every received request.
  * @param req Express request instance.
  * @param res Express response instance.
  * @param next Express next function.
  */
 export function registerLogs(req: AuthRequest, res: AuthResponse, next: NextFunction) {
   const end = res.end;
+  // tslint:disable-next-line:only-arrow-functions
   res.end = async function() {
     const startTime = Date.now();
     const args = Array.prototype.slice.apply(arguments);

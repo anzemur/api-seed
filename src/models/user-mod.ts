@@ -1,7 +1,10 @@
-import { Model } from './model';
-import { UserStatus, UserRoles } from '../config/user';
+import { Model } from './mod';
+import { UserStatus, UserRoles } from '../config/types';
 import { prop } from 'typegoose';
 
+/**
+ * User model class.
+ */
 export class UserModel extends Model {
 
   @prop({ required: true, unique: true })

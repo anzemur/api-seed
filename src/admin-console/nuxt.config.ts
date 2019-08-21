@@ -5,7 +5,7 @@ import NuxtConfiguration from '@nuxt/config';
  */
 export const config: NuxtConfiguration =  {
   /**
-   * Directory paths options. Remove `rootDir` and `modulesDir` properties if you want to run/build on admin console Nuxt app.
+   * Directory paths options. 
    */
   rootDir: 'src/admin-console',
   modulesDir: ['../../node_modules'],
@@ -87,20 +87,19 @@ export const config: NuxtConfiguration =  {
   ** Nuxt.js modules.
   */
   modules: [
-    // Doc: https://bootstrap-vue.js.org/docs/
     'bootstrap-vue/nuxt',
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration.
-  ** See https://axios.nuxtjs.org/options
   */
   axios: {
     baseURL: '/api/v1/',
-    // baseURL: 'http://localhost:3000/api/v1/',
   },
+  build: {
+    stats: process.env.NODE_ENV === 'test' ? 'errors-only' : {}
+  } as any,
 };
 
 export default config;

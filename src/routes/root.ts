@@ -2,7 +2,7 @@
 import { Application, Router, Request, Response } from 'express';
 import { formatApplicationUptime } from '../lib/parsers';
 import { registerRateLimit } from '../middleware/rate-limit';
-import { AdminConfig } from '../models/admin-config-model';
+import { AdminConfig } from '../models/admin-config-mod';
 import { AuthRequest, authenticateRequest } from '../middleware/authentication';
 import { RateLimitByType } from '../config/types';
 import { registerCache } from '../middleware/cache';

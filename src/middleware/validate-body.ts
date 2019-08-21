@@ -6,7 +6,7 @@ import { BadRequestError, ValidationError } from '../lib/errors';
 import * as Joi from 'joi';
 
 /**
- * Validates request body with provided schema.
+ * Middleware that validates request body against provided body schema.
  * @param bodySchema Joi schema validation object.
  */
 export function validateBody(bodySchema: Joi.ObjectSchema): RequestHandler {

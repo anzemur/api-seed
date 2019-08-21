@@ -7,7 +7,7 @@ import { handleErrors, handleNotFoundError } from './middleware/errors';
 import { registerCors, registerBodyParsers, registerDeviceParsers } from './middleware/parsers';
 import { registerContext } from './middleware/context';
 import { RedisClient, createClient } from 'redis';
-import { responseInterceptor, createReturn } from './middleware/response-interceptor';
+import { parseResponse } from './middleware/parse-response';
 import { registerLogs } from './middleware/logs';
 import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import passport from 'passport';
@@ -52,8 +52,7 @@ export class App {
     registerDeviceParsers(this.app);
 
     /* Register api middleware. */
-    this.app.use(createReturn);
-    this.app.use(responseInterceptor);
+    this.app.use(parseResponse);
     this.app.use(registerLogs);
     this.app.use(registerContext(this.mongooseConnection, this.redisClient));
 

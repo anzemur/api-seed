@@ -51,3 +51,19 @@ export enum RedisEvents {
   END = 'end',
   ERROR = 'error',
 }
+
+/**
+ * User roles.
+ */
+export enum UserRoles {
+  ADMIN = 'admin',
+  USER = 'user'
+}
+
+/**
+ * User statuses.
+ */
+export enum UserStatus {
+  ACTIVE = 0,
+  DELETED = 1,
+}

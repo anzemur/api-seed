@@ -1,42 +1,37 @@
 import { Application, Router } from 'express';
-import { UsersController } from '../controllers/users-ctrl';
-import { authenticateRequest } from '../middleware/authentication';
-import { UserRoles } from '../config/types';
-import { validateBody } from '../middleware/validate-body';
-import { updateUserSchema } from '../config/body-schemas';
+import { AuthenticationController } from '../controllers/auth-ctrl';
 
 /* Register controller. */
-const usersController = new UsersController();
+const authController = new AuthenticationController();
 
 /**
  * Registers authentication api routes at `/api/{API_VERSION}/auth`.
  * @param app Express application instance.
  */
-export function registerUsersRoutes(app: Application) {
-  app.use(`/api/${process.env.API_VERSION || 'v1'}/auth`, usersRoutes());
+export function registerAuthRoutes(app: Application) {
+  app.use(`/api/${process.env.API_VERSION || 'v1'}/auth`, authRoutes());
 }
 
 /**
  * Authentication api routes.
  */
-export function usersRoutes() {
+export function authRoutes() {
   const router = Router();
 
   router.post('/local',
-    usersController.logInRequest);
+    authController.localAuth);
 
   router.post('/facebook',
-    usersController.facebookAuth);
+    authController.facebookAuth);
     
   router.post('/google',
-    usersController.googleAuth);
+    authController.googleAuth);
 
   router.post('/registration',
-    usersController.registrationRequest);
+    authController.registrationRequest);
 
   router.put('/change-password',
-    authenticateRequest([UserRoles.ADMIN, UserRoles.USER]),
-    usersController.changePassword);
+    authController.changePassword);
 
   return router;
 }

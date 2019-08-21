@@ -9,6 +9,8 @@ JWT_SECRET=
 ENV=dev
 DB_HOST=localhost
 DB_NAME=api-seed-dev
+TEST_DB_HOST=localhost
+TEST_DB_NAME=api-seed-test
 REDIS_HOST=localhost
 REDIS_PORT=6379
 PORT=3000
@@ -18,3 +20,5 @@ SMTP_PORT=
 SMTP_USE_SSL=
 SMTP_USERNAME=
 SMTP_PASSWORD=
+USE_ADMIN_CONSOLE=false
+

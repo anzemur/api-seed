@@ -14,6 +14,8 @@ const app = new App();
   await app.connectDb();
   await app.createRedisClient();
   await app.registerRoutesAndMiddleware();
+  // TODO!
+  await app.initAdminConfig();
 
   const adminSvc = new AdminService();
   const data = {

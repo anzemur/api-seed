@@ -10,7 +10,7 @@
     "start": "tsc && node dist/src/scripts/start.js",
     "watch-node": "nodemon dist/src/scripts/start.js",
     "watch-ts": "tsc -w",
-    "test": "mocha -r ts-node/register ./test/*.test.ts",
+    "test": "mocha -r ts-node/register ./src/test/*.test.ts",
     "lint": "tslint --project tsconfig.json \"src/**/*.ts?(x)\""
   },
   "author": "Anze Mur <am3159@student.uni-lj.si>",

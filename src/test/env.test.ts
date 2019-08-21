@@ -1,9 +1,9 @@
-import { App } from '../src/app';
+import { App } from '../app';
 import { config } from 'dotenv';
-import { User, UserModel } from '../src/models/user-mod';
+import { User, UserModel } from '../models/user-mod';
 import * as bcrypt from 'bcryptjs';
-import { UserStatus, UserRoles } from '../src/config/types';
-import { AuthenticationService } from '../src/services/authentication-service';
+import { UserStatus, UserRoles } from '../config/types';
+import { AuthenticationService } from '../services/authentication-service';
 import { Application } from 'express';
 
 /**
@@ -42,7 +42,7 @@ before(async() => {
   try {
     await app.listen();
     await app.connectDb();
-    console.log(`│ Server listening on port: ${app.port}.`);
+    await app.registerRoutesAndMiddleware();
     console.log('╘══════════════════════════════════════════════');
   } catch (error) {
     console.log(error);

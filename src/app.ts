@@ -9,12 +9,13 @@ import { registerContext } from './middleware/context';
 import { RedisClient, createClient } from 'redis';
 import { registerLogs } from './middleware/logs';
 import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
-import passport from 'passport';
+import { registerAuthRoutes } from './routes/auth';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
-import env from './config/env';
 import { registerAdminRoutes } from './routes/admin';
 import { MongooseEvents, RedisEvents, EnvType } from './config/types';
 import { registerAnalyticsRoutes } from './routes/analytics';
+import env from './config/env';
+import passport from 'passport';
 
 /**
  * Base application instance.
@@ -57,6 +58,7 @@ export class App {
 
     /* Register api routes. */
     registerRootRoutes(this.app);
+    registerAuthRoutes(this.app);
     registerUsersRoutes(this.app);
     registerAdminRoutes(this.app);
     registerAnalyticsRoutes(this.app);
@@ -68,6 +70,10 @@ export class App {
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);
     this.app.use(handleErrors);
+  }
+
+  async initAdminConfig() {
+    
   }
 
   /**
@@ -101,10 +107,10 @@ export class App {
   public async connectDb() {
     let connectionUri: string;
     if (process.env.ENV === EnvType.DEV) {
-      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'api-seed'}`;
+      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'api-seed-dev'}`;
     }
-    if (process.env.ENV === EnvType.DEV) {
-      connectionUri = `mongodb://${process.env.DB_TEST_USER}:${process.env.DB_TEST_PASS}@${process.env.DB_TEST_HOST}:${process.env.DB_TEST_PORT}/${process.env.DB_TEST_NAME}`;
+    if (process.env.ENV === EnvType.TEST) {
+      connectionUri = `mongodb://${process.env.TEST_DB_HOST || 'localhost'}/${process.env.TEST_DB_NAME || 'api-seed-test'}`;
     }
     this.mongooseConnection = mongoose.connection;
 

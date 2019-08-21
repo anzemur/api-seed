@@ -180,6 +180,12 @@ export default {
   
   .data-span {
     font-size: 1.4rem;
-    color: $primary-dark;
+    color: $secondary-dark;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: $secondary-dark !important;
+    background-color: $secondary-dark !important;
   }
 </style>

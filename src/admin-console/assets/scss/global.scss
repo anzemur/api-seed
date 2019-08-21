@@ -5,6 +5,11 @@ h1 {
   color: $gray;
 }
 
+.custom-control-input:checked ~ .custom-control-label::before {
+  color: #fff;
+  border-color: $secondary !important;
+  background-color: $secondary !important;
+}
 
 h2 {
   font-size: 1.5rem;
@@ -45,7 +50,7 @@ h3 {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: $primary; 
+  background: $secondary; 
   border-radius: 10px;
 }
 

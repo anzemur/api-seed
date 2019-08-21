@@ -3,7 +3,7 @@ import { User } from '../models/user-mod';
 import { AuthenticationService } from '../services/authentication-service';
 import { boundMethod as BoundMethod } from 'autobind-decorator';
 import { Request, Response, NextFunction } from 'express';
-import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError } from '../lib/errors';
+import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError, NotFoundError } from '../lib/errors';
 import { MailingService } from '../services/mailing-service';
 import { registrationEmailTemplate } from '../res/templates/registration-email';
 import { isRequestBodyEmpty } from '../lib/validators';
@@ -14,6 +14,7 @@ import { HttpStatusCodes } from '../config/http-status-codes';
 import passport from 'passport';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
+import { forgottenPasswordTemplate } from '../res/templates/forgotten-password-email';
 
 /**
  * Authentication controller.
@@ -259,18 +260,9 @@ export class AuthenticationController extends Controller {
    * Changes users password.
    */
   @BoundMethod
-  public async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
+  public async changePassword(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const body = req.body;
     const user = req.context.user;
-
-    if (isRequestBodyEmpty(body)) {
-      return next(new BadRequestError('Request body is empty.'));
-    }
-
-    const { error } = Joi.validate(body, changePasswordSchema, { abortEarly: false });
-    if (error) {
-      return next(new ValidationError('Request body validation failed.', error));
-    }
 
     const correctPass = await this.authenticationService.comparePassword(user.password, body.password);
     if (!correctPass) {
@@ -279,12 +271,74 @@ export class AuthenticationController extends Controller {
 
     const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
     try {
-      const response = await User.update({ _id: user.id }, { password: passwordHash});
-      res.status(HttpStatusCodes.OK).json({
+      const response = await User.updateOne({ _id: user.id }, { password: passwordHash});
+      res.return(HttpStatusCodes.OK, {
         successful: !!(response.n && response.nModified && response.ok)
       });
     } catch (error) {
       next(new InternalServerError('There was a problem while changing password.', error));
+    }
+  }
+
+  /**
+   * Sends email with reset password token to email if user exists in database.
+   */
+  @BoundMethod
+  public async forgottenPasswordRequest(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    try {
+      const user = await User.findOne({ email: body.email });
+      if (!user) {
+        return next(new NotFoundError('User with this email doesn\'t exists.'));
+      }
+    } catch (error) {
+      return next(new InternalServerError('There was a problem while getting user.', error));
+    }
+
+    const forgottenPasswordToken = this.authenticationService.generateForgottenPasswordToken(body.email);
+    if (!forgottenPasswordToken) {
+      return next(new BadRequestError('Invalid forgotten password token.'));
+    }
+
+    const emailData = {
+      from: process.env.SMTP_USERNAME,
+      to: body.email,
+      subject: 'Forgotten password.',
+      text: '',
+      html: forgottenPasswordTemplate(forgottenPasswordToken)
+    };
+
+    const response = await this.mailingService.sendMail(emailData);
+    if (response) {
+      res.return(HttpStatusCodes.OK, {
+        message: 'Forgotten password email successfully sent.'
+      });
+    } else {
+      return next(new InternalServerError('There was an error while sending forgotten password email.'));
+    }
+  }
+
+  /**
+   * Reset users password.
+   */
+  @BoundMethod
+  public async resetPassword(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    const parsedToken = this.authenticationService.parseForgottenPasswordToken(req.body.forgottenPasswordToken);
+    if (!parsedToken) {
+      return next(new BadRequestError('Invalid forgotten password token.'));
+    }
+
+    const passwordHash = bcrypt.hashSync(body.password || '', bcrypt.genSaltSync(10));
+    try {
+      const response = await User.updateOne({ email: parsedToken.email }, { password: passwordHash});
+      res.return(HttpStatusCodes.OK, {
+        successful: !!(response.n && response.nModified && response.ok)
+      });
+    } catch (error) {
+      next(new InternalServerError('There was a problem while resetting password.', error));
     }
   }
 }

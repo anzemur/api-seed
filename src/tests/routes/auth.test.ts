@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import context from '../env.test';
 import request from 'supertest';
 import 'mocha';
+import { AuthenticationService } from '../../services/authentication-service';
 
 /**
  * Users local auth tests.
@@ -92,6 +93,9 @@ describe('#POST /auth/registration', () => {
   });
 });
 
+/**
+ * Change user's password request.
+ */
 describe('#PUT /auth/change-password', () => {
   it('should change users password', async () => {
 
@@ -139,6 +143,69 @@ describe('#PUT /auth/change-password', () => {
     };
 
     const result = await request(context.app).put('/api/v1/auth/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(422);
+  });
+});
+
+/**
+ * Send forgotten password email request tests.
+ */
+describe('#POST /auth/forgotten-password/request', () => {
+  it('should send reset password email', async () => {
+    const body = {
+      email: 'testUser@domain.com',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/forgotten-password/request').send(body);
+    expect(result.status).to.equal(200);
+  });
+
+  it('should not send reset password email if body is not valid', async () => {
+    const body = {
+      email: 'invalidEmail',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/forgotten-password/request').send(body);
+    expect(result.status).to.equal(422);
+  });
+
+  it('should not send reset password email if user doesn\'t exists', async () => {
+    const body = {
+      email: 'newUser@domain.com',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/forgotten-password/request').send(body);
+    expect(result.status).to.equal(404);
+  });
+});
+
+/**
+ * Reset users password tests.
+ */
+describe('#PUT /auth/forgotten-password/change', () => {
+  it('should reset users password', async () => {
+    const authService = new AuthenticationService();
+    const forgottenPasswordToken = authService.generateForgottenPasswordToken('testUser@domain.com');
+
+    const body = {
+      forgottenPasswordToken,
+      password: '12345678',
+    };
+
+    const result = await request(context.app).put('/api/v1/auth/forgotten-password/change').send(body);
+    expect(result.status).to.equal(200);
+  });
+
+  it('should not reset users password if new password is not valid', async () => {
+    const authService = new AuthenticationService();
+    const forgottenPasswordToken = authService.generateForgottenPasswordToken('testUser@domain.com');
+
+    const body = {
+      forgottenPasswordToken,
+      password: '1',
+    };
+
+    const result = await request(context.app).put('/api/v1/auth/forgotten-password/change').send(body);
     expect(result.status).to.equal(422);
   });
 });

@@ -9,7 +9,8 @@ import * as bcrypt from 'bcryptjs';
  */
 export enum JwtSignTypes {
   REGISTRATION = 'registration',
-  AUTHENTICATION = 'authentication'
+  AUTHENTICATION = 'authentication',
+  FORGOTTEN_PASSWORD = 'forgotten-password',
 }
 
 /**
@@ -137,6 +138,43 @@ export class AuthenticationService extends Service {
       }
     } catch (error) {
       this.logger.error('There was an error while parsing registration token: ', error);
+      return null;
+    }
+  }
+
+  /**
+   * Generates forgotten password registration token.
+   * @param email User's email.
+   */
+  generateForgottenPasswordToken(email: string) {
+    if (!email) {
+      return null;
+    }
+    return jwt.sign({ email }, process.env.JWT_SECRET, {
+      subject: JwtSignTypes.FORGOTTEN_PASSWORD,
+      expiresIn: '2d',
+    });
+  }
+
+  /**
+   * Parses forgotten password token.
+   * @param token Forgotten password token.
+   */
+  parseForgottenPasswordToken(token: string) {
+    try {
+      const { email } = jwt.verify(token, process.env.JWT_SECRET, {
+        subject: JwtSignTypes.FORGOTTEN_PASSWORD,
+      }) as any;
+
+      if (email) {
+        return {
+          email: email as string,
+        };
+      } else {
+        return null;
+      }
+    } catch (error) {
+      this.logger.error('There was an error while parsing forgotten password token: ', error);
       return null;
     }
   }

@@ -1,6 +1,8 @@
 import { Application, Router } from 'express';
 import { AuthenticationController } from '../controllers/auth-ctrl';
 import { authenticateRequest } from '../middleware/authentication';
+import { validateBody } from '../middleware/validate-body';
+import { changePasswordSchema, forgottenPasswordSchema, resetPasswordSchema } from '../config/body-schemas';
 
 /* Register controller. */
 const authController = new AuthenticationController();
@@ -36,13 +38,16 @@ export function authRoutes() {
 
   router.put('/change-password',
     authenticateRequest(),
+    validateBody(changePasswordSchema),
     authController.changePassword);
 
-  router.put('/forgotten-password/request',
-    authController.changePassword);
+  router.post('/forgotten-password/request',
+    validateBody(forgottenPasswordSchema),
+    authController.forgottenPasswordRequest);
 
   router.put('/forgotten-password/change',
-    authController.changePassword);
+    validateBody(resetPasswordSchema),
+    authController.resetPassword);
 
   return router;
 }

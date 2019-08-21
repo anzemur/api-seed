@@ -44,3 +44,18 @@ export const changePasswordSchema = Joi.object().keys({
   password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
   newPassword: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
 }).required();
+
+/**
+ * Forgotten password request body schema.
+ */
+export const forgottenPasswordSchema = Joi.object().keys({
+  email: Joi.string().email().required(),
+}).required();
+
+/**
+ * Reset password request body schema.
+ */
+export const resetPasswordSchema = Joi.object().keys({
+  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+  forgottenPasswordToken: Joi.string().required(),
+}).required();

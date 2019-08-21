@@ -80,7 +80,6 @@ import { setMenuMargin } from '~/mixins/set-menu-margin';
 
 export default {
   mixins: [ setMenuMargin ],
-  auth: false,
   data () {
     return {
       serverInfo: {
@@ -104,6 +103,7 @@ export default {
         fsUsedSize: 0,
         fsTotalSize: 0,
       },
+      refreshInterval: null,
     }
   },
   created () {
@@ -112,12 +112,12 @@ export default {
   mounted () {
     this.setMenuMargin();
     this.getServerInfo();
-    window.setInterval(() => {
+    this.refreshInterval = window.setInterval(() => {
       this.getServerInfo();
     }, 5000);
   },
-  watch: {
-
+  beforeDestroy() {
+    window.clearInterval(this.refreshInterval);
   },
   methods: {
     async getServerInfo() {

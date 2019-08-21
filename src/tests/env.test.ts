@@ -42,6 +42,7 @@ before(async() => {
   try {
     await app.listen();
     await app.connectDb();
+    await app.initAdminConfig();
     await app.registerRoutesAndMiddleware();
     console.log('╘══════════════════════════════════════════════');
   } catch (error) {
@@ -98,13 +99,12 @@ beforeEach(async() => {
   });
 
   try {
-    const res = await user.save();
-    const res2 = await userNormal.save();
-    context.user = res;
-    context.userNormal = res2;
+    context.user = await user.save();
+    context.userNormal = await userNormal.save();
     const authService = new AuthenticationService();
     context.authToken = authService.generateAuthToken(user.id);
     context.authTokenNormal = authService.generateAuthToken(userNormal.id);
+    await app.initAdminConfig();
   } catch (error) {
     console.log(error);
   }

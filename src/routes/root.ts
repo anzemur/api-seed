@@ -2,11 +2,6 @@
 import { Application, Router, Request, Response } from 'express';
 import { formatApplicationUptime } from '../lib/parsers';
 import { registerRateLimit } from '../middleware/rate-limit';
-import { AdminConfig } from '../models/admin-config-mod';
-import { AuthRequest, authenticateRequest } from '../middleware/authentication';
-import { RateLimitByType } from '../config/types';
-import { registerCache } from '../middleware/cache';
-
 
 /**
  * Root API routes - returns basic API information..
@@ -25,7 +20,7 @@ export function rootRoutes() {
   /**
    * Returns api base information.
    */
-  router.get('/', registerRateLimit(), async (req: AuthRequest, res: Response) => {
+  router.get('/', registerRateLimit(), async (req: Request, res: Response) => {
     res.status(200).json({
       name: 'API-seed',
       description: 'API-seed is a tool that helps developers develop their APIs better and faster.',

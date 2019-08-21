@@ -1,33 +1,40 @@
 import { Controller } from './ctrl';
 import { User } from '../models/user-mod';
 import { AuthenticationService } from '../services/authentication-service';
+import { boundMethod as BoundMethod } from 'autobind-decorator';
 import { Request, Response, NextFunction } from 'express';
-import * as Joi from 'joi';
-import * as bcrypt from 'bcryptjs';
 import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError } from '../lib/errors';
 import { MailingService } from '../services/mailing-service';
 import { registrationEmailTemplate } from '../res/templates/registration-email';
 import { isRequestBodyEmpty } from '../lib/validators';
-import { AuthRequest } from '../middleware/authentication';
-import passport from 'passport';
-import { PassportAuthStrategyType } from '../config/types';
+import { AuthRequest, AuthResponse } from '../middleware/authentication';
+import { PassportAuthStrategyType, UserRoles } from '../config/types';
 import { registrationRequestSchema, changePasswordSchema } from '../config/body-schemas';
-
-/* Register services.*/
-const authService = new AuthenticationService();
+import { HttpStatusCodes } from '../config/http-status-codes';
+import passport from 'passport';
+import * as Joi from 'joi';
+import * as bcrypt from 'bcryptjs';
 
 /**
  * Authentication controller.
  */
 export class AuthenticationController extends Controller {
 
+   /* Register services. */
+   private authenticationService: AuthenticationService;
+   private mailingService: MailingService;
+ 
+   constructor() {
+     super(AuthenticationController.name);
+     this.authenticationService = new AuthenticationService();
+     this.mailingService = MailingService.getInstance();
+   }
+
   /**
    * Checks if user can be authenticated using Facebook auth and generates authentication token.
-   * @param req Express request instance.
-   * @param res Express response instance.
-   * @param next Express next function instance.
    */
-  public async facebookAuth(req: AuthRequest, res: Response, next: NextFunction) {
+  @BoundMethod
+  public async facebookAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     if (req.context.adminConfig && !req.context.adminConfig.allowFacebookAuth) {
       return next(new UnauthorizedError('Facebook authentication is not allowed.'));
     }
@@ -52,9 +59,13 @@ export class AuthenticationController extends Controller {
 
       /* Authenticate user and generate JWT. */
       if (user) {
-        return res.status(200).json({
+        // return res.status(HttpStatusCodes.OK).json({
+        //   user: user,
+        //   authToken: this.authenticationService.generateAuthToken(user.id)
+        // });
+        return res.return(HttpStatusCodes.OK, {
           user: user,
-          authToken: authService.generateAuthToken(user.id)
+          authToken: this.authenticationService.generateAuthToken(user.id)
         });
       }
     }) (req, res);
@@ -62,11 +73,9 @@ export class AuthenticationController extends Controller {
 
   /**
    * Checks if user can be authenticated using Google auth and generates authentication token.
-   * @param req Express request instance.
-   * @param res Express response instance.
-   * @param next Express next function instance.
    */
-  public async googleAuth(req: AuthRequest, res: Response, next: NextFunction) {
+  @BoundMethod
+  public async googleAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     if (req.context.adminConfig && !req.context.adminConfig.allowGoogleAuth) {
       return next(new UnauthorizedError('Google authentication is not allowed.'));
     }
@@ -98,9 +107,9 @@ export class AuthenticationController extends Controller {
 
       /* Authenticate user and generate JWT. */
       if (user) {
-        return res.status(200).json({
+        return res.return(HttpStatusCodes.OK, {
           user: user,
-          authToken: authService.generateAuthToken(user.id)
+          authToken: this.authenticationService.generateAuthToken(user.id)
         });
       }
     }) (req, res);
@@ -108,11 +117,9 @@ export class AuthenticationController extends Controller {
 
   /**
    * Checks if user can be authenticated and generates authentication token.
-   * @param req Express request instance.
-   * @param res Express response instance.
-   * @param next Express next function instance.
    */
-  public async localAuth(req: Request, res: Response, next: NextFunction) {
+  @BoundMethod
+  public async localAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const body = req.body;
 
     if (isRequestBodyEmpty(body)) {
@@ -123,7 +130,7 @@ export class AuthenticationController extends Controller {
       return next(new BadRequestError('Username/email or password is missing.'));
     }
 
-    const response = await authService.checkAuthUser(body.usernameOrEmail, body.password);
+    const response = await this.authenticationService.checkAuthUser(body.usernameOrEmail, body.password);
     if (!response) {
       return next(new UnauthenticatedError('Incorrect username/email or password.'));
     }
@@ -132,14 +139,55 @@ export class AuthenticationController extends Controller {
       return next(new UnauthenticatedError('Incorrect username/email or password.'));
     }
 
-    const authToken = authService.generateAuthToken(response.user.id);
+    const authToken = this.authenticationService.generateAuthToken(response.user.id);
     if (!authToken) {
       return next(new UnauthenticatedError('Incorrect username/email or password.'));
     }
 
     delete response.user.password;
 
-    return res.status(200).json({
+    return res.return(HttpStatusCodes.OK, {
+      user: response.user,
+      authToken
+    });
+  }
+
+   /**
+   * Checks if admin can be authenticated and generates authentication token.
+   */
+  @BoundMethod
+  public async adminAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    if (isRequestBodyEmpty(body)) {
+      return next(new BadRequestError('Request body is empty.'));
+    }
+
+    if (!body.usernameOrEmail || !body.password) {
+      return next(new BadRequestError('Username/email or password is missing.'));
+    }
+
+    const response = await this.authenticationService.checkAuthUser(body.usernameOrEmail, body.password);
+    if (!response) {
+      return next(new UnauthenticatedError('Incorrect username/email or password.'));
+    }
+
+    if (!response.isAuthenticated || !response.user) {
+      return next(new UnauthenticatedError('Incorrect username/email or password.'));
+    }
+
+    if (response.user.roles.indexOf(UserRoles.ADMIN) === -1) {
+      return next(new UnauthorizedError('You are not allowed to log in as admin.'));
+    }
+
+    const authToken = this.authenticationService.generateAuthToken(response.user.id);
+    if (!authToken) {
+      return next(new UnauthenticatedError('Incorrect username/email or password.'));
+    }
+
+    delete response.user.password;
+
+    return res.return(HttpStatusCodes.OK, {
       user: response.user,
       authToken
     });
@@ -147,11 +195,9 @@ export class AuthenticationController extends Controller {
 
   /**
    * Generate and sends new registration token to given user.
-   * @param req Express request instance.
-   * @param res Express response instance.
-   * @param next Express next function instance.
    */
-  public async registrationRequest(req: Request, res: Response, next: NextFunction) {
+  @BoundMethod
+  public async registrationRequest(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const body = req.body;
 
     if (isRequestBodyEmpty(body)) {
@@ -179,7 +225,7 @@ export class AuthenticationController extends Controller {
     }
 
     const passwordHash = bcrypt.hashSync(body.password || '', bcrypt.genSaltSync(10));
-    const registrationToken = authService.generateRegistrationToken(
+    const registrationToken = this.authenticationService.generateRegistrationToken(
       body.username,
       body.email,
       passwordHash,
@@ -199,10 +245,9 @@ export class AuthenticationController extends Controller {
       html: registrationEmailTemplate(registrationToken)
     };
 
-    const mailingService = MailingService.getInstance();
-    const response = await mailingService.sendMail(emailData);
+    const response = await this.mailingService.sendMail(emailData);
     if (response) {
-      res.status(200).json({
+      res.return(HttpStatusCodes.OK, {
         message: 'Registration email successfully sent.'
       });
     } else {
@@ -210,38 +255,36 @@ export class AuthenticationController extends Controller {
     }
   }
 
-  /**
-   * Changes users password.
-   * @param req Express request instance.
-   * @param res Express response instance.
-   * @param next Express next function instance.
-   */
-  public async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
-    const body = req.body;
-    const user = req.context.user;
+  // /**
+  //  * Changes users password.
+  //  */
+  // @BoundMethod
+  // public async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
+  //   const body = req.body;
+  //   const user = req.context.user;
 
-    if (isRequestBodyEmpty(body)) {
-      return next(new BadRequestError('Request body is empty.'));
-    }
+  //   if (isRequestBodyEmpty(body)) {
+  //     return next(new BadRequestError('Request body is empty.'));
+  //   }
 
-    const { error } = Joi.validate(body, changePasswordSchema, { abortEarly: false });
-    if (error) {
-      return next(new ValidationError('Request body validation failed.', error));
-    }
+  //   const { error } = Joi.validate(body, changePasswordSchema, { abortEarly: false });
+  //   if (error) {
+  //     return next(new ValidationError('Request body validation failed.', error));
+  //   }
 
-    const correctPass = await authService.comparePassword(user.password, body.password);
-    if (!correctPass) {
-      return next(new UnauthenticatedError('Password is incorrect.'));
-    }
+  //   const correctPass = await this.authenticationService.comparePassword(user.password, body.password);
+  //   if (!correctPass) {
+  //     return next(new UnauthenticatedError('Password is incorrect.'));
+  //   }
 
-    const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
-    try {
-      const response = await User.update({ _id: user.id }, { password: passwordHash});
-      res.status(200).json({
-        successful: !!(response.n && response.nModified && response.ok)
-      });
-    } catch (error) {
-      next(new InternalServerError('There was a problem while changing password.', error));
-    }
-  }
+  //   const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
+  //   try {
+  //     const response = await User.update({ _id: user.id }, { password: passwordHash});
+  //     res.status(HttpStatusCodes.OK).json({
+  //       successful: !!(response.n && response.nModified && response.ok)
+  //     });
+  //   } catch (error) {
+  //     next(new InternalServerError('There was a problem while changing password.', error));
+  //   }
+  // }
 }

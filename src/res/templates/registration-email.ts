@@ -345,7 +345,7 @@ export function registrationEmailTemplate(registrationToken: string) {
                         <tr>
                           <td>
                             <h2>Hi there,</h2>
-                            <p>Thank you for joining StraightAs. Please confirm your registration by clicking confirm button.</p>
+                            <p>Thank you for joining. Please confirm your registration by clicking confirm button.</p>
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                               <tbody>
                                 <tr>

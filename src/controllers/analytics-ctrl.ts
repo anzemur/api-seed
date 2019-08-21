@@ -6,6 +6,7 @@ import { Log } from '../models/log-mod';
 import { InternalServerError } from '../lib/errors';
 import * as os from 'os';
 import { formatApplicationUptime } from '../lib/parsers';
+import { HttpStatusCodes } from '../config/http-status-codes';
 
 /**
  * Analytics controller.
@@ -13,9 +14,12 @@ import { formatApplicationUptime } from '../lib/parsers';
 export class AnalyticsController extends Controller {
 
   constructor() {
-    super();
+    super(AnalyticsController.name);
   }
 
+  /**
+   * Returns list of devices counts.
+   */
   @BoundMethod
   public async getRequestDevicesCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
@@ -51,13 +55,15 @@ export class AnalyticsController extends Controller {
         { $sort : { count: 1 } },
       ]);
 
-    res.return(200, logs);
+      res.return(HttpStatusCodes.OK, logs);
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
-
   }
 
+  /**
+   * Returns list of requests counts.
+   */
   @BoundMethod
   public async getRequestsCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
@@ -103,12 +109,15 @@ export class AnalyticsController extends Controller {
         log.requestUrl.startsWith('/api/v1/admin/') ||
         log.requestUrl.startsWith('/api/v1/analytics/')
       )));
-    res.return(200, logs);
+      res.return(HttpStatusCodes.OK, logs);
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
   }
 
+  /**
+   * Returns list of requests response times.
+   */
   @BoundMethod
   public async getRequestsResponseTimes(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
@@ -153,12 +162,15 @@ export class AnalyticsController extends Controller {
         log.requestUrl.startsWith('/api/v1/analytics/')
       )));
 
-    res.return(200, logs);
+      res.return(HttpStatusCodes.OK, logs);
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
   }
 
+  /**
+   * Returns paginated list of requests.
+   */
   @BoundMethod
   public async getRequests(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
@@ -184,7 +196,7 @@ export class AnalyticsController extends Controller {
       ]);
       const count = await Log.countDocuments($match);
 
-      res.return(200, logs, {
+      res.return(HttpStatusCodes.OK, logs, {
         totalRecords: count,
         page        : query.page,
         totalPages  : Math.ceil(count / query.limit),
@@ -195,6 +207,9 @@ export class AnalyticsController extends Controller {
     }
   }
 
+  /**
+   * Returns list of daily requests count.
+   */
   @BoundMethod
   public async getDailyRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
@@ -235,17 +250,20 @@ export class AnalyticsController extends Controller {
         }
       ]);
 
-      res.return(200, logs);
+      res.return(HttpStatusCodes.OK, logs);
     } catch (error) {
       return next(new InternalServerError('There was a problem while getting logs.', error));
     }
   }
 
+  /**
+   * Returns server and database information.
+   */
   @BoundMethod
   public async getServerInfo(req: AuthRequest, res: AuthResponse, next: NextFunction) {
 
     req.context.mongooseConnection.db.stats((err, mongoStats) => {
-      res.return(200, {
+      res.return(HttpStatusCodes.OK, {
         ...process.memoryUsage(),
         mongoStats,
         formattedRss: Math.round(process.memoryUsage().rss / 1024 / 1024 * 100) / 100,
@@ -263,7 +281,5 @@ export class AnalyticsController extends Controller {
         uptime: process.uptime()
       });
     });
-
-    
   }
 }

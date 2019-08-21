@@ -1,11 +1,10 @@
 import { Controller } from './ctrl';
 import { boundMethod as BoundMethod } from 'autobind-decorator';
 import { AdminService } from '../services/admin-service';
-import { Request, Response, NextFunction} from 'express';
-import { MailingService } from '../services/mailing-service';
+import { NextFunction} from 'express';
 import { InternalServerError } from '../lib/errors';
 import { AdminConfig } from '../models/admin-config-mod';
-import { AuthRequest } from '../middleware/authentication';
+import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { HttpStatusCodes } from '../config/http-status-codes';
 
 /**
@@ -15,22 +14,20 @@ export class AdminController extends Controller {
 
   /* Register services. */
   adminService: AdminService;
-  mailingService: MailingService;
 
   constructor() {
-    super();
+    super(AdminController.name);
     this.adminService = new AdminService();
-    this.mailingService = MailingService.getInstance();
   }
 
   /**
    * Returns admin config.
    */
   @BoundMethod
-  public async getAdminConfig(req: Request, res: Response, next: NextFunction) {
+  public async getAdminConfig(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const { config, error } = await this.adminService.getAdminConfig();
     if (config) {
-      res.status(HttpStatusCodes.OK).json(config);
+      res.return(HttpStatusCodes.OK, config);
     } else {
       return next(error ? error : new InternalServerError('There was a problem while getting admin config.'));
     }
@@ -40,7 +37,7 @@ export class AdminController extends Controller {
    * Updates admin config.
    */
   @BoundMethod
-  public async updateAdminConfig(req: AuthRequest, res: Response, next: NextFunction) {
+  public async updateAdminConfig(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const body = req.body;
 
     try {
@@ -50,7 +47,7 @@ export class AdminController extends Controller {
         { new: true, runValidators: true }
       );
       if (config) {
-        res.status(HttpStatusCodes.OK).json(config);
+        res.return(HttpStatusCodes.OK, config);
       } else {
         return next(new InternalServerError('There was a problem while updating admin config.'));
       }

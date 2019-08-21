@@ -4,7 +4,7 @@
       <h4 class="alert-heading">System error!</h4>
       <p> There was a problem while loading admin settings. Please try again.</p>
     </b-alert>
-    <b-form @submit="saveChanges" class="content m-5 p-4">
+    <b-form v-if="adminConfig" @submit="saveChanges" class="content m-5 p-4">
       <div class="row mb-3 pb-3 group">
         <h2 class="col-12 mb-4"> Authenitcation settings</h2>
         <div class="col-12 col-md-6">
@@ -136,7 +136,6 @@ import { setMenuMargin } from '~/mixins/set-menu-margin';
 export default {
   layout: 'default',
   mixins: [ setMenuMargin ],
-  auth: false,
   data () {
     return {
       updateState: 0,

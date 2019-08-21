@@ -44,4 +44,3 @@ export const changePasswordSchema = Joi.object().keys({
   password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
   newPassword: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
 }).required();
-

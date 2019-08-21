@@ -7,6 +7,8 @@ import { AdminService } from '../services/admin-service';
 import { Connection } from 'mongoose';
 import { RedisClient } from 'redis';
 import { InternalServerError } from '../lib/errors';
+import env from '../config/env';
+import { EnvType } from '../config/types';
 
 const adminService = new AdminService();
 
@@ -45,7 +47,7 @@ export function registerContext(mongooseConnection: Connection, redisClient: Red
       req.context.adminConfig = config;
     }
 
-    if (!req.context.adminConfig)
+    if (!req.context.adminConfig && process.env.ENV)
       next(error ? error : new InternalServerError('There was a problem while loading admin config. Please try again.'));
     
     req.context.mongooseConnection = mongooseConnection;

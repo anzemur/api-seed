@@ -20,6 +20,9 @@ export function authRoutes() {
 
   router.post('/local',
     authController.localAuth);
+  
+  router.post('/admin',
+    authController.adminAuth);
 
   router.post('/facebook',
     authController.facebookAuth);
@@ -30,8 +33,8 @@ export function authRoutes() {
   router.post('/registration',
     authController.registrationRequest);
 
-  router.put('/change-password',
-    authController.changePassword);
+  // router.put('/change-password',
+  //   authController.changePassword);
 
   return router;
 }

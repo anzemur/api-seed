@@ -43,7 +43,6 @@ import { mapGetters } from 'vuex';
 
 export default {
   mixins: [ setMenuMargin ],
-  auth: false,
   components: {
     LineChart,
     BarChart,

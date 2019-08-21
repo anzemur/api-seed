@@ -1,5 +1,5 @@
 // /**
-//  * Nuxt.js admin console app config. This config will be used if you want to run/build admin console app independently.
+//  * Nuxt.js admin console app config. Uncomment this config and it will be used if you want to run/build admin console app independently.
 //  */
 // export default {
 //   server: {
@@ -92,7 +92,4 @@
 //   axios: {
 //     baseURL: 'http://localhost:3000/api/v1/',
 //   },
-//   build: {
-//     stats: process.env.NODE_ENV === 'test' ? 'errors-only' : {}
-//   }
 // };

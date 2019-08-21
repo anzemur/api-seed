@@ -37,7 +37,7 @@ export const config: NuxtConfiguration =  {
       local: {
         endpoints: {
           login: {
-            url: '/users/login',
+            url: '/auth/admin',
             method: 'post',
             propertyName: 'authToken',
           },
@@ -97,9 +97,6 @@ export const config: NuxtConfiguration =  {
   axios: {
     baseURL: '/api/v1/',
   },
-  build: {
-    stats: process.env.NODE_ENV === 'test' ? 'errors-only' : {}
-  } as any,
 };
 
 export default config;

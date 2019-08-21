@@ -12,10 +12,12 @@ import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import { registerAuthRoutes } from './routes/auth';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import { registerAdminRoutes } from './routes/admin';
-import { MongooseEvents, RedisEvents, EnvType } from './config/types';
+import { MongooseEvents, RedisEvents, EnvType, RateLimitByType } from './config/types';
 import { registerAnalyticsRoutes } from './routes/analytics';
 import env from './config/env';
 import passport from 'passport';
+import { AdminService } from './services/admin-service';
+import defaultAdminConfig from './res/data/default-admin-config';
 
 /**
  * Base application instance.
@@ -63,17 +65,29 @@ export class App {
     registerAdminRoutes(this.app);
     registerAnalyticsRoutes(this.app);
 
-    /* Register admin console app middleware. */
-    if (env.USE_ADMIN_CONSOLE) 
+    /* Register admin console app middleware. */    
+    if (env.USE_ADMIN_CONSOLE && process.env.ENV !== EnvType.TEST) 
       await buildAdminConsoleNuxtApp(this.app);
 
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);
     this.app.use(handleErrors);
+
+    console.log(`│ Routes and middleware registered.`);
   }
 
+  /**
+   * Checks if admin config exist, and if it doesn't creates new one.
+   */
   async initAdminConfig() {
-    
+    const adminService = new AdminService();
+    const { config, error } = await adminService.getAdminConfig();
+    if (error && !config) {
+      await adminService.createAdminConfig(defaultAdminConfig);
+      console.log(`│ Admin config created.`);
+    } else if (config) {
+      console.log(`│ Admin config loaded.`);
+    }
   }
 
   /**

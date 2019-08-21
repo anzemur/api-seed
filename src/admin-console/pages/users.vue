@@ -101,7 +101,6 @@ import { setMenuMargin } from '~/mixins/set-menu-margin';
 
 export default {
   mixins: [ setMenuMargin ],
-  auth: false,
   data () {
     return {
       fields: [

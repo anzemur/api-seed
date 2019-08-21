@@ -19,7 +19,7 @@ export abstract class Service {
     this.logger = winston.createLogger({
       level: LoggerLevels.info,
       format: winston.format.json(),
-      defaultMeta: { service: this.name },
+      defaultMeta: { Service: this.name },
       transports: [
         new winston.transports.File({ filename: `logs/${moment().format('MM-DD-YYYY')}-error.log`, level: LoggerLevels.error }),
         new winston.transports.File({ filename: `logs/${moment().format('MM-DD-YYYY')}-all.log` })

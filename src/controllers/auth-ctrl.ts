@@ -255,36 +255,36 @@ export class AuthenticationController extends Controller {
     }
   }
 
-  // /**
-  //  * Changes users password.
-  //  */
-  // @BoundMethod
-  // public async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
-  //   const body = req.body;
-  //   const user = req.context.user;
+  /**
+   * Changes users password.
+   */
+  @BoundMethod
+  public async changePassword(req: AuthRequest, res: Response, next: NextFunction) {
+    const body = req.body;
+    const user = req.context.user;
 
-  //   if (isRequestBodyEmpty(body)) {
-  //     return next(new BadRequestError('Request body is empty.'));
-  //   }
+    if (isRequestBodyEmpty(body)) {
+      return next(new BadRequestError('Request body is empty.'));
+    }
 
-  //   const { error } = Joi.validate(body, changePasswordSchema, { abortEarly: false });
-  //   if (error) {
-  //     return next(new ValidationError('Request body validation failed.', error));
-  //   }
+    const { error } = Joi.validate(body, changePasswordSchema, { abortEarly: false });
+    if (error) {
+      return next(new ValidationError('Request body validation failed.', error));
+    }
 
-  //   const correctPass = await this.authenticationService.comparePassword(user.password, body.password);
-  //   if (!correctPass) {
-  //     return next(new UnauthenticatedError('Password is incorrect.'));
-  //   }
+    const correctPass = await this.authenticationService.comparePassword(user.password, body.password);
+    if (!correctPass) {
+      return next(new UnauthenticatedError('Password is incorrect.'));
+    }
 
-  //   const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
-  //   try {
-  //     const response = await User.update({ _id: user.id }, { password: passwordHash});
-  //     res.status(HttpStatusCodes.OK).json({
-  //       successful: !!(response.n && response.nModified && response.ok)
-  //     });
-  //   } catch (error) {
-  //     next(new InternalServerError('There was a problem while changing password.', error));
-  //   }
-  // }
+    const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
+    try {
+      const response = await User.update({ _id: user.id }, { password: passwordHash});
+      res.status(HttpStatusCodes.OK).json({
+        successful: !!(response.n && response.nModified && response.ok)
+      });
+    } catch (error) {
+      next(new InternalServerError('There was a problem while changing password.', error));
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { Application, Router } from 'express';
 import { AuthenticationController } from '../controllers/auth-ctrl';
+import { authenticateRequest } from '../middleware/authentication';
 
 /* Register controller. */
 const authController = new AuthenticationController();
@@ -33,8 +34,15 @@ export function authRoutes() {
   router.post('/registration',
     authController.registrationRequest);
 
-  // router.put('/change-password',
-  //   authController.changePassword);
+  router.put('/change-password',
+    authenticateRequest(),
+    authController.changePassword);
+
+  router.put('/forgotten-password/request',
+    authController.changePassword);
+
+  router.put('/forgotten-password/change',
+    authController.changePassword);
 
   return router;
 }

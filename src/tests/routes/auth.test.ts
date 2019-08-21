@@ -32,7 +32,7 @@ describe('#POST /auth/local', () => {
 /**
  * Users admin auth tests.
  */
-describe.only('#POST /auth/admin', () => {
+describe('#POST /auth/admin', () => {
   it('authenticate existing admin', async () => {
     const body = {
       usernameOrEmail: 'testUser',
@@ -92,53 +92,53 @@ describe('#POST /auth/registration', () => {
   });
 });
 
-// describe('#PUT /users/change-password', () => {
-//   it('should change users password', async () => {
+describe('#PUT /auth/change-password', () => {
+  it('should change users password', async () => {
 
-//     const body = {
-//       password: '12345678',
-//       newPassword: '123456789',
-//     };
+    const body = {
+      password: '12345678',
+      newPassword: '123456789',
+    };
 
-//     const result = await request(context.app).put('/api/v1/users/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
-//     expect(result.status).to.equal(200);
-//   });
+    const result = await request(context.app).put('/api/v1/auth/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(200);
+  });
 
-//   it('should not change users if user is not authenticated', async () => {
-//     const body = {
-//       password: '12345678',
-//       newPassword: '123456789',
-//     };
+  it('should not change users if user is not authenticated', async () => {
+    const body = {
+      password: '12345678',
+      newPassword: '123456789',
+    };
 
-//     const result = await request(context.app).put('/api/v1/users/change-password').send(body);
-//     expect(result.status).to.equal(401);
-//   });
+    const result = await request(context.app).put('/api/v1/auth/change-password').send(body);
+    expect(result.status).to.equal(401);
+  });
 
-//   it('should not change users password if given old password is incorrect', async () => {
+  it('should not change users password if given old password is incorrect', async () => {
 
-//     const body = {
-//       password: '123456789',
-//       newPassword: '123456789',
-//     };
+    const body = {
+      password: '123456789',
+      newPassword: '123456789',
+    };
 
-//     const result = await request(context.app).put('/api/v1/users/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
-//     expect(result.status).to.equal(401);
-//   });
+    const result = await request(context.app).put('/api/v1/auth/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(401);
+  });
 
-//   it('should not change users password if request body is empty', async () => {
-//     const body = {};
-//     const result = await request(context.app).put('/api/v1/users/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
-//     expect(result.status).to.equal(400);
-//   });
+  it('should not change users password if request body is empty', async () => {
+    const body = {};
+    const result = await request(context.app).put('/api/v1/auth/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(400);
+  });
 
-//   it('should not change users password if new password is invalid', async () => {
+  it('should not change users password if new password is invalid', async () => {
 
-//     const body = {
-//       password: '123456789',
-//       newPassword: '1',
-//     };
+    const body = {
+      password: '123456789',
+      newPassword: '1',
+    };
 
-//     const result = await request(context.app).put('/api/v1/users/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
-//     expect(result.status).to.equal(422);
-//   });
-// });
+    const result = await request(context.app).put('/api/v1/auth/change-password').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(422);
+  });
+});

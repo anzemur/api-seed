@@ -4,17 +4,16 @@ import mongoose, { Connection } from 'mongoose';
 import { registerUsersRoutes } from './routes/users';
 import { registerRootRoutes } from './routes/root';
 import { handleErrors, handleNotFoundError } from './middleware/errors';
-import { registerCors, registerBodyParsers, registerDeviceParsers } from './middleware/parsers';
+import { registerCors, registerBodyParsers, registerDeviceParsers, parseResponse } from './middleware/parsers';
 import { registerContext } from './middleware/context';
 import { RedisClient, createClient } from 'redis';
-import { parseResponse } from './middleware/parse-response';
 import { registerLogs } from './middleware/logs';
 import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import passport from 'passport';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import env from './config/env';
 import { registerAdminRoutes } from './routes/admin';
-import { MongooseEvents, RedisEvents } from './config/types';
+import { MongooseEvents, RedisEvents, EnvType } from './config/types';
 import { registerAnalyticsRoutes } from './routes/analytics';
 
 /**
@@ -50,9 +49,9 @@ export class App {
     registerCors(this.app);
     registerBodyParsers(this.app);
     registerDeviceParsers(this.app);
+    this.app.use(parseResponse);
 
     /* Register api middleware. */
-    this.app.use(parseResponse);
     this.app.use(registerLogs);
     this.app.use(registerContext(this.mongooseConnection, this.redisClient));
 
@@ -101,14 +100,10 @@ export class App {
    */
   public async connectDb() {
     let connectionUri: string;
-    if (process.env.ENV === 'dev') {
-      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'straight-as-dev'}`;
+    if (process.env.ENV === EnvType.DEV) {
+      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'api-seed'}`;
     }
-    if (process.env.ENV === 'production' || process.env.DB_TEST === 'test') {
-      // connectionUri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'straight-as-dev'}`;
-    }
-    if (process.env.ENV === 'test') {
+    if (process.env.ENV === EnvType.DEV) {
       connectionUri = `mongodb://${process.env.DB_TEST_USER}:${process.env.DB_TEST_PASS}@${process.env.DB_TEST_HOST}:${process.env.DB_TEST_PORT}/${process.env.DB_TEST_NAME}`;
     }
     this.mongooseConnection = mongoose.connection;
@@ -171,28 +166,4 @@ export class App {
   public async closeRedisClient() {
     await this.redisClient.quit();
   }
-
-
-
-
-  // public collectRoutes() {
-  //   const routes = [];
-
-  //   this.app._router.stack.forEach((middleware) => {
-  //       if (middleware.route) { // routes registered directly on the app
-  //           routes.push(middleware.route);
-  //       } else if (middleware.name === 'router') { // router middleware
-  //           middleware.handle.stack.forEach((handler) => {
-  //             // console.log(JSON.stringify(handler));
-  //             const route = handler.route;
-  //             if (route) {
-  //               routes.push(route);
-  //             }
-  //           });
-  //       }
-  //   });
-
-  //   routes.forEach((route) => console.log(JSON.stringify(route)));
-  // }
-
 }

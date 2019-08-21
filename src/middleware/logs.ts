@@ -40,7 +40,7 @@ export function registerLogs(req: AuthRequest, res: AuthResponse, next: NextFunc
     try {
       await log.save();
     } catch (error) {
-      console.log(error);
+      logger.error(`There was an error while writing logs.`, error);
     }
   };
   next();

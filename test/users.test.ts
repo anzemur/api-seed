@@ -1,10 +1,11 @@
 import { expect } from 'chai';
-import 'mocha';
+import { AuthenticationService } from '../src/services/authentication-service';
 import context from './env.test';
 import * as bcrypt from 'bcryptjs';
 import request from 'supertest';
-import { AuthenticationService } from '../src/services/authentication-service';
+import 'mocha';
 
+// tslint:disable:no-hardcoded-credentials
 describe('#POST /users/login', () => { 
   it('authenticate existing user', async () => {
     const body = {

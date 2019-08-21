@@ -4,7 +4,7 @@ import { NextFunction } from 'connect';
 
 /**
  * Response caching middleware.
- * If parameters are not provided default values from admin config will be used.
+ * If parameters are not provided default values from admin configuration will be used.
  * @param perUser Tells if cached data should be cached per user. Request must be authenticated.
  * @param expiration Cached data expiration in seconds.
  */

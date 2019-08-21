@@ -6,6 +6,7 @@ import { AuthenticationService } from '../services/authentication-service';
 import { User, UserModel } from '../models/user-mod';
 import { Context } from './context';
 
+/* Register services. */
 const authService = new AuthenticationService();
 
 /**

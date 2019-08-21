@@ -9,11 +9,11 @@ import { updateAdminConfigSchema } from '../config/body-schemas';
 const adminController = new AdminController();
 
 /**
- * Registers admin api routes.
+ * Registers admin api routes at `/api/{API_VERSION}/admin`.
  * @param app Express application instance.
  */
 export function registerAdminRoutes(app: Application) {
-  app.use(`/api/${process.env.API_VERSION || 'v1'}`, adminRoutes());
+  app.use(`/api/${process.env.API_VERSION || 'v1'}/admin`, adminRoutes());
 }
 
 /**
@@ -22,11 +22,11 @@ export function registerAdminRoutes(app: Application) {
 export function adminRoutes() {
   const router = Router();
 
-  router.get('/admin/config',
+  router.get('/config',
     // authenticateRequest([UserRoles.ADMIN]),
     adminController.getAdminConfig);
     
-  router.patch('/admin/config',
+  router.patch('/config',
     // authenticateRequest([UserRoles.ADMIN]),
     validateBody(updateAdminConfigSchema),
     adminController.updateAdminConfig);

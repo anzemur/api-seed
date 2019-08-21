@@ -8,15 +8,17 @@ import { RateLimitByType } from '../config/types';
 import { registerCache } from '../middleware/cache';
 
 
-
 /**
- * Root api routes.
+ * Root API routes - returns basic API information..
  * @param app Express application instance.
  */
 export function registerRootRoutes(app: Application) {
   app.use(`/api/${process.env.API_VERSION || 'v1'}`, rootRoutes());
 }
 
+/**
+ * Root api routes.
+ */
 export function rootRoutes() {
   const router = Router();
 

@@ -6,6 +6,14 @@ import { RateLimitByType } from '../config/types';
 import { parseDurationFromMs } from '../lib/parsers';
 
 
+/**
+ * Rate limit configuration.
+ * `limitBy` - Rate limit by IP address of user ID.
+ * `maxPoints` - Maximum number of points that can be consumed over duration.
+ * `consumePoints` - Number of points consumed per endpoint.
+ * `duration` - Number of seconds before consumed points are reset.
+ * `blockDuration` - Number of seconds the user is blocked after consuming all of available points on endpoint.
+ */
 export interface RateLimitConfig {
   limitBy?: RateLimitByType;
   maxPoints?: number;
@@ -14,6 +22,11 @@ export interface RateLimitConfig {
   blockDuration?: number;
 }
 
+/**
+ * Middleware that registers rate limiting on given route.
+ * If `config` is not provided default values from admin configuration will be used.
+ * @param config Rate limit configuration object.
+ */
 export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     const defaultRateLimit = req.context.adminConfig.rateLimit;

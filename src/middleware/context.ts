@@ -30,7 +30,7 @@ export class Context {
 }
 
 /**
- * Context middleware that adds request context to the request.
+ * Context middleware that adds request context to the express request object.
  * @param req Express request instance.
  * @param res Express response instance.
  * @param next Express next function instance.

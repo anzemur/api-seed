@@ -1,5 +1,5 @@
 /**
- * Nuxt.js admin console app config. This config will be used if you want to run/build on admin console Nuxt app independently as SPA.
+ * Nuxt.js admin console app config. This config will be used if you want to run/build admin console app independently.
  */
 export default {
   server: {

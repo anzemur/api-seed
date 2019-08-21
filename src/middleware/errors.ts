@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedError, UnauthenticatedError, InternalServerError, BadRequestError, ConflictError, ValidationError, RateLimitExceededError, InternalOAuthError } from '../lib/errors';
 import { isJsonString } from '../lib/validators';
+import { EnvType } from '../config/types';
 
 /**
  * Not found error handling middleware.
@@ -24,7 +25,7 @@ export function handleNotFoundError(req: Request, res: Response): void {
  * @param next Express next function.
  */
 export function handleErrors(error: any, req: Request, res: Response, next: NextFunction) {
-  if (process.env.ENV === 'dev') {
+  if (process.env.ENV === EnvType.DEV) {
     console.log(error);
   }
 
@@ -39,7 +40,7 @@ export function handleErrors(error: any, req: Request, res: Response, next: Next
       status: error.status,
       name: error.name,
       ...error.message ? { message: error.message } : {},
-      ...error.error && process.env.ENV === 'dev' ? { error: error.error } : {},
+      ...error.error && process.env.ENV === EnvType.DEV ? { error: error.error } : {},
     });
   } else if (error instanceof ConflictError) {
     res.status(error.status).json({
@@ -66,7 +67,7 @@ export function handleErrors(error: any, req: Request, res: Response, next: Next
     res.status(error.status || 500).json({
       status: error.status || 500,
       message: 'Unhandled internal server error.',
-      ...process.env.ENV === 'dev' ? { error } : {},
+      ...process.env.ENV === EnvType.DEV ? { error } : {},
     });
   }
   next();

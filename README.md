@@ -7,18 +7,31 @@ docker run --name api-seed-redis -d -i -t -p 6379:6379 redis redis-server --appe
 
 JWT_SECRET=
 ENV=dev
+
 DB_HOST=localhost
 DB_NAME=api-seed-dev
 TEST_DB_HOST=localhost
 TEST_DB_NAME=api-seed-test
+
 REDIS_HOST=localhost
 REDIS_PORT=6379
+
 PORT=3000
 API_VERSION=v1
+
 SMTP_HOST=
 SMTP_PORT=
 SMTP_USE_SSL=
 SMTP_USERNAME=
 SMTP_PASSWORD=
+
 USE_ADMIN_CONSOLE=false
 
+FB_CLIENT_ID=
+FB_CLIENT_SECRET=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+SEED_ADMIN_EMAIL=
+SEED_ADMIN_PASSWORD=

@@ -8,6 +8,7 @@
     "build-ts": "tsc",
     "postinstall": "npm run build-ts",
     "start": "tsc && node dist/scripts/start.js",
+    "seed": "tsc && node dist/scripts/seed.js",
     "watch-node": "nodemon dist/scripts/start.js",
     "watch-ts": "tsc -w",
     "test": "mocha -r ts-node/register ./src/tests/**/*.test.ts",

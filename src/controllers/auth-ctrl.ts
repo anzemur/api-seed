@@ -2,19 +2,19 @@ import { Controller } from './ctrl';
 import { User } from '../models/user-mod';
 import { AuthenticationService } from '../services/authentication-service';
 import { boundMethod as BoundMethod } from 'autobind-decorator';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction } from 'express';
 import { BadRequestError, InternalServerError, ConflictError, UnauthenticatedError, ValidationError, InternalOAuthError, UnauthorizedError, NotFoundError } from '../lib/errors';
 import { MailingService } from '../services/mailing-service';
 import { registrationEmailTemplate } from '../res/templates/registration-email';
 import { isRequestBodyEmpty } from '../lib/validators';
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { PassportAuthStrategyType, UserRoles } from '../config/types';
-import { registrationRequestSchema, changePasswordSchema } from '../config/body-schemas';
+import { registrationRequestSchema } from '../config/body-schemas';
 import { HttpStatusCodes } from '../config/http-status-codes';
+import { forgottenPasswordTemplate } from '../res/templates/forgotten-password-email';
 import passport from 'passport';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
-import { forgottenPasswordTemplate } from '../res/templates/forgotten-password-email';
 
 /**
  * Authentication controller.

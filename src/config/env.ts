@@ -25,5 +25,7 @@ export default {
   FB_CLIENT_SECRET     : process.env.FB_CLIENT_SECRET as string,
   GOOGLE_CLIENT_ID     : process.env.GOOGLE_CLIENT_ID as string,
   GOOGLE_CLIENT_SECRET : process.env.GOOGLE_CLIENT_SECRET as string,
+  SEED_ADMIN_EMAIL     : process.env.SEED_ADMIN_EMAIL as string,
+  SEED_ADMIN_PASSWORD  : process.env.SEED_ADMIN_PASSWORD as string,
   USE_ADMIN_CONSOLE    : (process.env.USE_ADMIN_CONSOLE !== 'false') as boolean,
 };

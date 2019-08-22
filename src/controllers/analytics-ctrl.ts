@@ -24,17 +24,20 @@ export class AnalyticsController extends Controller {
   public async getRequestDevicesCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
+    const createdAt: any = {};
+    if (query.endTime) {
+      createdAt['$lte'] = new Date(query.endTime);
+    }
+
+    if (query.startTime) {
+      createdAt['$gte'] = new Date(query.startTime);
+    }
+
     try {
       const logs = await Log.aggregate([
         {
           $match:  {
-            ...(query.startTime && query.endTime) ? 
-            {
-              'createdAt': {
-                $lte: query.endTime,
-                $gte: query.startTime,
-              }
-            } : {},
+            ...(createdAt.$gte || createdAt.$lte) ? { createdAt } : {},
           }
         },
         {
@@ -68,19 +71,21 @@ export class AnalyticsController extends Controller {
   public async getRequestsCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
+    const createdAt: any = {};
+    if (query.endTime) {
+      createdAt['$lte'] = new Date(query.endTime);
+    }
+
+    if (query.startTime) {
+      createdAt['$gte'] = new Date(query.startTime);
+    }
+
     try {
       const logs = await Log.aggregate([
         {
           $match:  {
             $and: [
-              { ...(query.startTime && query.endTime) ? 
-                {
-                  createdAt: {
-                    $lte: query.endTime,
-                    $gte: query.startTime,
-                  }
-                } : {},
-              },
+              { ...(createdAt.$gte || createdAt.$lte) ? { createdAt } : {} },
               { statusCode: { $ne: 404} }
             ]
           }
@@ -122,19 +127,21 @@ export class AnalyticsController extends Controller {
   public async getRequestsResponseTimes(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
 
+    const createdAt: any = {};
+    if (query.endTime) {
+      createdAt['$lte'] = new Date(query.endTime);
+    }
+
+    if (query.startTime) {
+      createdAt['$gte'] = new Date(query.startTime);
+    }
+
     try {
       const logs = await Log.aggregate([
         {
-          $match:  {
+          $match: {
             $and: [
-              { ...(query.startTime && query.endTime) ? 
-                {
-                  createdAt: {
-                    $lte: query.endTime,
-                    $gte: query.startTime,
-                  }
-                } : {},
-              },
+              { ...(createdAt.$gte || createdAt.$lte) ? { createdAt } : {} },
               { statusCode: { $ne: 404} }
             ]
           }
@@ -214,17 +221,20 @@ export class AnalyticsController extends Controller {
   public async getDailyRequestCount(req: AuthRequest, res: AuthResponse, next: NextFunction) {
     const query = req.query;
     
+    const createdAt: any = {};
+    if (query.endTime) {
+      createdAt['$lte'] = new Date(query.endTime);
+    }
+
+    if (query.startTime) {
+      createdAt['$gte'] = new Date(query.startTime);
+    }
+
     try {
       const logs = await Log.aggregate([
         {
-          $match:  {
-            ...(query.startTime && query.endTime) ? 
-            {
-              'createdAt': {
-                $lte: query.endTime,
-                $gte: query.startTime,
-              }
-            } : {},
+          $match: {
+            ...(createdAt.$gte || createdAt.$lte) ? { createdAt } : {},
           }
         },
         {

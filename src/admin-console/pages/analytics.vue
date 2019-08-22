@@ -1,31 +1,60 @@
 <template>
   <div>
     <div class="m-5 analyitcs-container">
+      <div class="row date-time-pickers justify-content-center mb-3">
+        <datetime type="date"
+          placeholder="START DATE"
+          :max-datetime="queryEndDate"
+          v-model="queryStartDate"
+          :title="'Select start date filter'"
+          :input-class="['w-100', 'dateTimeQuery']">
+        </datetime>
+        <datetime type="date"
+          placeholder="END DATE"
+          :min-datetime="queryStartDate"
+          v-model="queryEndDate"
+          :title="'Select end date filter'"
+          :input-class="['w-100', 'dateTimeQuery']">
+        </datetime>
+        <span @click="resetDateQueries()" class="reset-query" v-if="queryEndDate || queryStartDate"> <i class="pl-2 mr-2 fa fa-trash fa-xs"></i></span>
+      </div>
       <div class="row">
         <div class="col-12 col-md-6 p-2">
           <div class="content p-3">
+            <div v-if="!devicesCountData" class="d-flex justify-content-center mb-3">
+              <b-spinner type="grow" class="spinner" variant="info" style="width: 6rem; height: 6rem;"></b-spinner>
+            </div>
             <PieChart v-if="devicesCountData" :data="this.devicesCountData" :options="{ responsive: true, maintainAspectRatio: false }"/>
-            <h3 class="text-center mt-3">Number of request sent from different devices</h3>
+            <h3 v-if="devicesCountData" class="text-center mt-3">Number of request sent from different devices</h3>
           </div>
         </div>
         <div class="col-12 col-md-6 p-2">
           <div class="content p-3">
+            <div v-if="!dailyRequestCountData" class="d-flex justify-content-center mb-3">
+              <b-spinner type="grow" class="spinner" variant="info" style="width: 6rem; height: 6rem;"></b-spinner>
+            </div>
             <LineChart v-if="dailyRequestCountData" :data="this.dailyRequestCountData" :options="{ responsive: true, maintainAspectRatio: false }"/>
-            <h3 class="text-center mt-3">Number of daily sent request</h3>
+            <h3 v-if="dailyRequestCountData" class="text-center mt-3">Number of daily sent request</h3>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-12 col-md-6 p-2">
           <div class="content p-3">
+            <div v-if="!averageResponseTimes" class="d-flex justify-content-center mb-3">
+              <b-spinner type="grow" class="spinner" variant="info" style="width: 6rem; height: 6rem;"></b-spinner>
+            </div>
             <BarChart v-if="averageResponseTimes" :data="this.averageResponseTimes" :options="{ responsive: true, maintainAspectRatio: false }"/>
-            <h3 class="text-center mt-3">Average request response times per endpoint.</h3>
+            <h3 v-if="averageResponseTimes" class="text-center mt-3">Average request response times per endpoint.</h3>
           </div>
         </div>
         <div class="col-12 col-md-6 p-2">
           <div class="content p-3">
+            <div v-if="!requestCountData" class="d-flex justify-content-center mb-3">
+              <b-spinner type="grow" class="spinner" variant="info" style="width: 6rem; height: 6rem;"></b-spinner>
+            </div>
             <BarChart v-if="requestCountData" :data="this.requestCountData" :options="{ responsive: true, maintainAspectRatio: false }"/>
-            <h3 class="text-center mt-3">Number of sent request per endpoint.</h3>
+            <h3 v-if="requestCountData" class="text-center mt-3">Number of sent request per endpoint.</h3>
           </div>
         </div>
       </div>
@@ -50,6 +79,8 @@ export default {
   },
   data () {
     return {
+      queryStartDate: '',
+      queryEndDate: '',
       devicesCountData: false,
       dailyRequestCountData: false,
       requestCountData: false,
@@ -66,10 +97,25 @@ export default {
   async mounted () {
     this.setMenuMargin();
   },
+  watch: {
+    queryStartDate: function (newVal, oldVal) {
+      this.getDevicesCount();
+      this.getDailyRequestCount();
+      this.getRequestCount();
+      this.getAverageResponseTimes();
+    },
+    queryEndDate: function (newVal, oldVal) {
+      this.getDevicesCount();
+      this.getDailyRequestCount();
+      this.getRequestCount();
+      this.getAverageResponseTimes();
+    },
+  },
   methods: {
     async getAverageResponseTimes() {
+      this.averageResponseTimes = false;
       try {
-        const res = await this.$axios.get('/analytics/response-times');
+        const res = await this.$axios.get('/analytics/response-times', this.getRequestConfig());
         const labels = [];
         const data = [];
         res.data.map((d) => {
@@ -90,9 +136,14 @@ export default {
         this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
     },
+    resetDateQueries() {
+      this.queryStartDate = '';
+      this.queryEndDate = '';
+    },
     async getDailyRequestCount() {
+      this.dailyRequestCountData = false;
       try {
-        const res = await this.$axios.get('/analytics/daily-request-count');
+        const res = await this.$axios.get('/analytics/daily-request-count',  this.getRequestConfig());
         const labels = [];
         const data = [];
         res.data.map((d) => {
@@ -114,8 +165,9 @@ export default {
       }
     },
     async getRequestCount() {
+      this.requestCountData = false;
       try {
-        const res = await this.$axios.get('/analytics/requests-count');
+        const res = await this.$axios.get('/analytics/requests-count',  this.getRequestConfig());
         const labels = [];
         const data = [];
         res.data.map((d) => {
@@ -135,8 +187,9 @@ export default {
       }
     },
     async getDevicesCount() {
+      this.devicesCountData = false;
       try {
-        const res = await this.$axios.get('/analytics/devices-count');
+        const res = await this.$axios.get('/analytics/devices-count',  this.getRequestConfig());
         const labels = [];
         const backgroundColor = [];
         const data = [];
@@ -155,6 +208,14 @@ export default {
       } catch (error) {
         this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
+    },
+    getRequestConfig() {
+      return {
+        params: {
+          startTime: this.queryStartDate || '',
+          endTime: this.queryEndDate || '',
+        }
+      };
     },
     generateRandomHexColor(){
       return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
@@ -187,6 +248,20 @@ export default {
   .form-title {
     font-size: 1.5rem;
     color: $gray;
+  }
+
+  .reset-query {
+    background-color: white;
+    border: 0.5px solid #e8e8e8;
+    cursor: pointer;
+
+    i {
+      color: $gray;
+    }
+    
+    i:hover {
+      color: $primary;
+    }
   }
 
   .group {

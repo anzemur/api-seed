@@ -155,3 +155,96 @@ a.fab:hover + div.fab-hint-container{
   width: 35px;
   margin-top: 15px;
 }
+
+/* ================= Datetime picker styles ================= */
+
+.vdatetime-popup__header {
+  background: $primary !important;
+}
+
+.vdatetime-calendar__month__day.vdatetime-calendar__month__day--selected span span {
+  background: $primary !important;
+}
+
+.vdatetime-popup__actions__button {
+  color: $primary !important;
+}
+
+.vdatetime-time-picker__item.vdatetime-time-picker__item--selected {
+  color: $primary !important;
+}
+
+.vdatetime-year-picker__item.vdatetime-year-picker__item--selected {
+  color: $primary !important;
+}
+
+.vdatetime-month-picker__item.vdatetime-month-picker__item--selected {
+  color: $primary !important;
+}
+
+.vdatetime-input {
+  border: 0.5px solid #e8e8e8 !important;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  -webkit-appearance: none;
+  -webkit-box-align: center;
+  background-color: white;
+  border-color: #dbdbdb;
+  color: #363636;
+  -webkit-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  -moz-box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+  cursor: pointer;
+}
+
+.vdatetime-input.dateTimeQuery {
+  border: 0.5px solid #e8e8e8 !important;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  text-align: center;
+}
+
+.vdatetime-input.dateTimeQuery:hover {
+  background-color: $primary;
+  color: $white;
+}
+
+.vdatetime-input.dateTimeQuery:hover::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: $white;
+}
+.vdatetime-input.dateTimeQuery:hover:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: $white;
+  opacity: 1;
+}
+.vdatetime-input.dateTimeQuery:hover::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: $white;
+  opacity: 1;
+}
+.vdatetime-input.dateTimeQuery:hover:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: $white;
+}
+.vdatetime-input.dateTimeQuery:hover::-ms-input-placeholder { /* Microsoft Edge */
+  color: $white;
+}
+
+.vdatetime-input.dateTimeQuery:hover::placeholder { /* Most modern browsers support this now. */
+  color: $white;
+}
+
+.vdatetime-input[disabled] {
+  background-color: whitesmoke;
+  border-color: whitesmoke;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  color: #7a7a7a;
+  cursor: not-allowed;
+}

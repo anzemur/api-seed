@@ -6,6 +6,7 @@ import { InternalServerError } from '../lib/errors';
 import { AdminConfig } from '../models/admin-config-mod';
 import { AuthRequest, AuthResponse } from '../middleware/authentication';
 import { HttpStatusCodes } from '../config/http-status-codes';
+import { UserRoles } from '../config/types';
 
 /**
  * Admin controller.
@@ -31,6 +32,14 @@ export class AdminController extends Controller {
     } else {
       return next(error ? error : new InternalServerError('There was a problem while getting admin config.'));
     }
+  }
+
+  /**
+   * Returns user's roles.
+   */
+  @BoundMethod
+  public async getUsersRoles(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    res.return(HttpStatusCodes.OK, UserRoles);
   }
 
   /**

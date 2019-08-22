@@ -25,6 +25,10 @@ export function adminRoutes() {
   router.get('/config',
     authenticateRequest([UserRoles.ADMIN]),
     adminController.getAdminConfig);
+  
+  router.get('/roles',
+    authenticateRequest([UserRoles.ADMIN]),
+    adminController.getUsersRoles);
     
   router.patch('/config',
     authenticateRequest([UserRoles.ADMIN]),

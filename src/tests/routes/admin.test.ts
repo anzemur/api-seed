@@ -20,6 +20,22 @@ describe('#GET /admin/config', () => {
 });
 
 /**
+ * Get user's roles.
+ */
+describe('#GET /admin/roles', () => {
+  it('should return user\'s roles', async () => {
+    const result = await request(context.app).get('/api/v1/admin/roles').set('Authorization', `Bearer ${context.authToken}`);
+    expect(result.status).to.equal(200);
+  });
+
+  it('should return user\'s roles with unauthorized credentials', async () => {
+    const result = await request(context.app).get('/api/v1/admin/roles').set('Authorization', `Bearer ${context.authTokenNormal}`);
+    expect(result.status).to.equal(403);
+  });
+});
+
+
+/**
  * Update admin configuration.
  */
 describe('#PATCH /admin/config', () => {

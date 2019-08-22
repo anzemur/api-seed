@@ -140,7 +140,7 @@ export class UsersController extends Controller {
     const body = req.body;
     const userId = req.params.userId;
 
-    if (userId !== req.context.user.id) {
+    if (userId !== req.context.user.id && req.context.user.roles.indexOf(UserRoles.ADMIN) === -1) {
       return next(new UnauthorizedError('You are not authorized to update this user.'));
     }
 

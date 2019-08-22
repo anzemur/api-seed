@@ -39,7 +39,7 @@ export class AdminController extends Controller {
    */
   @BoundMethod
   public async getUsersRoles(req: AuthRequest, res: AuthResponse, next: NextFunction) {
-    res.return(HttpStatusCodes.OK, UserRoles);
+    res.return(HttpStatusCodes.OK, Object.keys(UserRoles).map(key => (UserRoles[key])));
   }
 
   /**

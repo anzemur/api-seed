@@ -1,5 +1,16 @@
 <template>
   <div>
+     <b-modal hide-footer hide-header centered id="user-roles-modal">
+      <div class="row ml-1 mr-1 mb-3">
+        <h2> Select user roles </h2>
+      </div>
+      <div class="row ml-1 mr-1 roles-container p-1">
+        <h4><b-badge class="role-badge m-1" @click="changeUserRole(role)" v-for="(role, index) in roles" :key="index" :variant="hasRole(role) ? 'success' : 'secondary'">{{ role }}</b-badge></h4>
+      </div>
+      <div class="row ml-1 mr-1 mt-4">
+        <b-button @click="saveUsersRoles()" variant="primary">Save roles</b-button>
+      </div>
+    </b-modal>
     <div class="row m-5 filters">
       <h2 class="col-12 mb-4">Filtering options</h2>
       <div class="col-12 col-md-4">
@@ -26,7 +37,7 @@
       </div>
       <div class="col-12 col-md-4">
         <b-form-group label="Role" description="Show only users with specific roles.">
-          <b-form-select v-model="params.role" :options="roles"></b-form-select>
+          <b-form-select v-model="params.role" :options="optionRoles"></b-form-select>
         </b-form-group>
       </div>
     </div>
@@ -76,8 +87,9 @@
           <b-col sm="2">{{ row.item.updatedAt || '/' }}</b-col>
         </b-row>
 
-        <b-row class="mt-5">
-          <b-col sm="2" class="text-sm-left"><b-button variant="danger" @click="deleteUserConfirmation(row.item._id)">Delete user</b-button></b-col>
+        <b-row class="pl-2">
+          <b-button variant="danger" class="mr-2" @click="deleteUserConfirmation(row.item._id)">Delete user</b-button>
+          <b-button variant="info" @click="showManageRolesModal(row.item)">Manage user roles</b-button>
         </b-row>
 
       </b-card>
@@ -111,7 +123,7 @@ export default {
         { key: 'createdAt', sortable: true },
       ],
       items: [],
-      roles: [
+      optionRoles: [
         '',
         { text: 'Admin', value: 'admin' },
         { text: 'User', value: 'user' },
@@ -126,10 +138,14 @@ export default {
       loadingPage: false,
       totalPages: 0,
       totalRecords: 0,
+      selectedUser: {},
+      selectedUserRoles: [],
+      roles: [],
     }
   },
   created () {
     this.$store.dispatch('ui/changeView', this.types.MenuItems.USERS);
+    this.getRoles();
     this.getUsers();
   },
   mounted () {
@@ -145,6 +161,40 @@ export default {
     }
   },
   methods: {
+    async saveUsersRoles() {
+      try {
+        const res = await this.$axios.patch(`/users/${this.selectedUser._id}/roles`, { roles: this.selectedUserRoles });
+        this.selectedUser.roles = this.selectedUserRoles;
+        this.$bvModal.hide('user-roles-modal');
+        this.createToast('success', 'User\'s roles successfully updated!');
+      } catch (error) {
+        this.createToast('danger', 'There was an error while updating user roles. Please try again.');
+      }
+    },
+    async getRoles() {
+      try {
+        const res = await this.$axios.get('/admin/roles');
+        this.roles = res.data;
+        this.roles.map((role) => this.optionRoles.push({ text: role.toUpperCase(), value: role }))
+      } catch (error) {
+        this.createToast('danger', 'There was an error while getting roles. Please try again.');
+      }
+    },
+    changeUserRole(role) {
+      if (this.hasRole(role)) {
+        this.selectedUserRoles = this.selectedUserRoles.filter((r) => r !== role);
+      } else {
+        this.selectedUserRoles.push(role);
+      }
+    }, 
+    hasRole(role) {
+      return this.selectedUserRoles.find((r) => r === role);
+    },
+    showManageRolesModal(user) {
+      this.selectedUser = user;
+      this.selectedUserRoles = user.roles;
+      this.$bvModal.show('user-roles-modal');
+    },
     expandAdditionalInfo(row) {
       row._showDetails = !row._showDetails;
     },
@@ -168,7 +218,7 @@ export default {
         this.totalPages = res.data.meta.totalPages;
         this.totalRecords = res.data.meta.totalRecords;
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting users. Please try again.');
       } finally {
         this.loadingPage = false;
       }
@@ -191,15 +241,16 @@ export default {
         }
       })
       .catch((error) => {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while deleting user. Please try again.');
       })
     },
     async deleteUser (userId) {
       try {
         await this.$axios.delete(`/users/${userId}`);
         this.getUsers();
+        this.createToast('success', 'User successfully deleted!');
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while deleting user. Please try again.');
       }
     },
   },
@@ -242,6 +293,16 @@ export default {
       margin: 0 !important;
       margin-top: 90px !important;
     }
+  }
+
+  .roles-container {
+    border-radius: 5px;
+    background-color: #f0eeee;
+    text-transform: uppercase;
+  }
+
+  .role-badge {
+    cursor: pointer;
   }
 
 </style>

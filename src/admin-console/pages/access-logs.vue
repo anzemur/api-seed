@@ -203,7 +203,7 @@ export default {
         this.totalPages = res.data.meta.totalPages;
         this.totalRecords = res.data.meta.totalRecords;
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting access logs. Please try again.');
       } finally {
         this.loadingPage = false;
       }

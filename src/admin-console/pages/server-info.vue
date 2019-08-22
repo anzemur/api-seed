@@ -145,7 +145,7 @@ export default {
         this.serverInfo.fsTotalSize = res.data.mongoStats.fsTotalSize;
 
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting server info. Please try again.');
       }
     },
     bToMb(bytes) {

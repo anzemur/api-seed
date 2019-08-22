@@ -82,6 +82,7 @@ export const config: NuxtConfiguration =  {
   plugins: [
     { src: '~plugins/vee-validate', ssr: true },
     { src: '~plugins/types', ssr: true },
+    { src: '~plugins/toast', ssr: true },
   ],
   /*
   ** Nuxt.js modules.

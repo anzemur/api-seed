@@ -3,7 +3,7 @@ import { UsersController } from '../controllers/users-ctrl';
 import { authenticateRequest } from '../middleware/authentication';
 import { UserRoles } from '../config/types';
 import { validateBody } from '../middleware/validate-body';
-import { updateUserSchema } from '../config/body-schemas';
+import { updateUserSchema, updateUserRolesSchema } from '../config/body-schemas';
 
 /* Register controller. */
 const usersController = new UsersController();
@@ -40,6 +40,11 @@ export function usersRoutes() {
   router.patch('/:userId',
     authenticateRequest(),
     validateBody(updateUserSchema),
+    usersController.updateUser);
+
+  router.patch('/:userId/roles',
+    authenticateRequest([UserRoles.ADMIN]),
+    validateBody(updateUserRolesSchema),
     usersController.updateUser);
 
   return router;

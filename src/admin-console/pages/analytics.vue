@@ -87,7 +87,7 @@ export default {
           }]
         };
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
     },
     async getDailyRequestCount() {
@@ -110,7 +110,7 @@ export default {
           }]
         };
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
     },
     async getRequestCount() {
@@ -131,7 +131,7 @@ export default {
           }]
         };
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
     },
     async getDevicesCount() {
@@ -153,7 +153,7 @@ export default {
           }]
         };
       } catch (error) {
-        // console.log(error);
+        this.createToast('danger', 'There was an error while getting analytics data. Please try again.');
       }
     },
     generateRandomHexColor(){

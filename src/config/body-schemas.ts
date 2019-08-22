@@ -9,6 +9,14 @@ export const updateUserSchema = Joi.object().keys({
 }).required();
 
 /**
+ * User roles update body schema.
+ */
+export const updateUserRolesSchema = Joi.object().keys({
+  roles: Joi.array().required(),
+}).required();
+
+
+/**
  * Admin config update body schemas.
  */
 export const updateAdminConfigSchema = Joi.object().keys({

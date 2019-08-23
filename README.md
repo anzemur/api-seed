@@ -2,8 +2,44 @@
 
 API-seed is a framework/tool that helps developers develop their APIs better and faster.
 
+## Contents
 
-## Installation
+API-seed includes different middlewares, modules and serivces that can be used with minimu configuration so that it makes developement easier and faster.
+
+### Authentication
+Framework offers three ways of authentication:
+* Local auth
+* Google auth
+* Facebook auth
+
+### Authorization
+Routes authorization middleware based on user's roles.
+
+### Rate limiting
+Highly configurable per route middleware that allows rate limiting by user's ID or IP address.
+
+### Cahce
+Request caching globaly or per user, using Redis key-value database.
+
+### Logging
+Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up.
+
+### Analytics
+
+### Error handling
+### Request body validation
+### Analytics module
+### Admin module
+### Users module
+### Mailing service
+### Data seed
+### Tests
+### Admin console
+
+
+
+
+
 ### First you need to clone this repository: 
 
 ```bash

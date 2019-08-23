@@ -6,38 +6,51 @@ API-seed is a framework/tool that helps developers develop their APIs better and
 
 API-seed includes different middlewares, modules and serivces that can be used with minimu configuration so that it makes developement easier and faster.
 
-### Authentication
+* ### Authentication
 Framework offers three ways of authentication:
-* Local auth
-* Google auth
-* Facebook auth
+	* Local auth
+	* Google auth
+	* Facebook auth
 
-### Authorization
+* ### Authorization
 Routes authorization middleware based on user's roles.
 
-### Rate limiting
+* ### Rate limiting
 Highly configurable per route middleware that allows rate limiting by user's ID or IP address.
 
-### Cahce
+* ### Cahce
 Request caching globaly or per user, using Redis key-value database.
 
-### Logging
+* ### Logging
 Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up.
+For every request a log document is created in database with all of relavant information about request and its response.
 
-### Analytics
+* ### Error handling
+Error handling middleware with different errors support.
 
-### Error handling
-### Request body validation
-### Analytics module
-### Admin module
-### Users module
-### Mailing service
-### Data seed
-### Tests
-### Admin console
+* ### Request body validation
+Request body validation middleware.
 
+* ### Analytics module
+Api analytics module -> usage, devices, requests browsing, response times...
 
+* ### Admin module
+Admin module allows user managment and some on the fly middleware managment.
 
+* ### Users module
+Users CRUD operations, forgotten password, registration, change password, change email...
+
+* ### Mailing service
+Service for sending transactional emails.
+
+* ### Data seed
+Data seed for adding data to database.
+
+* ### Tests
+Framework is already test covered, as it should be in future use.
+
+* ### Admin console
+Server side rencered admin console with users managment, analytics and API admin settings.
 
 
 ### First you need to clone this repository: 

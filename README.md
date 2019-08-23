@@ -132,7 +132,7 @@ $ npm run start
 
 ### You can run tests with command:
 ```bash
-$ npm run start
+$ npm run test
 ```
 
 

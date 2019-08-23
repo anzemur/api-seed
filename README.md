@@ -43,7 +43,7 @@ $ docker run --name api-seed-redis -d -i -t -p 6379:6379 redis redis-server --ap
 #### Create `.env` file in root directory with variables:
 
 ```bash
-JWT_SECRET=
+JWT_SECRET=notasecret
 ENV=dev
 DB_HOST=localhost
 DB_NAME=api-seed-dev
@@ -53,12 +53,12 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 PORT=3000
 API_VERSION=v1
+USE_ADMIN_CONSOLE=true
 SMTP_HOST=
 SMTP_PORT=
 SMTP_USE_SSL=
 SMTP_USERNAME=
 SMTP_PASSWORD=
-USE_ADMIN_CONSOLE=true
 FB_CLIENT_ID=
 FB_CLIENT_SECRET=
 GOOGLE_CLIENT_ID=
@@ -66,6 +66,8 @@ GOOGLE_CLIENT_SECRET=
 SEED_ADMIN_EMAIL=
 SEED_ADMIN_PASSWORD=
 ```
+Empty variables are exposure sensitive so they should be set by the user.
+They are not necessary but each scope of them unlocks functions the framework allows.
 
 #### Intstall dependecies: 
 

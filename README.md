@@ -4,13 +4,13 @@ API-seed is a framework/tool that helps developers develop their APIs better and
 
 
 ## Installation
-#### First you need to clone this repository: 
+### First you need to clone this repository: 
 
 ```bash
 $ git clone https://{bitbucket_username}@bitbucket.org/spproject/api-seed.git
 ```
 
-#### If you want to run API-seed you must have install all of the following prerequisites:
+### If you want to run API-seed you must have install all of the following prerequisites:
 * [npm](https://www.npmjs.com/) 
 * [Node.js](https://nodejs.org/en/)
 * [MongoDB](https://www.mongodb.com)
@@ -40,7 +40,7 @@ Install latest Redis docker image.
 $ docker run --name api-seed-redis -d -i -t -p 6379:6379 redis redis-server --appendonly yes
 ```
 
-#### Create `.env` file in root directory with variables:
+### Create `.env` file in root directory with variables:
 
 ```bash
 JWT_SECRET=notasecret
@@ -69,13 +69,13 @@ SEED_ADMIN_PASSWORD=
 Empty variables are exposure sensitive so they should be set by the user.
 They are not necessary but each scope of them unlocks functions the framework allows.
 
-#### Intstall dependecies: 
+### Intstall dependecies: 
 
 ```bash
 $ npm install
 ```
 
-#### After the dependecies are installed run the app with command:
+### After the dependecies are installed run the app with command:
 ```bash
 $ npm run start
 ```

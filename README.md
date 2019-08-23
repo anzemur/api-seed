@@ -4,7 +4,7 @@ API-seed is a framework/tool that helps developers develop their APIs better and
 
 ## Contents
 
-API-seed includes different middlewares, modules and serivces that can be used with minimu configuration so that it makes developement easier and faster.
+API-seed includes different middlewares, modules and serivces that can be used with minimum configuration, so that it makes api developement easier and faster.
 
 * ### Authentication
 Framework offers three ways of authentication:
@@ -52,6 +52,7 @@ Framework is already test covered, as it should be in future use.
 * ### Admin console
 Server side rencered admin console with users managment, analytics and API admin settings.
 
+## Installation
 
 ### First you need to clone this repository: 
 
@@ -125,6 +126,11 @@ $ npm install
 ```
 
 ### After the dependecies are installed run the app with command:
+```bash
+$ npm run start
+```
+
+### You can run tests with command:
 ```bash
 $ npm run start
 ```

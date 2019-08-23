@@ -52,6 +52,8 @@ Framework is already test covered, as it should be in future use.
 * ### Admin console
 Server side rencered admin console with users managment, analytics and API admin settings.
 
+![admin-console](https://bitbucket.org/anzemur/api-seed/raw/b137cddbf38cf42b784b7e73c320f7c095c95fc0/assets/admin-console.gif)
+
 ## Installation
 
 ### First you need to clone this repository: 

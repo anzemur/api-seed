@@ -59,7 +59,7 @@ Server side rencered admin console with users managment, analytics and API admin
 ### First you need to clone this repository: 
 
 ```bash
-$ git clone https://anzemur@bitbucket.org/anzemur/api-seed.git
+$ git clone https://{bitbucket_username}@bitbucket.org/anzemur/api-seed.git
 ```
 
 ### If you want to run API-seed you must have install all of the following prerequisites:

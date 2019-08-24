@@ -59,7 +59,7 @@ Server side rencered admin console with users managment, analytics and API admin
 ### First you need to clone this repository: 
 
 ```bash
-$ git clone https://{bitbucket_username}@bitbucket.org/spproject/api-seed.git
+$ git clone https://anzemur@bitbucket.org/anzemur/api-seed.git
 ```
 
 ### If you want to run API-seed you must have install all of the following prerequisites:
@@ -119,7 +119,7 @@ SEED_ADMIN_EMAIL=
 SEED_ADMIN_PASSWORD=
 ```
 Empty variables are exposure sensitive so they should be set by the user.
-They are not necessary but each scope of them unlocks functions the framework allows.
+They are not necessary but each scope of them unlocks functions the framework offers.
 
 ### Intstall dependecies: 
 

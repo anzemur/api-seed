@@ -2,7 +2,7 @@ import { Application, Router } from 'express';
 import { AuthenticationController } from '../controllers/auth-ctrl';
 import { authenticateRequest } from '../middleware/authentication';
 import { validateBody } from '../middleware/validate-body';
-import { changePasswordSchema, forgottenPasswordSchema, resetPasswordSchema } from '../config/body-schemas';
+import { changePasswordSchema, forgottenPasswordSchema, resetPasswordSchema, changeEmailRequestSchema, changeEmailSchema, changeUsernameSchema, changeUsernameRequestSchema } from '../config/body-schemas';
 
 /* Register controller. */
 const authController = new AuthenticationController();
@@ -48,6 +48,24 @@ export function authRoutes() {
   router.put('/forgotten-password/change',
     validateBody(resetPasswordSchema),
     authController.resetPassword);
+
+  router.post('/change-email/request',
+    authenticateRequest(),
+    validateBody(changeEmailRequestSchema),
+    authController.changeEmailRequest);
+
+  router.put('/change-email/change',
+    validateBody(changeEmailSchema),
+    authController.changeEmail);
+
+  router.post('/change-username/request',
+    authenticateRequest(),
+    validateBody(changeUsernameRequestSchema),
+    authController.changeUsernameRequest);
+
+  router.put('/change-username/change',
+    validateBody(changeUsernameSchema),
+    authController.changeUsername);
 
   return router;
 }

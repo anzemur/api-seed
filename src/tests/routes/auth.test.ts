@@ -108,7 +108,7 @@ describe('#PUT /auth/change-password', () => {
     expect(result.status).to.equal(200);
   });
 
-  it('should not change users if user is not authenticated', async () => {
+  it('should not change users password if user is not authenticated', async () => {
     const body = {
       password: '12345678',
       newPassword: '123456789',
@@ -207,5 +207,95 @@ describe('#PUT /auth/forgotten-password/change', () => {
 
     const result = await request(context.app).put('/api/v1/auth/forgotten-password/change').send(body);
     expect(result.status).to.equal(422);
+  });
+});
+
+/**
+ * Send change email request email tests.
+ */
+describe('#POST /auth/change-email/request', () => {
+  it('should send change email request email', async () => {
+    const body = {
+      email: 'newEmail@domain.com',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/change-email/request').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(200);
+  });
+
+  it('should not send change email request email if body is not valid', async () => {
+    const body = {
+      email: 'invalidEmail',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/change-email/request').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(422);
+  });
+
+  it('should not send change email request email if user is not authenticated', async () => {
+    const body = {
+      email: 'newEmail@domain.com',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/change-email/request').send(body);
+    expect(result.status).to.equal(401);
+  });
+});
+
+/**
+ * Change users email tests.
+ */
+describe('#PUT /auth/change-email/change', () => {
+  it('should change users email', async () => {
+    const authService = new AuthenticationService();
+    const changeEmailToken = authService.generateChangeEmailToken(context.user.id, 'newEmail@domain.com');
+
+    const body = {
+      changeEmailToken,
+    };
+
+    const result = await request(context.app).put('/api/v1/auth/change-email/change').send(body);
+    expect(result.status).to.equal(200);
+  });
+});
+
+/**
+ * Send change username request email tests.
+ */
+describe('#POST /auth/change-username/request', () => {
+  it('should send change username request email', async () => {
+    const body = {
+      username: 'newUsername',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/change-username/request').set('Authorization', `Bearer ${context.authToken}`).send(body);
+    expect(result.status).to.equal(200);
+  });
+
+
+  it('should not send change username request email if user is not authenticated', async () => {
+    const body = {
+      username: 'newUsername',
+    };
+
+    const result = await request(context.app).post('/api/v1/auth/change-username/request').send(body);
+    expect(result.status).to.equal(401);
+  });
+});
+
+/**
+ * Change users username tests.
+ */
+describe('#PUT /auth/change-username/change', () => {
+  it('should change users username', async () => {
+    const authService = new AuthenticationService();
+    const changeUsernameToken = authService.generateChangeUsernameToken(context.user.id, 'newUsername');
+
+    const body = {
+      changeUsernameToken,
+    };
+
+    const result = await request(context.app).put('/api/v1/auth/change-username/change').send(body);
+    expect(result.status).to.equal(200);
   });
 });

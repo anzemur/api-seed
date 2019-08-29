@@ -11,6 +11,8 @@ export enum JwtSignTypes {
   REGISTRATION = 'registration',
   AUTHENTICATION = 'authentication',
   FORGOTTEN_PASSWORD = 'forgotten-password',
+  CHANGE_EMAIL = 'change-email',
+  CHANGE_USERNAME = 'change-username',
 }
 
 /**
@@ -175,6 +177,84 @@ export class AuthenticationService extends Service {
       }
     } catch (error) {
       this.logger.error('There was an error while parsing forgotten password token: ', error);
+      return null;
+    }
+  }
+
+  /**
+   * Generates change email token.
+   * @param id User's ID.
+   * @param email User's new email.
+   */
+  generateChangeEmailToken(id: string, email: string) {
+    if (!id || !email) {
+      return null;
+    }
+    return jwt.sign({ id, email }, process.env.JWT_SECRET, {
+      subject: JwtSignTypes.CHANGE_EMAIL,
+      expiresIn: '2d',
+    });
+  }
+
+  /**
+   * Parses change email token.
+   * @param token Change email token.
+   */
+  parseChangeEmailToken(token: string) {
+    try {
+      const { id, email } = jwt.verify(token, process.env.JWT_SECRET, {
+        subject: JwtSignTypes.CHANGE_EMAIL,
+      }) as any;
+
+      if (id && email) {
+        return {
+          id: id as string,
+          email: email as string,
+        };
+      } else {
+        return null;
+      }
+    } catch (error) {
+      this.logger.error('There was an error while parsing change email token: ', error);
+      return null;
+    }
+  }
+
+  /**
+   * Generates change username token.
+   * @param id User's ID.
+   * @param username User's new username.
+   */
+  generateChangeUsernameToken(id: string, username: string) {
+    if (!id || !username) {
+      return null;
+    }
+    return jwt.sign({ id, username }, process.env.JWT_SECRET, {
+      subject: JwtSignTypes.CHANGE_USERNAME,
+      expiresIn: '2d',
+    });
+  }
+
+  /**
+   * Parses change username token.
+   * @param token Change username token.
+   */
+  parseChangeUsernameToken(token: string) {
+    try {
+      const { id, username } = jwt.verify(token, process.env.JWT_SECRET, {
+        subject: JwtSignTypes.CHANGE_USERNAME,
+      }) as any;
+
+      if (id && username) {
+        return {
+          id: id as string,
+          username: username as string,
+        };
+      } else {
+        return null;
+      }
+    } catch (error) {
+      this.logger.error('There was an error while parsing change username token: ', error);
       return null;
     }
   }

@@ -32,7 +32,7 @@ export interface AuthResponse extends Response {
  * @param roles Allowed user's roles.
  */
 export function authenticateRequest(roles?: UserRoles[]): RequestHandler {
-  return async (req: AuthRequest, res: Response, next: NextFunction) => {
+  return async (req: AuthRequest, res: AuthResponse, next: NextFunction) => {
     const authToken = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
     if (!authToken) {
       return next(new UnauthenticatedError('Authentication token is missing.'));

@@ -7,8 +7,6 @@ import { AdminService } from '../services/admin-service';
 import { Connection } from 'mongoose';
 import { RedisClient } from 'redis';
 import { InternalServerError } from '../lib/errors';
-import env from '../config/env';
-import { EnvType } from '../config/types';
 
 const adminService = new AdminService();
 

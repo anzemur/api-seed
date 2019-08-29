@@ -15,6 +15,8 @@ import { forgottenPasswordTemplate } from '../res/templates/forgotten-password-e
 import passport from 'passport';
 import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
+import { changeEmailTemplate } from '../res/templates/change-email-request-email';
+import { changeUsernameTemplate } from '../res/templates/change-username-request-email';
 
 /**
  * Authentication controller.
@@ -46,6 +48,11 @@ export class AuthenticationController extends Controller {
     }
 
     await passport.authenticate(PassportAuthStrategyType.FACEBOOK, (error, user, data) => {
+      /** If invalid `access_token` is provided `error` is passed as `data` parameter. */
+      if (data && data.name === 'InternalOAuthError') {
+        error = data;
+      }
+
       if (error) {
         if (error.name === 'InternalOAuthError') {
           return next(new InternalOAuthError(
@@ -271,7 +278,7 @@ export class AuthenticationController extends Controller {
 
     const passwordHash = bcrypt.hashSync(body.newPassword || '', bcrypt.genSaltSync(10));
     try {
-      const response = await User.updateOne({ _id: user.id }, { password: passwordHash});
+      const response = await User.updateOne({ _id: user.id }, { password: passwordHash });
       res.return(HttpStatusCodes.OK, {
         successful: !!(response.n && response.nModified && response.ok)
       });
@@ -339,6 +346,131 @@ export class AuthenticationController extends Controller {
       });
     } catch (error) {
       next(new InternalServerError('There was a problem while resetting password.', error));
+    }
+  }
+
+  
+  /**
+   * Sends email with change email token to user.
+   */
+  @BoundMethod
+  public async changeEmailRequest(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    const existingUsers = await User.find({ email: body.email });
+    if (existingUsers.length > 0) {
+      return next(new ConflictError(['email'], 'User with given data already exists.'));
+    }
+
+    const changeEmailToken = this.authenticationService.generateChangeEmailToken(req.context.user.id, body.email);
+    if (!changeEmailToken) {
+      return next(new BadRequestError('Invalid change email token.'));
+    }
+
+    const emailData = {
+      from: process.env.SMTP_USERNAME,
+      to: req.context.user.email,
+      subject: 'Change email.',
+      text: '',
+      html: changeEmailTemplate(changeEmailToken)
+    };
+
+    const response = await this.mailingService.sendMail(emailData);
+    if (response) {
+      res.return(HttpStatusCodes.OK, {
+        message: 'Change email request email successfully sent.'
+      });
+    } else {
+      return next(new InternalServerError('There was an error while sending change email request email.'));
+    }
+  }
+
+  /**
+   * Changes users email.
+   */
+  @BoundMethod
+  public async changeEmail(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    const parsedToken = this.authenticationService.parseChangeEmailToken(body.changeEmailToken);
+    if (!parsedToken) {
+      return next(new BadRequestError('Invalid change email token.'));
+    }
+
+    const existingUsers = await User.find({ email: parsedToken.email });
+    if (existingUsers.length > 0) {
+      return next(new ConflictError(['email'], 'User with given data already exists.'));
+    }
+
+    try {
+      const response = await User.updateOne({ _id: parsedToken.id }, { email: parsedToken.email });
+      res.return(HttpStatusCodes.OK, {
+        successful: !!(response.n && response.nModified && response.ok)
+      });
+    } catch (error) {
+      next(new InternalServerError('There was a problem while changing email.', error));
+    }
+  }
+
+  /**
+   * Sends email with change username token to user.
+   */
+  @BoundMethod
+  public async changeUsernameRequest(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    const existingUsers = await User.find({ username: body.username });
+    if (existingUsers.length > 0) {
+      return next(new ConflictError(['username'], 'User with given data already exists.'));
+    }
+
+    const changeUsernameToken = this.authenticationService.generateChangeUsernameToken(req.context.user.id, body.username);
+    if (!changeUsernameToken) {
+      return next(new BadRequestError('Invalid change username token.'));
+    }
+
+    const emailData = {
+      from: process.env.SMTP_USERNAME,
+      to: req.context.user.email,
+      subject: 'Change username.',
+      text: '',
+      html: changeUsernameTemplate(changeUsernameToken)
+    };
+
+    const response = await this.mailingService.sendMail(emailData);
+    if (response) {
+      res.return(HttpStatusCodes.OK, {
+        message: 'Change username request email successfully sent.'
+      });
+    } else {
+      return next(new InternalServerError('There was an error while sending change username request email.'));
+    }
+  }
+
+  /**
+   * Changes users username.
+   */
+  @BoundMethod
+  public async changeUsername(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    const body = req.body;
+
+    const parsedToken = this.authenticationService.parseChangeUsernameToken(body.changeUsernameToken);
+    if (!parsedToken) {
+      return next(new BadRequestError('Invalid change username token.'));
+    }
+
+    const existingUsers = await User.find({ username: parsedToken.username });
+    if (existingUsers.length > 0) {
+      return next(new ConflictError(['username'], 'User with given data already exists.'));
+    }
+
+    try {
+      const response = await User.updateOne({ _id: parsedToken.id }, { username: parsedToken.username });
+      res.return(HttpStatusCodes.OK, {
+        successful: !!(response.n && response.nModified && response.ok)
+      });
+    } catch (error) {
+      next(new InternalServerError('There was a problem while changing username.', error));
     }
   }
 }

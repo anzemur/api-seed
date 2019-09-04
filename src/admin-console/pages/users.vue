@@ -1,5 +1,14 @@
 <template>
   <div>
+      <b-modal hide-footer title="Delete confirmation" centered id="delete-user-confirmation">
+        <div class="row ml-1 mr-1 mb-3">
+          <h3> Are you sure you want to <strong>delete</strong> this user? This action cannot be undone. </h3>
+        </div>
+        <div class="row ml-1 mr-1 mt-4">
+          <b-button @click="$bvModal.hide('delete-user-confirmation')" class="mr-2" variant="info">Cancel</b-button>
+          <b-button @click="deleteUser()" variant="danger">Delete user</b-button>
+        </div>
+      </b-modal>
      <b-modal hide-footer hide-header centered id="user-roles-modal">
       <div class="row ml-1 mr-1 mb-3">
         <h2> Select user roles </h2>
@@ -88,7 +97,7 @@
         </b-row>
 
         <b-row class="pl-2">
-          <b-button variant="danger" class="mr-2" @click="deleteUserConfirmation(row.item._id)">Delete user</b-button>
+          <b-button variant="danger" class="mr-2" @click="deleteUserConfirmation(row.item)">Delete user</b-button>
           <b-button variant="info" @click="showManageRolesModal(row.item)">Manage user roles</b-button>
         </b-row>
 
@@ -223,30 +232,15 @@ export default {
         this.loadingPage = false;
       }
     },
-    deleteUserConfirmation (userId) {
-      this.$bvModal.msgBoxConfirm('Are you sure you want to delete this user? This action cannot be undone.', {
-        title: 'Delete confirmation',
-        size: 'md',
-        buttonSize: 'md',
-        okVariant: 'danger',
-        okTitle: 'Yes',
-        cancelTitle: 'No',
-        footerClass: 'p-2 no-',
-        hideHeaderClose: false,
-        centered: true
-      })
-      .then((value) => {
-        if (value) {
-          this.deleteUser(userId);
-        }
-      })
-      .catch((error) => {
-        this.createToast('danger', 'There was an error while deleting user. Please try again.');
-      })
+    deleteUserConfirmation (user) {
+      this.selectedUser = user;
+      this.$bvModal.show('delete-user-confirmation');
     },
-    async deleteUser (userId) {
+    async deleteUser () {
+      this.$bvModal.hide('delete-user-confirmation')
+
       try {
-        await this.$axios.delete(`/users/${userId}`);
+        await this.$axios.delete(`/users/${this.selectedUser._id}`);
         this.getUsers();
         this.createToast('success', 'User successfully deleted!');
       } catch (error) {

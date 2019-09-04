@@ -14,7 +14,7 @@ export async function seedAdminData() {
     firstName: 'adminFirstName',
     lastName: 'adminLastName',
     status: UserStatus.ACTIVE,
-    roles: [UserRoles.USER],
+    roles: [UserRoles.USER, UserRoles.ADMIN],
   });
 
   try {

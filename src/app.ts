@@ -1,6 +1,8 @@
-import express, { Application } from 'express';
-import { Server } from 'http';
+import env from './config/env';
+import defaultAdminConfig from './res/data/default-admin-config';
+import passport from 'passport';import express, { Application } from 'express';
 import mongoose, { Connection } from 'mongoose';
+import { Server } from 'http';
 import { registerUsersRoutes } from './routes/users';
 import { registerRootRoutes } from './routes/root';
 import { handleErrors, handleNotFoundError } from './middleware/errors';
@@ -12,12 +14,9 @@ import { buildAdminConsoleNuxtApp } from './middleware/admin-console';
 import { registerAuthRoutes } from './routes/auth';
 import { registerFacebookAuth, registerGoogleAuth } from './config/passport';
 import { registerAdminRoutes } from './routes/admin';
-import { MongooseEvents, RedisEvents, EnvType, RateLimitByType } from './config/types';
+import { MongooseEvents, RedisEvents, EnvType } from './config/types';
 import { registerAnalyticsRoutes } from './routes/analytics';
-import env from './config/env';
-import passport from 'passport';
 import { AdminService } from './services/admin-service';
-import defaultAdminConfig from './res/data/default-admin-config';
 
 /**
  * Base application instance.
@@ -66,8 +65,9 @@ export class App {
     registerAnalyticsRoutes(this.app);
 
     /* Register admin console app middleware. */    
-    if (env.USE_ADMIN_CONSOLE && process.env.ENV !== EnvType.TEST) 
+    if (env.USE_ADMIN_CONSOLE && process.env.ENV !== EnvType.TEST) {
       await buildAdminConsoleNuxtApp(this.app);
+    }
 
     /* Register api errors middleware. */
     this.app.use(handleNotFoundError);
@@ -120,12 +120,23 @@ export class App {
    */
   public async connectDb() {
     let connectionUri: string;
-    if (process.env.ENV === EnvType.DEV) {
-      connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'api-seed-dev'}`;
+    switch (process.env.ENV) {
+      case EnvType.DEV:
+        connectionUri = `mongodb://${process.env.DB_HOST || 'localhost'}/${process.env.DB_NAME || 'api-seed-dev'}`;
+        break;
+
+      case EnvType.PRODUCTION:
+        connectionUri = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`;
+        break;
+
+      case EnvType.TEST:
+        connectionUri = `mongodb://${process.env.TEST_DB_HOST || 'localhost'}/${process.env.TEST_DB_NAME || 'api-seed-test'}`;
+        break;
+
+      default:
+        break;
     }
-    if (process.env.ENV === EnvType.TEST) {
-      connectionUri = `mongodb://${process.env.TEST_DB_HOST || 'localhost'}/${process.env.TEST_DB_NAME || 'api-seed-test'}`;
-    }
+  
     this.mongooseConnection = mongoose.connection;
 
     /* Mongoose connection. */

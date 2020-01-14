@@ -45,8 +45,9 @@ export function registerContext(mongooseConnection: Connection, redisClient: Red
       req.context.adminConfig = config;
     }
 
-    if (!req.context.adminConfig && process.env.ENV)
+    if (!req.context.adminConfig && process.env.ENV) {
       next(error ? error : new InternalServerError('There was a problem while loading admin config. Please try again.'));
+    }
     
     req.context.mongooseConnection = mongooseConnection;
     req.context.redisClient = redisClient;

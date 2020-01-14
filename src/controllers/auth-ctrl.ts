@@ -48,7 +48,7 @@ export class AuthenticationController extends Controller {
     }
 
     await passport.authenticate(PassportAuthStrategyType.FACEBOOK, (error, user, data) => {
-      /** If invalid `access_token` is provided `error` is passed as `data` parameter. */
+      /* If invalid `access_token` is provided `error` is passed as `data` parameter. */
       if (data && data.name === 'InternalOAuthError') {
         error = data;
       }
@@ -67,12 +67,8 @@ export class AuthenticationController extends Controller {
 
       /* Authenticate user and generate JWT. */
       if (user) {
-        // return res.status(HttpStatusCodes.OK).json({
-        //   user: user,
-        //   authToken: this.authenticationService.generateAuthToken(user.id)
-        // });
         return res.return(HttpStatusCodes.OK, {
-          user: user,
+          user,
           authToken: this.authenticationService.generateAuthToken(user.id)
         });
       }
@@ -116,7 +112,7 @@ export class AuthenticationController extends Controller {
       /* Authenticate user and generate JWT. */
       if (user) {
         return res.return(HttpStatusCodes.OK, {
-          user: user,
+          user,
           authToken: this.authenticationService.generateAuthToken(user.id)
         });
       }
@@ -151,7 +147,6 @@ export class AuthenticationController extends Controller {
     if (!authToken) {
       return next(new UnauthenticatedError('Incorrect username/email or password.'));
     }
-
     delete response.user.password;
 
     return res.return(HttpStatusCodes.OK, {
@@ -192,7 +187,6 @@ export class AuthenticationController extends Controller {
     if (!authToken) {
       return next(new UnauthenticatedError('Incorrect username/email or password.'));
     }
-
     delete response.user.password;
 
     return res.return(HttpStatusCodes.OK, {
@@ -249,7 +243,6 @@ export class AuthenticationController extends Controller {
       from: process.env.SMTP_USERNAME,
       to: body.email,
       subject: 'Registration.',
-      text: '',
       html: registrationEmailTemplate(registrationToken)
     };
 
@@ -312,7 +305,6 @@ export class AuthenticationController extends Controller {
       from: process.env.SMTP_USERNAME,
       to: body.email,
       subject: 'Forgotten password.',
-      text: '',
       html: forgottenPasswordTemplate(forgottenPasswordToken)
     };
 
@@ -371,7 +363,6 @@ export class AuthenticationController extends Controller {
       from: process.env.SMTP_USERNAME,
       to: req.context.user.email,
       subject: 'Change email.',
-      text: '',
       html: changeEmailTemplate(changeEmailToken)
     };
 
@@ -433,7 +424,6 @@ export class AuthenticationController extends Controller {
       from: process.env.SMTP_USERNAME,
       to: req.context.user.email,
       subject: 'Change username.',
-      text: '',
       html: changeUsernameTemplate(changeUsernameToken)
     };
 

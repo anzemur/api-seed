@@ -8,14 +8,14 @@
       <div class="row mb-3 pb-3 group">
         <h2 class="col-12 mb-4"> Authenitcation settings</h2>
         <div class="col-12 col-md-6">
-          <b-form-group description="Allow users to authenticate with their Google account.">
+          <b-form-group description="Allow users to authenticate with their Google accounts.">
             <b-form-checkbox v-model="adminConfig.allowGoogleAuth" switch>
               Allow Google auth
             </b-form-checkbox>
           </b-form-group>
         </div>
         <div class="col-12 col-md-6">
-          <b-form-group description="Allow users to authenticate with their Facebook account.">
+          <b-form-group description="Allow users to authenticate with their Facebook accounts.">
             <b-form-checkbox v-model="adminConfig.allowFacebookAuth" switch>
               Allow Facebook auth
             </b-form-checkbox>

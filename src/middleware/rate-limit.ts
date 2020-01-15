@@ -73,7 +73,7 @@ export function registerRateLimit(config: RateLimitConfig = {}): RequestHandler 
  */
 function getHeaders(rateLimiterRes: RateLimiterRes, options: IRateLimiterMongoOptions) {
   return {
-    'Retry-After': rateLimiterRes.msBeforeNext / 1000,
+    ...rateLimiterRes.consumedPoints > options.points ? { 'Retry-After': rateLimiterRes.msBeforeNext / 1000 } : {},
     'X-RateLimit-Limit': options.points,
     'X-RateLimit-Remaining': rateLimiterRes.remainingPoints,
     'X-RateLimit-Reset': new Date(Date.now() + rateLimiterRes.msBeforeNext)

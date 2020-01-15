@@ -35,10 +35,10 @@ export const AdminConfig = new AdminConfigModel().getModelForClass(
   {
     schemaOptions: {
       ...Model.schemaOptions,
-      capped: { 
+      capped: {
         size: 1024,
         max: 1,
-        autoIndexId: true }
+      }
     }
   }
 );

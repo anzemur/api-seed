@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
 import { AuthRequest, AuthResponse } from './authentication';
 import { NextFunction } from 'connect';
+import { HttpStatusCodes } from '../config/http-status-codes';
+import { RedisClient } from 'redis';
 
 /**
  * Response caching middleware.
@@ -20,7 +22,15 @@ export function registerCache(perUser: boolean = false, expiration?: number): Re
 
     redisClient.get(key, (err, result) => {
       if (!err && result) {
-        res.send(JSON.parse(result));
+        res.set('Cache-Control', req.context.user && req.context.user.id ? 'private' : 'public');
+        redisClient.ttl(key, (ttlError, ttl) => {
+          if (!ttlError && ttl) {
+            res.set('Cache-Control', `${req.context.user && req.context.user.id ? 'private' : 'public'}, max-age=${ttl}`)
+            res.send(JSON.parse(result));
+          } else {
+            res.send(JSON.parse(result));
+          }
+        })
       } else {
         res.responseData = res.send;
         res.send = (data: any) => {

@@ -4,6 +4,7 @@ import { authenticateRequest } from '../middleware/authentication';
 import { UserRoles } from '../config/types';
 import { validateBody } from '../middleware/validate-body';
 import { updateUserSchema, updateUserRolesSchema } from '../config/body-schemas';
+import { registerCache } from '../middleware/cache';
 
 /* Register controller. */
 const usersController = new UsersController();
@@ -28,6 +29,7 @@ export function usersRoutes() {
 
   router.get('/',
     authenticateRequest(),
+    registerCache(false, 100),
     usersController.getUsers);
   
   router.delete('/:userId',

@@ -115,6 +115,7 @@ export class UsersController extends Controller {
     try {
       const logs = await User.aggregate([
         { $match },
+        { $project: { password: 0 } },
         { $sort : { createdAt : -1 } },
         { $limit: query.limit * query.page  + query.limit },
         { $skip: query.limit * query.page },

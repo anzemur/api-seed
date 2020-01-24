@@ -153,7 +153,7 @@ You need to install Docker and set enviroment variables to your enviroment.
 $ docker build -t api-seed .
 ```
 
-# Start the image by running:
+#### Start the image by running:
 ```bash
 $ docker-compose up
 ```

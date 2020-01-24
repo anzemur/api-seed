@@ -1,10 +1,10 @@
 ![API-seed](https://bitbucket.org/anzemur/api-seed/raw/15d25e8f43f330b1bc2b464b13609d5d5fa4fff7/assets/logo-small.png)
 
-API-seed is a framework/tool that helps developers develop their APIs better and faster.
+API-seed is a template for the development of backend systems in Node.js and it helps developers develop their APIs better and faster.
 
 ## Contents
 
-API-seed includes different middlewares, modules and serivces that can be used with minimum configuration, so that it makes api developement easier and faster.
+API-seed includes different middlewares, modules and serivces that can be used with minimum configuration, so that it makes api developement easier.
 
 * ### Authentication
 Framework offers three ways of authentication:
@@ -35,7 +35,7 @@ Request body validation middleware.
 Api analytics module -> usage, devices, requests browsing, response times...
 
 * ### Admin module
-Admin module allows user managment and some on the fly middleware managment.
+Admin module allows user managment and some on the fly middleware managment via admin console or API.
 
 * ### Users module
 Users CRUD operations, forgotten password, registration, change password, change email, change username...
@@ -62,29 +62,31 @@ Server side rendered admin console with users managment, analytics and API admin
 $ git clone https://{bitbucket_username}@bitbucket.org/anzemur/api-seed.git
 ```
 
-### If you want to run API-seed you must have install all of the following prerequisites:
+### 1. Local installation
+
+#### If you want to run API-seed locally you must install all of the following prerequisites:
 * [npm](https://www.npmjs.com/) 
 * [Node.js](https://nodejs.org/en/)
 * [MongoDB](https://www.mongodb.com)
 * [Redis](https://redis.io)
 * [Docker](https://www.docker.com/)
 
-### How to install the prerequisites:
+#### How to install the prerequisites:
 
-#### Node.js and npm
+##### Node.js and npm
 * [Node.js + npm installation](https://nodejs.org/en/download/)
 
-#### Docker
+##### Docker
 * [Download docker desktop](https://www.docker.com/products/docker-desktop)
 
-#### MongoDB
+##### MongoDB
 
 Install latest MongoDB docker image.
 ```bash
 $ docker run --name api-seed-mongo -d -i -t -p 27017:27017 mongo
 ```
 
-#### Redis
+##### Redis
 
 Install latest Redis docker image.
 
@@ -92,7 +94,7 @@ Install latest Redis docker image.
 $ docker run --name api-seed-redis -d -i -t -p 6379:6379 redis redis-server --appendonly yes
 ```
 
-### Create `.env` file in root directory with variables:
+#### Create `.env` file in root directory with variables or add them to OS's enviroment:
 
 ```bash
 JWT_SECRET=notasecret
@@ -121,25 +123,37 @@ SEED_ADMIN_PASSWORD=
 Empty variables are exposure sensitive so they should be set by the user.
 They are not necessary but each scope of them unlocks functions the framework offers.
 
-### Intstall dependecies: 
+#### Intstall dependecies: 
 
 ```bash
 $ npm install
 ```
 
-### After the dependecies are installed run the app with command:
+#### After the dependecies are installed run the app with command:
 ```bash
 $ npm run start
 ```
 
-### You can run tests with command:
+#### You can run tests with command:
 ```bash
 $ npm run test
 ```
 
+#### And you can run data seed with command:
+```bash
+$ npm run seed
+```
 
+### 2. Using Docker
 
+You need to install Docker and set enviroment variables to your enviroment.
 
+#### Crete docker image:
+```bash
+$ docker build -t api-seed .
+```
 
-
-
+#### Start the image by running:
+```bash
+$ docker-compose up
+```

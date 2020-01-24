@@ -11,6 +11,8 @@ export default {
   JWT_SECRET           : process.env.JWT_SECRET as string,
   DB_HOST              : process.env.DB_HOST as string,
   DB_NAME              : process.env.DB_NAME as string,
+  TEST_DB_HOST         : process.env.TEST_DB_HOST as string,
+  TEST_DB_NAME         : process.env.TEST_DB_NAME as string,
   REDIS_HOST           : process.env.REDIS_HOST as string,
   REDIS_PORT           : parseInt(process.env.REDIS_PORT) as number,
   PORT                 : parseInt(process.env.PORT) as number,

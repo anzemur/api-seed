@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo:latest
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    restart: unless-stopped
+
+  app:
+    image: api-seed:latest
+    environment:
+    - PORT=$PORT
+    - API_VERSION=$API_VERSION
+    - DB_HOST=mongo:27017
+    - DB_NAME=$DB_NAME
+    - REDIS_HOST=redis
+    - REDIS_PORT=6379
+    - ENV=$ENV
+    - JWT_SECRET=$JWT_SECRET
+    - SMTP_HOST=$SMTP_HOST
+    - SMTP_PORT=$SMTP_PORT
+    - SMTP_USE_SSL=$SMTP_USE_SSL
+    - SMTP_USERNAME=$SMTP_USERNAME
+    - SMTP_PASSWORD=$SMTP_PASSWORD
+    - USE_ADMIN_CONSOLE=$USE_ADMIN_CONSOLE
+    - APP_URL=$APP_URL
+    - FB_CLIENT_ID=$FB_CLIENT_ID
+    - FB_CLIENT_SECRET=$FB_CLIENT_SECRET
+    - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+    - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+    depends_on:
+    - mongo
+    - redis
+    ports:
+    - "3000:3000"
+    restart: unless-stopped
+

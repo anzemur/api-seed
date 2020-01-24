@@ -1,8 +1,6 @@
 import { RequestHandler } from 'express';
 import { AuthRequest, AuthResponse } from './authentication';
 import { NextFunction } from 'connect';
-import { HttpStatusCodes } from '../config/http-status-codes';
-import { RedisClient } from 'redis';
 
 /**
  * Response caching middleware.

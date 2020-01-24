@@ -1,8 +1,12 @@
 {
-  "name": "API-seed",
-  "version": "1.0.0",
+  "name": "api-seed",
+  "version": "0.0.1",
   "description": "API-seed is a tool that helps developers develop their APIs better and faster.",
   "main": "dist/scripts/start.js",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/anzemur/api-seed/src/master/"
+  },
   "scripts": {
     "dev": "concurrently --kill-others \"tsc -w\" \"nodemon dist/scripts/start.js\"",
     "build-ts": "tsc",

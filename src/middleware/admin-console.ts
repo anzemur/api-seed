@@ -13,7 +13,7 @@ export async function buildAdminConsoleNuxtApp(app: Application) {
   try {
     console.log('│ Nuxt build started.');
     const builder = await new Builder(nuxt);
-    await new Generator(nuxt, builder).generate({build: true, init: true});
+    await new Generator(nuxt, builder).generate({ build: true, init: true });
     console.log('│ Nuxt build finished. Admin console available at: /admin');
   } catch (error) {
     console.log('│ Failed to build Nuxt: ' + error);

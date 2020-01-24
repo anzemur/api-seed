@@ -250,7 +250,4 @@ export default {
     }
   }
 
-  
-/* =============== pagination: ============= */
-
 </style>

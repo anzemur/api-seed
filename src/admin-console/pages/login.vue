@@ -112,6 +112,12 @@ export default {
     box-shadow: 9px 11px 79px -12px rgba(135,135,135,1);
   }
 
+  @include media('<1465px') {
+    .login-form {
+      width: 25%;
+    }
+  }
+
   @include media('<1300px') {
     .login-form {
       width: 40%;

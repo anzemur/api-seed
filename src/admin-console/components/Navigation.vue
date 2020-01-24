@@ -4,8 +4,10 @@
       <div style="font-size: 0.8rem;">
         <i @click="toggleSideMenu()" class="menu-icon mr-3 side-nav-ic fa fa-bars fa-lg"></i>
       </div>
-      <b-navbar-brand href="/admin">
-        <img src="~/assets/img/logo.png" width="130" height="40" class="d-inline-block align-top" alt="logo">
+      <b-navbar-brand>
+        <nuxt-link to="/settings">
+          <img src="~/assets/img/logo.png" width="130" height="40" class="d-inline-block align-top" alt="logo">
+        </nuxt-link>
       </b-navbar-brand>
     </b-navbar>
   </div>

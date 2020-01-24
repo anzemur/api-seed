@@ -91,9 +91,9 @@
           <b-col sm="2" class="text-sm-left"><b>Facebook ID:</b></b-col>
           <b-col sm="2">{{ row.item.facebookId || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b> Created at:</b></b-col>
-          <b-col sm="2">{{ row.item.createdAt || '/' }}</b-col>
+          <b-col sm="2">{{ parseDate(row.item.createdAt) || '/' }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Updated at:</b></b-col>
-          <b-col sm="2">{{ row.item.updatedAt || '/' }}</b-col>
+          <b-col sm="2">{{ parseDate(row.item.updatedAt) || '/' }}</b-col>
         </b-row>
 
         <b-row class="pl-2">
@@ -119,6 +119,7 @@
 
 <script>
 import { setMenuMargin } from '~/mixins/set-menu-margin';
+import { format } from 'date-fns';
 
 export default {
   mixins: [ setMenuMargin ],
@@ -129,7 +130,16 @@ export default {
         { key: 'email', sortable: true },
         { key: 'firstName', sortable: true },
         { key: 'lastName', sortable: true },
-        { key: 'createdAt', sortable: true },
+        {
+          key: 'createdAt',
+          sortable: true,
+          formatter: value => {
+            if (value) {
+              return format(new Date(value), 'yyyy-M-dd, HH:mm')
+            }
+            return value;
+          }
+        },
       ],
       items: [],
       optionRoles: [
@@ -170,6 +180,12 @@ export default {
     }
   },
   methods: {
+    parseDate(date) {
+      if (date) {
+        return format(new Date(date), 'yyyy-M-dd, HH:mm');
+      }
+      return date;
+    },
     async saveUsersRoles() {
       try {
         const res = await this.$axios.patch(`/users/${this.selectedUser._id}/roles`, { roles: this.selectedUserRoles });

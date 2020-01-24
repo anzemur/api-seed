@@ -36,7 +36,6 @@ export const AdminConfig = new AdminConfigModel().getModelForClass(
     schemaOptions: {
       ...Model.schemaOptions,
       capped: {
-        size: 1024,
         max: 1,
       }
     }

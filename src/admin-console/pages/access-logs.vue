@@ -63,7 +63,7 @@
           <b-col sm="2" class="text-sm-left"><b>Request ID:</b></b-col>
           <b-col sm="2">{{ row.item.requestId }}</b-col>
           <b-col sm="2" class="text-sm-left"><b>Created at:</b></b-col>
-          <b-col sm="2">{{ row.item.createdAt }}</b-col>
+          <b-col sm="2">{{ parseDate(row.item.createdAt) }}</b-col>
         </b-row>
 
         <b-row class="mb-3">
@@ -124,6 +124,7 @@
 
 <script>
 import { setMenuMargin } from '~/mixins/set-menu-margin';
+import { format } from 'date-fns';
 
 export default {
   mixins: [ setMenuMargin ],
@@ -134,7 +135,16 @@ export default {
         { key: 'fullRequestUrl', sortable: true },
         { key: 'method', sortable: true },
         { key: 'statusCode', sortable: true },
-        { key: 'createdAt', sortable: true },
+        {
+          key: 'createdAt',
+          sortable: true,
+          formatter: value => {
+            if (value) {
+              return format(new Date(value), 'yyyy-M-dd, HH:mm')
+            }
+            return value;
+          }
+        },
       ],
       items: [],
       httpMethods: [
@@ -179,6 +189,12 @@ export default {
     }
   },
   methods: {
+    parseDate(date) {
+      if (date) {
+        return format(new Date(date), 'yyyy-M-dd, HH:mm');
+      }
+      return date;
+    },
     expandAdditionalInfo(row) {
       row._showDetails = !row._showDetails;
     },

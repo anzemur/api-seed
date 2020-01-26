@@ -17,6 +17,7 @@ import * as Joi from 'joi';
 import * as bcrypt from 'bcryptjs';
 import { changeEmailTemplate } from '../res/templates/change-email-request-email';
 import { changeUsernameTemplate } from '../res/templates/change-username-request-email';
+import env from '../config/env';
 
 /**
  * Authentication controller.
@@ -38,6 +39,10 @@ export class AuthenticationController extends Controller {
    */
   @BoundMethod
   public async facebookAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    if (!env.FB_CLIENT_ID || !env.FB_CLIENT_SECRET) {
+      return next(new BadRequestError('Facebook authentication is not supported.'));
+    }
+
     if (req.context.adminConfig && !req.context.adminConfig.allowFacebookAuth) {
       return next(new UnauthorizedError('Facebook authentication is not allowed.'));
     }
@@ -80,6 +85,10 @@ export class AuthenticationController extends Controller {
    */
   @BoundMethod
   public async googleAuth(req: AuthRequest, res: AuthResponse, next: NextFunction) {
+    if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+      return next(new BadRequestError('Google authentication is not supported.'));
+    }
+
     if (req.context.adminConfig && !req.context.adminConfig.allowGoogleAuth) {
       return next(new UnauthorizedError('Google authentication is not allowed.'));
     }

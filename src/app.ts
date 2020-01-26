@@ -39,11 +39,13 @@ export class App {
   public async registerRoutesAndMiddleware() {
 
     /** Register passport authentication strategies */
-    if (env.FB_CLIENT_ID && env.FB_CLIENT_SECRET)
+    if (env.FB_CLIENT_ID && env.FB_CLIENT_SECRET) {
       await registerFacebookAuth();
+    }
 
-    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET)
+    if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
       await registerGoogleAuth();
+    }
 
     this.app.use(passport.initialize());
 

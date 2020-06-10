@@ -8,9 +8,9 @@ API-seed includes different middlewares, modules and serivces that can be used w
 
 * ### Authentication
 Framework offers three ways of authentication:
-	* Local auth
-	* Google auth
-	* Facebook auth
+* Local auth
+* Google auth
+* Facebook auth
 
 * ### Authorization
 Routes authorization middleware based on user's roles.

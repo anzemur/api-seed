@@ -7,50 +7,49 @@ API-seed is a template for the development of backend systems in Node.js.
 API-seed includes different middlewares, modules and serivces that can be used with minimum configuration.
 
 * ### Authentication
-Template offers three ways of authentication:
-* Local auth
-* Google auth
-* Facebook auth
+  Template offers three ways of authentication:
+  * Local auth
+  * Google auth
+  * Facebook auth
 
 * ### Authorization
-Routes authorization middleware based on user's roles.
+  Routes authorization middleware based on user's roles.
 
 * ### Rate limiting
-Per route middleware that allows rate limiting by user's ID or IP address.
+  Per route middleware that allows rate limiting by user's ID or IP address.
 
 * ### Cahce
-Request caching globaly or per user, using Redis key-value database.
+  Request caching globaly or per user, using Redis key-value database.
 
 * ### Logging
-Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up.
-For every request a log document is created in database with all of relavant information about request and its response.
+  Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up. For every request a log document is created in database with all of relavant information about request and its response.
 
 * ### Error handling
-Error handling middleware.
+  Error handling middleware.
 
 * ### Request body validation
-Request body validation middleware.
+  Request body validation middleware.
 
 * ### Analytics module
-API analytics module -> usage, devices, requests browsing, response times...
+  API analytics module -> usage, devices, requests browsing, response times...
 
 * ### Admin module
-Admin module allows user managment and some on the fly middleware managment via admin console or API.
+  Admin module allows user managment and some on the fly middleware managment via admin console or API.
 
 * ### Users module
-Users CRUD operations, forgotten password, registration, change password, change email, change username...
+  Users CRUD operations, forgotten password, registration, change password, change email, change username...
 
 * ### Mailing service
-Service for sending transactional emails.
+  Service for sending transactional emails.
 
 * ### Data seed
-Data seed for adding data to database.
+  Data seed for adding data to database.
 
 * ### Tests
-Template is already test covered, as it should be in future use.
+  Template is already test covered, as it should be in future use.
 
 * ### Admin console
-Server side rendered admin console with users managment, analytics and API admin settings.
+  Server side rendered admin console with users managment, analytics and API admin settings.
 
 ![admin-console](https://bitbucket.org/anzemur/api-seed/raw/b137cddbf38cf42b784b7e73c320f7c095c95fc0/assets/admin-console.gif)
 

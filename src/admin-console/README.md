@@ -1,6 +1,5 @@
-# admin-console
-
-> Admin console app for API-seed tool.
+# API-seed admin console
+> Admin console app for API-seed template.
 
 ## Build Setup
 

@@ -4,7 +4,7 @@ API-seed is a template for the development of backend systems in Node.js.
 
 ## Contents
 
-API-seed includes different middlewares, modules and serivces that can be used with minimum configuration.
+API-seed includes different middlewares, modules and services that can be used with minimum configuration.
 
 * ### Authentication
   Template offers three ways of authentication:

@@ -1,13 +1,13 @@
 ![API-seed](https://bitbucket.org/anzemur/api-seed/raw/15d25e8f43f330b1bc2b464b13609d5d5fa4fff7/assets/logo-small.png)
 
-API-seed is a template for the development of backend systems in Node.js and it helps developers develop their APIs better and faster.
+API-seed is a template for the development of backend systems in Node.js.
 
 ## Contents
 
-API-seed includes different middlewares, modules and serivces that can be used with minimum configuration, so that it makes api developement easier.
+API-seed includes different middlewares, modules and serivces that can be used with minimum configuration.
 
 * ### Authentication
-Framework offers three ways of authentication:
+Template offers three ways of authentication:
 * Local auth
 * Google auth
 * Facebook auth
@@ -16,7 +16,7 @@ Framework offers three ways of authentication:
 Routes authorization middleware based on user's roles.
 
 * ### Rate limiting
-Highly configurable per route middleware that allows rate limiting by user's ID or IP address.
+Per route middleware that allows rate limiting by user's ID or IP address.
 
 * ### Cahce
 Request caching globaly or per user, using Redis key-value database.
@@ -26,13 +26,13 @@ Error, info and access (route) local logging. Logs are available in `./logs` dir
 For every request a log document is created in database with all of relavant information about request and its response.
 
 * ### Error handling
-Error handling middleware with different errors support.
+Error handling middleware.
 
 * ### Request body validation
 Request body validation middleware.
 
 * ### Analytics module
-Api analytics module -> usage, devices, requests browsing, response times...
+API analytics module -> usage, devices, requests browsing, response times...
 
 * ### Admin module
 Admin module allows user managment and some on the fly middleware managment via admin console or API.
@@ -47,7 +47,7 @@ Service for sending transactional emails.
 Data seed for adding data to database.
 
 * ### Tests
-Framework is already test covered, as it should be in future use.
+Template is already test covered, as it should be in future use.
 
 * ### Admin console
 Server side rendered admin console with users managment, analytics and API admin settings.

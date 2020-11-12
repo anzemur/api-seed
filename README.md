@@ -18,11 +18,11 @@ API-seed includes different middlewares, modules and services that can be used w
 * ### Rate limiting
   Per route middleware that allows rate limiting by user's ID or IP address.
 
-* ### Cahce
-  Request caching globaly or per user, using Redis key-value database.
+* ### Cache
+  Request caching globally or per user, using Redis key-value database.
 
 * ### Logging
-  Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up. For every request a log document is created in database with all of relavant information about request and its response.
+  Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up. For every request a log document is created in database with all of relevant information about request and its response.
 
 * ### Error handling
   Error handling middleware.
@@ -34,7 +34,7 @@ API-seed includes different middlewares, modules and services that can be used w
   API analytics module -> usage, devices, requests browsing, response times...
 
 * ### Admin module
-  Admin module allows user managment and some on the fly middleware managment via admin console or API.
+  Admin module allows user management and some on the fly middleware management via admin console or API.
 
 * ### Users module
   Users CRUD operations, forgotten password, registration, change password, change email, change username...
@@ -49,7 +49,7 @@ API-seed includes different middlewares, modules and services that can be used w
   Template is already test covered, as it should be in future use.
 
 * ### Admin console
-  Server side rendered admin console with users managment, analytics and API admin settings.
+  Server side rendered admin console with users management, analytics and API admin settings.
 
 ![admin-console](https://bitbucket.org/anzemur/api-seed/raw/b137cddbf38cf42b784b7e73c320f7c095c95fc0/assets/admin-console.gif)
 
@@ -93,7 +93,7 @@ Install latest Redis docker image.
 $ docker run --name api-seed-redis -d -i -t -p 6379:6379 redis redis-server --appendonly yes
 ```
 
-#### Create `.env` file in root directory with variables or add them to OS's enviroment:
+#### Create `.env` file in root directory with variables or add them to OS's environment:
 
 ```bash
 JWT_SECRET=notasecret
@@ -122,13 +122,13 @@ SEED_ADMIN_PASSWORD=
 Empty variables are exposure sensitive so they should be set by the user.
 They are not necessary but each scope of them unlocks functions the framework offers.
 
-#### Intstall dependecies: 
+#### Install dependencies: 
 
 ```bash
 $ npm install
 ```
 
-#### After the dependecies are installed run the app with command:
+#### After the dependencies are installed run the app with command:
 ```bash
 $ npm run start
 ```
@@ -145,7 +145,7 @@ $ npm run seed
 
 ### 2. Using Docker
 
-You need to install Docker and set enviroment variables to your enviroment.
+You need to install Docker and set environment variables to your environment.
 
 #### Crete docker image:
 ```bash

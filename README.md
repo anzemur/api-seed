@@ -4,7 +4,7 @@ API-seed is a template for the development of backend systems in Node.js.
 
 ## Contents
 
-API-seed includes different middlewares, modules and services that can be used with minimum configuration.
+API-seed includes different middlewares, modules, and services that can be used with minimum configuration.
 
 * ### Authentication
   Template offers three ways of authentication:
@@ -16,13 +16,13 @@ API-seed includes different middlewares, modules and services that can be used w
   Routes authorization middleware based on user's roles.
 
 * ### Rate limiting
-  Per route middleware that allows rate limiting by user's ID or IP address.
+  Per route middleware that allows rate-limiting by user's ID or IP address.
 
 * ### Cache
   Request caching globally or per user, using Redis key-value database.
 
 * ### Logging
-  Error, info and access (route) local logging. Logs are available in `./logs` directory after app start up. For every request a log document is created in database with all of relevant information about request and its response.
+  Error, info, and access (route) local logging. Logs are available in the `./logs` directory after the app startup. A log document is created in the database with all relevant information about the request and response for every received request on the server.
 
 * ### Error handling
   Error handling middleware.
@@ -34,7 +34,7 @@ API-seed includes different middlewares, modules and services that can be used w
   API analytics module -> usage, devices, requests browsing, response times...
 
 * ### Admin module
-  Admin module allows user management and some on the fly middleware management via admin console or API.
+  Admin module allows user management and some on-the-fly middleware management via admin console or API.
 
 * ### Users module
   Users CRUD operations, forgotten password, registration, change password, change email, change username...
@@ -43,13 +43,13 @@ API-seed includes different middlewares, modules and services that can be used w
   Service for sending transactional emails.
 
 * ### Data seed
-  Data seed for adding data to database.
+  Data seed for adding data to the database.
 
 * ### Tests
-  Template is already test covered, as it should be in future use.
+  The template is already test-covered, as it should be in future use.
 
 * ### Admin console
-  Server side rendered admin console with users management, analytics and API admin settings.
+  Server-side rendered admin console with users management, analytics, and API admin settings.
 
 ![admin-console](https://bitbucket.org/anzemur/api-seed/raw/b137cddbf38cf42b784b7e73c320f7c095c95fc0/assets/admin-console.gif)
 
@@ -128,17 +128,17 @@ They are not necessary but each scope of them unlocks functions the framework of
 $ npm install
 ```
 
-#### After the dependencies are installed run the app with command:
+#### After the dependencies are installed run the app with the command:
 ```bash
 $ npm run start
 ```
 
-#### You can run tests with command:
+#### You can run tests with the command:
 ```bash
 $ npm run test
 ```
 
-#### And you can run data seed with command:
+#### And you can run data seed with the command:
 ```bash
 $ npm run seed
 ```

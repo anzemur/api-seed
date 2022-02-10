@@ -40,7 +40,7 @@
     "@types/redis": "^2.8.13",
     "@types/supertest": "^2.0.7",
     "concurrently": "^2.2.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^7.2.0",
     "tslint": "^5.16.0",
     "tslint-sonarts": "^1.9.0",

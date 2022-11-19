@@ -75,7 +75,7 @@
     "mongodb": "^3.2.6",
     "mongoose": "^5.5.11",
     "nodemailer": "^6.2.1",
-    "nuxt": "^2.8.1",
+    "nuxt": "^2.15.8",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "passport-google-token": "^0.1.2",
